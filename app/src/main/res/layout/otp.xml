@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_centerInParent="true"
+    tools:context=".OTPVerification"
+    android:padding="10dp">
+    <ProgressBar
+        android:id="@+id/pbOTP"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:layout_centerHorizontal="true"
+        android:contentDescription="@string/otpLogo"
+        android:src="@mipmap/ic_otp_1_foreground"
+        android:id = "@+id/iv_OTPIcon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="15dp"/>
+
+   <TextView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/iv_OTPIcon"
+       android:layout_marginTop="15dp"
+       android:text="@string/enter_the_verification_code"
+       android:gravity="center"
+       android:id="@+id/tvOtpTitle"
+       android:textSize="24sp"
+       android:textColor="@color/black"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvOtpTitle"
+        android:id = "@+id/tvPhnNum"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:textSize="28sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tvPhnNum"
+        android:layout_marginTop="20dp"
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        android:id = "@+id/rlOTPPin">
+
+        <EditText
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:ems="10"
+            android:layout_marginRight="20dp"
+            android:padding="10dp"
+            android:id="@+id/etOTP1"
+            android:textSize="24sp" />
+        <EditText
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:layout_toRightOf="@+id/etOTP1"
+            android:layout_marginRight="20dp"
+            android:id = "@+id/etOTP2"
+            android:padding="10dp"
+            android:textSize="24sp" />
+        <EditText
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:layout_toRightOf="@+id/etOTP2"
+            android:layout_marginRight="20dp"
+            android:id = "@+id/etOTP3"
+            android:padding="10dp"
+            android:textSize="24sp" />
+        <EditText
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:layout_toRightOf="@+id/etOTP3"
+            android:layout_marginRight="20dp"
+            android:padding="10dp"
+            android:id = "@+id/etOTP4"
+            android:textSize="24sp" />
+        <EditText
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:layout_toRightOf="@+id/etOTP4"
+            android:layout_marginRight="20dp"
+            android:padding="10dp"
+            android:id = "@+id/etOTP5"
+            android:textSize="24sp" />
+        <EditText
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="number"
+            android:layout_toRightOf="@+id/etOTP5"
+            android:id = "@+id/etOTP6"
+            android:padding="10dp"
+            android:textSize="24sp" />
+        </RelativeLayout>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnVerify"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/rlOTPPin"
+        android:text="Verify"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:background="@android:color/transparent"/>
+    </RelativeLayout>

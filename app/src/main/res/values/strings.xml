@@ -4,4 +4,8 @@
     <string name="close">Close</string>
     <string name="home">Home</string>
     <string name="loginLogo">loginLogo</string>
+    <string name="enter_your_phone_number">Enter your phone number</string>
+    <string name="loginContinue">Continue</string>
+    <string name="otpLogo">OTPLogo</string>
+    <string name="enter_the_verification_code">Enter the verification code</string>
 </resources>
