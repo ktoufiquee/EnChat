@@ -50,8 +50,7 @@ public class MainActivity extends AppCompatActivity {
         );
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        Intent intent = new Intent(this, Login.class);
-        startActivity(intent);
+
 
     }
 

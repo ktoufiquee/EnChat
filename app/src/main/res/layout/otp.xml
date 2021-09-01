@@ -47,83 +47,19 @@
         android:textStyle="bold"
         android:textSize="28sp"/>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvPhnNum"
-        android:layout_marginTop="20dp"
-        android:layout_margin="20dp"
-        android:orientation="vertical"
-        android:id = "@+id/rlOTPPin">
-
-        <EditText
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="number"
-            android:ems="10"
-            android:layout_marginRight="20dp"
-            android:padding="10dp"
-            android:id="@+id/etOTP1"
-            android:textSize="24sp" />
-        <EditText
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="number"
-            android:layout_toRightOf="@+id/etOTP1"
-            android:layout_marginRight="20dp"
-            android:id = "@+id/etOTP2"
-            android:padding="10dp"
-            android:textSize="24sp" />
-        <EditText
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="number"
-            android:layout_toRightOf="@+id/etOTP2"
-            android:layout_marginRight="20dp"
-            android:id = "@+id/etOTP3"
-            android:padding="10dp"
-            android:textSize="24sp" />
-        <EditText
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="number"
-            android:layout_toRightOf="@+id/etOTP3"
-            android:layout_marginRight="20dp"
-            android:padding="10dp"
-            android:id = "@+id/etOTP4"
-            android:textSize="24sp" />
-        <EditText
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="number"
-            android:layout_toRightOf="@+id/etOTP4"
-            android:layout_marginRight="20dp"
-            android:padding="10dp"
-            android:id = "@+id/etOTP5"
-            android:textSize="24sp" />
-        <EditText
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:inputType="number"
-            android:layout_toRightOf="@+id/etOTP5"
-            android:id = "@+id/etOTP6"
-            android:padding="10dp"
-            android:textSize="24sp" />
-        </RelativeLayout>
-    <Button
+    <com.mukesh.OtpView
+        android:id="@+id/otp_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btnVerify"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:textSize="20sp"
+        android:inputType="number"
+        android:focusableInTouchMode="true"
+        android:layout_below="@+id/tvPhnNum"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/rlOTPPin"
-        android:text="Verify"
-        android:textColor="@color/black"
-        android:textSize="15sp"
-        android:background="@android:color/transparent"/>
+        app:OtpItemCount="6"
+        android:padding="10dp"
+        app:OtpViewType="line" />
+
     </RelativeLayout>

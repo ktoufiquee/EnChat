@@ -39,11 +39,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.login);
+        userLogin();
         binding = LoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         FirebaseApp.initializeApp(this);
-       // userLogin();
         fbAuth = FirebaseAuth.getInstance();
         etPhnNum = findViewById(R.id.etPhnNum);
         btnLoginContinue = findViewById(R.id.btnLoginContinue);
@@ -54,13 +53,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                 Log.d(TAG, "onVerificationCompleted: "+phoneAuthCredential);
-              //  signInWithPhnCredential(phoneAuthCredential);
             }
 
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
-               // pbLoadLogin.setVisibility(View.GONE);
-               // btnLoginContinue.setVisibility(View.VISIBLE);
+                pbLoadLogin.setVisibility(View.GONE);
+                btnLoginContinue.setVisibility(View.VISIBLE);
                 Log.d(TAG, "onVerificationFailed: " + e.toString());
                 Toast.makeText(Login.this, "Verification failed due to "+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -68,8 +66,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onCodeSent(@NonNull String verificationID, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(verificationID, forceResendingToken);
-            //    pbLoadLogin.setVisibility(View.GONE);
-             //   btnLoginContinue.setVisibility(View.VISIBLE);
+                pbLoadLogin.setVisibility(View.GONE);
+                btnLoginContinue.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(Login.this,OTPVerification.class);
                 intent.putExtra("number", number);
                 intent.putExtra("verification",verificationID);
@@ -89,16 +87,28 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }
     }
     private void PhnNumVerification() {
-       // pbLoadLogin.setVisibility(View.VISIBLE);
-      //  btnLoginContinue.setVisibility(View.GONE);
+        pbLoadLogin.setVisibility(View.VISIBLE);
+        btnLoginContinue.setVisibility(View.GONE);
         String rec_text = etPhnNum.getText().toString().trim();
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(fbAuth)
                 .setPhoneNumber("+88" + rec_text)
                 .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(this)
+                .setActivity(Login.this)
                 .setCallbacks(verCallbacks)
                 .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
+    }
+    private void userLogin() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d(TAG, "userLogin: "+user.getPhoneNumber());
+        if(user != null)
+        {
+            Intent intent = new Intent(Login.this,MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+            return;
+        }
     }
 
 
