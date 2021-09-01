@@ -21,9 +21,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.tsproject.enchat.databinding.OtpBinding;
 
 public class OTPVerification extends AppCompatActivity implements  View.OnClickListener{
-
+    OtpBinding binding;
     private TextView tvShowNumber;
     private String verification;
     private Button btnVerify;
@@ -34,8 +35,10 @@ public class OTPVerification extends AppCompatActivity implements  View.OnClickL
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.otp);
-        editTextInput();
+        //setContentView(R.layout.otp);
+        binding = OtpBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        //editTextInput();
         tvShowNumber = findViewById(R.id.tvPhnNum);
         btnVerify = findViewById(R.id.btnVerify);
         etOTP1 = findViewById(R.id.etOTP1);
@@ -53,85 +56,7 @@ public class OTPVerification extends AppCompatActivity implements  View.OnClickL
     }
 
     private void editTextInput() {
-            etOTP1.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            etOTP2.requestFocus();
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            }); etOTP2.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            etOTP3.requestFocus();
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-        etOTP3.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                etOTP4.requestFocus();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        etOTP4.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                etOTP5.requestFocus();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        etOTP5.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                etOTP6.requestFocus();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
     }
 
     @Override

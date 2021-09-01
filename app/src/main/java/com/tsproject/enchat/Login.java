@@ -23,11 +23,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.tsproject.enchat.databinding.LoginBinding;
 
 import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
-public class Login extends AppCompatActivity implements View.OnClickListener{
+public class Login extends AppCompatActivity implements View.OnClickListener {
+    LoginBinding binding;
     public static final String TAG = "Login";
     ProgressBar pbLoadLogin;
     private EditText etPhnNum;
@@ -37,7 +39,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        //setContentView(R.layout.login);
+        binding = LoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         FirebaseApp.initializeApp(this);
        // userLogin();
         fbAuth = FirebaseAuth.getInstance();
