@@ -7,4 +7,8 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="teal_tg">#009687</color>
+    <color name="grey_tg_menu">#282E33</color>
+    <color name="grey_tg_chat">#33393F</color>
+    <color name="black_tg_back">#18191D</color>
 </resources>
