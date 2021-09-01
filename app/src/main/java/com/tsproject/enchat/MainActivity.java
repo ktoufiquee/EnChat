@@ -13,6 +13,7 @@ import android.os.Looper;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,19 +30,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-//        Handler handler = new Handler(Looper.getMainLooper());
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                Intent intent = new Intent(MainActivity.this, Login.class);
-//                startActivity(intent);
-//            }
-//        },3000);
-
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawerLayout);
         navView = findViewById(R.id.navView);
+
+        TextView uID = findViewById(R.id.uID);
+        uID.setText(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
         setSupportActionBar(toolbar);
 
@@ -63,9 +57,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void startChatOnClick() {
         EditText chatID = findViewById(R.id.chatID);
-
+        EditText userID = findViewById(R.id.nickname);
+        String userName = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        if(userID.getText().toString() != null) {
+            userName = userID.getText().toString();
+        }
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra("userID", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        intent.putExtra("userID", userName);
         intent.putExtra("chatID", chatID.getText().toString());
         startActivity(intent);
     }
