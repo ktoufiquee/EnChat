@@ -11,8 +11,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,7 +55,19 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
+        Button startChat = findViewById(R.id.startChat);
+        startChat.setOnClickListener(v -> startChatOnClick());
 
+
+    }
+
+    private void startChatOnClick() {
+        EditText chatID = findViewById(R.id.chatID);
+
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("userID", FirebaseAuth.getInstance().getCurrentUser().getUid());
+        intent.putExtra("chatID", chatID.getText().toString());
+        startActivity(intent);
     }
 
 }

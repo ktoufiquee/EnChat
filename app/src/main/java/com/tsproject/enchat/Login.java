@@ -100,9 +100,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
     private void userLogin() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        Log.d(TAG, "userLogin: "+user.getPhoneNumber());
+
         if(user != null)
         {
+            Log.d(TAG, "userLogin: "+user.getPhoneNumber());
             Intent intent = new Intent(Login.this,MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
