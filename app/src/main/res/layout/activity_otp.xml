@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_centerInParent="true"
-    tools:context=".OTPVerification"
     android:padding="10dp">
     <ProgressBar
         android:id="@+id/pbOTP"
@@ -28,16 +26,16 @@
         app:layout_constraintTop_toTopOf="parent"
         android:padding="15dp"/>
 
-   <TextView
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:layout_below="@+id/iv_OTPIcon"
-       android:layout_marginTop="15dp"
-       android:text="@string/enter_the_verification_code"
-       android:gravity="center"
-       android:id="@+id/tvOtpTitle"
-       android:textSize="24sp"
-       android:textColor="@color/black"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_OTPIcon"
+        android:layout_marginTop="15dp"
+        android:text="@string/enter_the_verification_code"
+        android:gravity="center"
+        android:id="@+id/tvOtpTitle"
+        android:textSize="24sp"
+        android:textColor="@color/black"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -47,19 +45,14 @@
         android:textStyle="bold"
         android:textSize="28sp"/>
 
-    <com.mukesh.OtpView
-        android:id="@+id/otp_view"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/etOTPPin"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:textSize="20sp"
-        android:inputType="number"
-        android:focusableInTouchMode="true"
         android:layout_below="@+id/tvPhnNum"
-        android:layout_centerHorizontal="true"
-        app:OtpItemCount="6"
-        android:padding="10dp"
-        app:OtpViewType="line" />
+        android:layout_margin="20dp"
+        android:gravity="center"
+        android:minHeight="48dp"
+        android:textAlignment="center" />
 
-    </RelativeLayout>
+</RelativeLayout>

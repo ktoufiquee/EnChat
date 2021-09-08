@@ -8,4 +8,10 @@
     <string name="loginContinue">Continue</string>
     <string name="otpLogo">OTPLogo</string>
     <string name="enter_the_verification_code">Enter the verification code</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="profile_info">Profile Info</string>
+    <string name="please_provide_your_name_and_optional_profile_photo">Please provide your name and optional profile photo</string>
+    <string name="type_your_name_here">Type your name here</string>
+    <string name="next">Next</string>
+    <string name="otpview">otpView</string>
 </resources>

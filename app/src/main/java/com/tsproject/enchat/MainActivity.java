@@ -52,7 +52,6 @@ public class MainActivity extends AppCompatActivity {
         Button startChat = findViewById(R.id.startChat);
         startChat.setOnClickListener(v -> startChatOnClick());
 
-
     }
 
     private void startChatOnClick() {

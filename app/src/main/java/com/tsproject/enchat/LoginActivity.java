@@ -1,47 +1,37 @@
 package com.tsproject.enchat;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.NoCopySpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.tsproject.enchat.databinding.LoginBinding;
 
-import java.sql.Time;
 import java.util.concurrent.TimeUnit;
 
-public class Login extends AppCompatActivity implements View.OnClickListener {
-    LoginBinding binding;
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String TAG = "Login";
     ProgressBar pbLoadLogin;
     private EditText etPhnNum;
     private Button btnLoginContinue;
     private FirebaseAuth fbAuth;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks verCallbacks;
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-        userLogin();
-        binding = LoginBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_login);
         FirebaseApp.initializeApp(this);
         fbAuth = FirebaseAuth.getInstance();
         etPhnNum = findViewById(R.id.etPhnNum);
@@ -60,7 +50,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 pbLoadLogin.setVisibility(View.GONE);
                 btnLoginContinue.setVisibility(View.VISIBLE);
                 Log.d(TAG, "onVerificationFailed: " + e.toString());
-                Toast.makeText(Login.this, "Verification failed due to "+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, "Verification failed due to "+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -68,7 +58,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 super.onCodeSent(verificationID, forceResendingToken);
                 pbLoadLogin.setVisibility(View.GONE);
                 btnLoginContinue.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(Login.this,OTPVerification.class);
+                Intent intent = new Intent(LoginActivity.this,OTPActivity.class);
                 intent.putExtra("number", number);
                 intent.putExtra("verification",verificationID);
                 startActivity(intent);
@@ -89,26 +79,25 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private void PhnNumVerification() {
         pbLoadLogin.setVisibility(View.VISIBLE);
         btnLoginContinue.setVisibility(View.GONE);
-        String rec_text = etPhnNum.getText().toString().trim();
+        String rec_phnNum = etPhnNum.getText().toString().trim();
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(fbAuth)
-                .setPhoneNumber("+88" + rec_text)
+                .setPhoneNumber("+88" + rec_phnNum)
                 .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(Login.this)
+                .setActivity(LoginActivity.this)
                 .setCallbacks(verCallbacks)
                 .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
+
     }
     private void userLogin() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
         if(user != null)
         {
             Log.d(TAG, "userLogin: "+user.getPhoneNumber());
-            Intent intent = new Intent(Login.this,MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();
-            return;
         }
     }
 
@@ -149,4 +138,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
 */
 }
+
+
 
