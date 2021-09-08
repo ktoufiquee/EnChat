@@ -40,7 +40,7 @@ public class OTPActivity extends AppCompatActivity {
         tvShowNumber.setText(getIntent().getStringExtra("number"));
         verification = getIntent().getStringExtra("verification");
         usernumber = getIntent().getStringExtra("number");
-        String otp = etOTP.getText().toString();
+
         etOTP.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -54,6 +54,7 @@ public class OTPActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                String otp = etOTP.getText().toString();
                 if (otp.length() == 6) {
                     if (verification != null) {
                         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verification, otp);

@@ -27,18 +27,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText etPhnNum;
     private Button btnLoginContinue;
     private FirebaseAuth fbAuth;
+    private String number;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks verCallbacks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         FirebaseApp.initializeApp(this);
+        userLogin();
         fbAuth = FirebaseAuth.getInstance();
         etPhnNum = findViewById(R.id.etPhnNum);
         btnLoginContinue = findViewById(R.id.btnLoginContinue);
         pbLoadLogin = findViewById(R.id.pbLogin);
         btnLoginContinue.setOnClickListener(this);
-        String number = etPhnNum.getText().toString().trim();
         verCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
@@ -77,6 +78,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
     private void PhnNumVerification() {
+        number = etPhnNum.getText().toString().trim();
         pbLoadLogin.setVisibility(View.VISIBLE);
         btnLoginContinue.setVisibility(View.GONE);
         String rec_phnNum = etPhnNum.getText().toString().trim();
