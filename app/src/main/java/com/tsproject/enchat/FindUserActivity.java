@@ -29,6 +29,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class FindUserActivity extends AppCompatActivity {
     private RecyclerView rvContact;
@@ -92,7 +94,6 @@ public class FindUserActivity extends AppCompatActivity {
                             User phnContact = new User(name,rec_number);
                             contactList.add(phnContact);
                             getUserDetails(phnContact);
-                            Log.d("tag", "getContacts: works" );
                             phnCursor.close();
 
                         }
@@ -100,7 +101,6 @@ public class FindUserActivity extends AppCompatActivity {
             }
         }
         cursor.close();
-        Log.d("tag", "getContacts: +1st while loop ");
 
     }
     private String formatNumber(String number)
@@ -115,28 +115,24 @@ public class FindUserActivity extends AppCompatActivity {
         if(number.charAt(0) != '+')
         {
             number = getCountryIso() + number;
-            Log.d("tag", "getContacts: " +number);
         }
         return number;
     }
 
     private void getUserDetails(User phnContact) {
-        Log.d("tag", "getUserDetails: called");
+
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference dRef = db.getReference().child("user");
         Query query = dRef.orderByChild("phnNum").equalTo(phnContact.getPhnNum());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("tag", "on data change: called");
-                Log.d("tag", "onDataChangeSnapshot: "+snapshot.exists());
                 if(snapshot.exists())
                 {
                     String name = "";
                     String number = "";
                     for(DataSnapshot childSnapshot : snapshot.getChildren())
                     {
-                        Log.d("tag", "goes to for loop");
                         if(childSnapshot.child("userName").getValue() != null)
                         {
                             name = childSnapshot.child("userName").getValue().toString();
@@ -148,7 +144,6 @@ public class FindUserActivity extends AppCompatActivity {
                         User appUser = new User(name, number);
                         userList.add(appUser);
                         adapter.notifyDataSetChanged();
-                        Log.d("tag", "onDataChange: "+ name + " " + number);
                     }
 
                 }
