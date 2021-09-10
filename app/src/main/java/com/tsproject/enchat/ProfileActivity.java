@@ -13,8 +13,13 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ProfileActivity extends AppCompatActivity {
     Button btnNext;
@@ -35,26 +40,32 @@ public class ProfileActivity extends AppCompatActivity {
                 }
                 else
                 {
-                    FirebaseDatabase db = FirebaseDatabase.getInstance();
-                    DatabaseReference dRef = db.getReference().child("user");
-                    String rec_number = getIntent().getStringExtra("number");
-                    User user = new User(rec_name, rec_number);
-                    dRef.push().setValue(user)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                    if(currentUser != null) {
+                        FirebaseDatabase db = FirebaseDatabase.getInstance();
+                        DatabaseReference dRef = db.getReference().child("user");
+                        String rec_number = getIntent().getStringExtra("number");
+                        User user = new User(rec_name, rec_number);
+                        dRef.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onSuccess(Void unused) {
-                                Log.d("Profile Activity", "onSuccess: ");
-                                Intent intent = new Intent(ProfileActivity.this,MainActivity.class);
-                                startActivity(intent);
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(!snapshot.exists())
+                                {
+                                       dRef.push().setValue(user);
+                                }
+                                else
+                                {
+                                    Toast.makeText(ProfileActivity.this, "User already exists!", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
+
                             @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.d("Profile Activity", "onFailure: " + e.toString());
-                                Toast.makeText(ProfileActivity.this, "Check your internet and try again.", Toast.LENGTH_SHORT).show();
+                            public void onCancelled(@NonNull DatabaseError error) {
+
                             }
                         });
+
+                    }
                 }
             }
         });

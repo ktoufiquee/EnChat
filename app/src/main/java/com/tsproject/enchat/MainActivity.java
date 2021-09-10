@@ -6,11 +6,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -50,10 +53,18 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         Button startChat = findViewById(R.id.startChat);
-        startChat.setOnClickListener(v -> startChatOnClick());
+     //   startChat.setOnClickListener(v -> startChatOnClick());
+        startChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+               Intent intent = new Intent(MainActivity.this, FindUserActivity.class);
+               startActivity(intent);
+            }
+        });
+
 
     }
-
     private void startChatOnClick() {
         EditText chatID = findViewById(R.id.chatID);
         EditText userID = findViewById(R.id.nickname);
@@ -66,5 +77,4 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("chatID", chatID.getText().toString());
         startActivity(intent);
     }
-
 }

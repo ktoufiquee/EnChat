@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         FirebaseApp.initializeApp(this);
-        userLogin();
+        userAlreadyLoggedIn();
         fbAuth = FirebaseAuth.getInstance();
         etPhnNum = findViewById(R.id.etPhnNum);
         btnLoginContinue = findViewById(R.id.btnLoginContinue);
@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 intent.putExtra("number", number);
                 intent.putExtra("verification",verificationID);
                 startActivity(intent);
+                finish();
             }
         };
     }
@@ -91,7 +92,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         PhoneAuthProvider.verifyPhoneNumber(options);
 
     }
-    private void userLogin() {
+    private void userAlreadyLoggedIn() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null)
         {

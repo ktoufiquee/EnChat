@@ -90,7 +90,7 @@
             android:layout_marginRight="67dp"
             android:layout_marginBottom="62dp"
             android:text="TextView"
-            android:textAlignment="center" />
+            android:textAlignment="center"/>
 
 
     </RelativeLayout>

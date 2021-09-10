@@ -3,6 +3,7 @@
     package="com.tsproject.enchat">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -12,8 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EnChat">
         <activity
+            android:name=".FindUserActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
-            android:exported="true"/>
+            android:exported="true" />
         <activity
             android:name=".OTPActivity"
             android:exported="true" />
@@ -26,6 +30,7 @@
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

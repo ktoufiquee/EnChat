@@ -64,6 +64,7 @@ public class OTPActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(OTPActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
+
                                             userLogin();
                                         } else {
                                             pbOTP.setVisibility(View.GONE);
