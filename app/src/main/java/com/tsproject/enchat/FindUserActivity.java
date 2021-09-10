@@ -1,6 +1,7 @@
 package com.tsproject.enchat;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -18,6 +19,8 @@ import android.provider.ContactsContract;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -85,19 +88,8 @@ public class FindUserActivity extends AppCompatActivity {
                        if(phnCursor.moveToNext())
                         {
                             String number = phnCursor.getString(phnCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            number.replaceAll("[^0-9]+","");
-                            if(number.charAt(0) == '0')
-                            {
-                                StringBuilder remove = new StringBuilder(number);
-                                remove.deleteCharAt(0);
-                                number = remove.toString();
-                            }
-                            if(number.charAt(0) != '+')
-                            {
-                                number = getCountryIso() + number;
-                                Log.d("tag", "getContacts: " +number);
-                            }
-                            User phnContact = new User(name,number);
+                            String rec_number = formatNumber(number);
+                            User phnContact = new User(name,rec_number);
                             contactList.add(phnContact);
                             getUserDetails(phnContact);
                             Log.d("tag", "getContacts: works" );
@@ -111,19 +103,35 @@ public class FindUserActivity extends AppCompatActivity {
         Log.d("tag", "getContacts: +1st while loop ");
 
     }
+    private String formatNumber(String number)
+    {
+        number.replaceAll("[^0-9]+","");
+        if(number.charAt(0) == '0')
+        {
+            StringBuilder remove = new StringBuilder(number);
+            remove.deleteCharAt(0);
+            number = remove.toString();
+        }
+        if(number.charAt(0) != '+')
+        {
+            number = getCountryIso() + number;
+            Log.d("tag", "getContacts: " +number);
+        }
+        return number;
+    }
 
     private void getUserDetails(User phnContact) {
         Log.d("tag", "getUserDetails: called");
-        DatabaseReference dRef = FirebaseDatabase.getInstance().getReference().child("user");
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference dRef = db.getReference().child("user");
         Query query = dRef.orderByChild("phnNum").equalTo(phnContact.getPhnNum());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Log.d("tag", "on data change: called");
                 Log.d("tag", "onDataChangeSnapshot: "+snapshot.exists());
                 if(snapshot.exists())
                 {
-
                     String name = "";
                     String number = "";
                     for(DataSnapshot childSnapshot : snapshot.getChildren())
@@ -142,6 +150,7 @@ public class FindUserActivity extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                         Log.d("tag", "onDataChange: "+ name + " " + number);
                     }
+
                 }
             }
 
