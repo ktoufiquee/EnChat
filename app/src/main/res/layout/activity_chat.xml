@@ -20,34 +20,44 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/grey_tg_menu"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/typeMessage"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8"
-            android:hint="Write a message..."
-            android:paddingHorizontal="20dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/white" />
-
-        <Button
-            android:id="@+id/send"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:background="@drawable/ic_baseline_send_24"
-            android:padding="10dp" />
-
-        <Button
-            android:id="@+id/attach"
-            android:layout_width="0dp"
+        android:orientation="vertical">
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.1"
-            android:background="@drawable/ic_baseline_attach_file_24"
-            android:gravity="center"
-            android:padding="10dp" />
+            android:id="@+id/attachmentList"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etMessage"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8"
+                android:hint="Write a message..."
+                android:paddingHorizontal="20dp"
+                android:textColor="@color/white"
+                android:textColorHint="@color/white" />
+
+            <Button
+                android:id="@+id/btnSend"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:background="@drawable/ic_baseline_send_24"
+                android:padding="10dp" />
+
+            <Button
+                android:id="@+id/btnAttach"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.1"
+                android:background="@drawable/ic_baseline_attach_file_24"
+                android:gravity="center"
+                android:padding="10dp" />
+        </LinearLayout>
     </LinearLayout>
 
 </RelativeLayout>

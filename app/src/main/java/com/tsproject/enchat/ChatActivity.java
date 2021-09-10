@@ -5,9 +5,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,12 +23,13 @@ import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
     private String userID, chatID;
-    private RecyclerView mChat;
-    private RecyclerView.Adapter mChatAdapter;
-    private RecyclerView.LayoutManager mChatLayoutManager;
+    private RecyclerView rvChat;
+    private RecyclerView.Adapter rvChatAdapter;
+    private RecyclerView.LayoutManager rvChatLayoutManager;
     private DatabaseReference chatDB;
 
     ArrayList<MessageObject> messageList;
+    ArrayList<String> mediaUriList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,29 +40,60 @@ public class ChatActivity extends AppCompatActivity {
         chatID = getIntent().getExtras().getString("chatID");
         chatDB = FirebaseDatabase.getInstance().getReference().child("chat").child(chatID);
 
-        Button mSend = findViewById(R.id.send);
-        mSend.setOnClickListener(v -> sendMessage());
+        Button btnSend = findViewById(R.id.btnSend);
+        btnSend.setOnClickListener(v -> sendMessage());
+
+        Button btnAttach = findViewById(R.id.btnAttach);
+        btnAttach.setOnClickListener(v -> sendAttachment());
 
         initRecyclerView();
         getChatMessages();
+    }
+
+
+
+    private void sendAttachment() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture(s)"), 1);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                if (data.getClipData() == null) {
+                    mediaUriList.add(data.getData().toString());
+                }
+                else {
+                    for (int i = 0; i < data.getClipData().getItemCount(); ++i) {
+                        mediaUriList.add(data.getClipData().getItemAt(i).toString());
+                    }
+                }
+            }
+        }
     }
 
     private void getChatMessages() {
         chatDB.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                if(snapshot.exists()) {
+                if (snapshot.exists()) {
                     String sender = "", text = "";
-                    if(snapshot.child("text").getValue() != null) {
+                    if (snapshot.child("text").getValue() != null) {
                         text = snapshot.child("text").getValue().toString();
                     }
-                    if(snapshot.child("sender").getValue() != null) {
+                    if (snapshot.child("sender").getValue() != null) {
                         sender = snapshot.child("sender").getValue().toString();
                     }
                     MessageObject readMessage = new MessageObject(snapshot.getKey(), sender, text);
                     messageList.add(readMessage);
-                    mChatLayoutManager.scrollToPosition(messageList.size() - 1);
-                    mChatAdapter.notifyDataSetChanged();
+                    rvChatLayoutManager.scrollToPosition(messageList.size() - 1);
+                    rvChatAdapter.notifyDataSetChanged();
 
                 }
 
@@ -87,8 +122,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendMessage() {
-        EditText mMessage = findViewById(R.id.typeMessage);
-        if(!mMessage.getText().toString().isEmpty()) {
+        EditText mMessage = findViewById(R.id.etMessage);
+        if (!mMessage.getText().toString().isEmpty()) {
             DatabaseReference newMessageDB = chatDB.push();
             Map newMessageMap = new HashMap<>();
             newMessageMap.put("text", mMessage.getText().toString());
@@ -101,11 +136,11 @@ public class ChatActivity extends AppCompatActivity {
 
     private void initRecyclerView() {
         messageList = new ArrayList<>();
-        mChat = findViewById(R.id.messageList);
-        mChat.setNestedScrollingEnabled(false);
-        mChatLayoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
-        mChat.setLayoutManager(mChatLayoutManager);
-        mChatAdapter = new MessageAdapter(messageList);
-        mChat.setAdapter(mChatAdapter);
+        rvChat = findViewById(R.id.messageList);
+        rvChat.setNestedScrollingEnabled(false);
+        rvChatLayoutManager = new LinearLayoutManager(getApplicationContext(), RecyclerView.VERTICAL, false);
+        rvChat.setLayoutManager(rvChatLayoutManager);
+        rvChatAdapter = new MessageAdapter(messageList);
+        rvChat.setAdapter(rvChatAdapter);
     }
 }
