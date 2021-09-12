@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        Fresco.initialize(this);
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawerLayout);
         navView = findViewById(R.id.navView);
@@ -53,27 +54,28 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         Button startChat = findViewById(R.id.startChat);
-     //   startChat.setOnClickListener(v -> startChatOnClick());
-        startChat.setOnClickListener(new View.OnClickListener() {
+        startChat.setOnClickListener(v -> startChatOnClick());
+        /*startChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                Intent intent = new Intent(MainActivity.this, FindUserActivity.class);
                startActivity(intent);
             }
-        });
+        });*/
 
 
     }
+
     private void startChatOnClick() {
         EditText chatID = findViewById(R.id.chatID);
         EditText userID = findViewById(R.id.nickname);
         String userName = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        if(userID.getText().toString() != null) {
+        if (userID.getText().toString() != null) {
             userName = userID.getText().toString();
         }
         Intent intent = new Intent(this, ChatActivity.class);
-        intent.putExtra("userID", userName);
+        //intent.putExtra("userID", userName);
         intent.putExtra("chatID", chatID.getText().toString());
         startActivity(intent);
     }
