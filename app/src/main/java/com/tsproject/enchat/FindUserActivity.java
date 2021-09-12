@@ -44,7 +44,7 @@ public class FindUserActivity extends AppCompatActivity{
     public static final String tag = "TAG";
     private RecyclerView rvContact;
     private FirebaseDatabase db;
-    private DatabaseReference dRef;
+    private DatabaseReference dRef,userRef;
     private FirebaseUser currentUser;
     private ArrayList<User> contactList, userList;
     private ContactListAdapter adapter;
@@ -110,7 +110,6 @@ public class FindUserActivity extends AppCompatActivity{
     }
     public void showAlert() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
-      //  alert.setTitle("Wrong Input Format");
         alert.setMessage("EnChat needs access to your contacts to connect with your friends");
         alert.setCancelable(false);
         alert.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
@@ -230,11 +229,12 @@ public class FindUserActivity extends AppCompatActivity{
     }
 
     private void getUserDetails(User phnContact) {
-
-        Query query = dRef.orderByChild("phnNum").equalTo(phnContact.getPhnNum());
+        userRef = db.getReference().child("user");
+        Query query = userRef.orderByChild("phnNum").equalTo(phnContact.getPhnNum());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("check", "onDataChange: "+snapshot.exists());
                 if(snapshot.exists())
                 {
                     String name = "";
