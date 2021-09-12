@@ -61,7 +61,7 @@ public class CountryToPhonePrefix {
         country2phone.put("DK", "+45");
         country2phone.put("DJ", "+253");
         country2phone.put("DM", "+1-767");
-        country2phone.put("DO", "+1-809and1-829");
+        country2phone.put("DO", "+1-809");
         country2phone.put("EC", "+593");
         country2phone.put("EG", "+20");
         country2phone.put("SV", "+503");
@@ -240,7 +240,7 @@ public class CountryToPhonePrefix {
         country2phone.put("SH", "+290");
         country2phone.put("TC", "+1-649");
         country2phone.put("MP", "+1-670");
-        country2phone.put("PR", "+1-787and1-939");
+        country2phone.put("PR", "+1-787");
         country2phone.put("AS", "+1-684");
         country2phone.put("GU", "+1-671");
         country2phone.put("VI", "+1-340");

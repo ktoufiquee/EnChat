@@ -14,10 +14,17 @@ import android.widget.Toast;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.concurrent.TimeUnit;
 
@@ -40,6 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         btnLoginContinue = findViewById(R.id.btnLoginContinue);
         pbLoadLogin = findViewById(R.id.pbLogin);
         btnLoginContinue.setOnClickListener(this);
+
         verCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
@@ -72,19 +80,27 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch(v.getId())
         {
             case R.id.btnLoginContinue:
-                PhnNumVerification();
+                    checkNumber();
                 break;
             default:
                 break;
         }
     }
-    private void PhnNumVerification() {
+
+    private void checkNumber(){
         number = etPhnNum.getText().toString().trim();
+        number = "+88" + number;
+        PhnNumVerification();
+    }
+
+
+    private void PhnNumVerification() {
+
         pbLoadLogin.setVisibility(View.VISIBLE);
         btnLoginContinue.setVisibility(View.GONE);
-        String rec_phnNum = etPhnNum.getText().toString().trim();
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(fbAuth)
-                .setPhoneNumber("+88" + rec_phnNum)
+               // .setPhoneNumber("+88"+ " " + rec_phnNum)//
+                .setPhoneNumber(number)
                 .setTimeout(60L, TimeUnit.SECONDS)
                 .setActivity(LoginActivity.this)
                 .setCallbacks(verCallbacks)
@@ -93,10 +109,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
     private void userAlreadyLoggedIn() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if(user != null)
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser != null)
         {
-            Log.d(TAG, "userLogin: "+user.getPhoneNumber());
+            Log.d(TAG, "userLogin: "+currentUser.getPhoneNumber());
             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
@@ -104,42 +120,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-
-  /*  private void signInWithPhnCredential(PhoneAuthCredential phoneAuthCredential) {
-            fbAuth.signInWithCredential(phoneAuthCredential)
-                  .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                      @Override
-                      public void onComplete(@NonNull Task<AuthResult> task) {
-                          if(task.isSuccessful())
-                          {
-                              Log.d(TAG, "onComplete: signInWithPhnCredential");
-                              userLogin();
-                          }
-                          else
-                          {
-                              Log.d(TAG, "signInPhnCredential failure");
-                              Toast.makeText(Login.this, "Invalid verification code", Toast.LENGTH_SHORT).show();
-                          }
-                      }
-                  });
-
-    }
-
-
-    private void userLogin() {
-        FirebaseUser user = fbAuth.getInstance().getCurrentUser();
-        if(user != null)
-        {
-            Intent intent = new Intent(Login.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }
-    }
-
-
-
-*/
 }
 
 

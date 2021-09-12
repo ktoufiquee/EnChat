@@ -24,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 public class ProfileActivity extends AppCompatActivity {
     Button btnNext;
     EditText etName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,38 +35,31 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String rec_name = etName.getText().toString().trim();
-                if(rec_name.equals(""))
-                {
+                if (rec_name.equals("")) {
                     etName.setError("Enter your name");
-                }
-                else
-                {
+                } else {
+                    String rec_number = getIntent().getStringExtra("number");
+                    User user = new User(rec_name, rec_number);
                     FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                    if(currentUser != null) {
-                        FirebaseDatabase db = FirebaseDatabase.getInstance();
-                        DatabaseReference dRef = db.getReference().child("user");
-                        String rec_number = getIntent().getStringExtra("number");
-                        User user = new User(rec_name, rec_number);
-                        dRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    FirebaseDatabase db = FirebaseDatabase.getInstance();
+                    DatabaseReference dRef = db.getReference().child("user").child(currentUser.getUid());
+                    dRef.setValue(user)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if(!snapshot.exists())
-                                {
-                                       dRef.push().setValue(user);
-                                }
-                                else
-                                {
-                                    Toast.makeText(ProfileActivity.this, "User already exists!", Toast.LENGTH_SHORT).show();
-                                }
+                            public void onSuccess(Void unused) {
+                                Toast.makeText(ProfileActivity.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(ProfileActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
                             }
+                        })
+                          .addOnFailureListener(new OnFailureListener() {
+                              @Override
+                              public void onFailure(@NonNull Exception e) {
+                                  Toast.makeText(ProfileActivity.this, "Check your internet!", Toast.LENGTH_SHORT).show();
+                              }
+                          });
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
-
-                    }
                 }
             }
         });

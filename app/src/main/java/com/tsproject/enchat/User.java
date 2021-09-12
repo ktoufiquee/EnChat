@@ -3,18 +3,12 @@ package com.tsproject.enchat;
 public class User {
     String userName;
     String phnNum;
-    String userID;
+    String contactPermission;
 
     public User()
     {
 
     }
-    public User(String userName, String phnNum, String userID) {
-        this.userName = userName;
-        this.phnNum = phnNum;
-        this.userID = userID;
-    }
-
     public User(String userName, String phnNum) {
         this.userName = userName;
         this.phnNum = phnNum;
@@ -36,11 +30,11 @@ public class User {
         this.phnNum = phnNum;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getContactPermission() {
+        return contactPermission;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setContactPermission(String contactPermission) {
+        this.contactPermission = contactPermission;
     }
 }
