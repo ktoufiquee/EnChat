@@ -107,6 +107,7 @@ public class FindUserActivity extends AppCompatActivity{
 
             }
         });
+        //getUserDetails();
     }
     public void showAlert() {
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -230,11 +231,11 @@ public class FindUserActivity extends AppCompatActivity{
 
     private void getUserDetails(User phnContact) {
         userRef = db.getReference().child("user");
+        Log.d("TESTING", phnContact.getPhnNum());
         Query query = userRef.orderByChild("phnNum").equalTo(phnContact.getPhnNum());
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("check", "onDataChange: "+snapshot.exists());
                 if(snapshot.exists())
                 {
                     String name = "";
