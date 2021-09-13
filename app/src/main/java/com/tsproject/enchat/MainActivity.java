@@ -54,15 +54,15 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
 
         Button startChat = findViewById(R.id.startChat);
-        startChat.setOnClickListener(v -> startChatOnClick());
-//        startChat.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//               Intent intent = new Intent(MainActivity.this, FindUserActivity.class);
-//               startActivity(intent);
-//            }
-//        });
+        //startChat.setOnClickListener(v -> startChatOnClick());
+        startChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+               Intent intent = new Intent(MainActivity.this, FindUserActivity.class);
+               startActivity(intent);
+            }
+        });
 
 
     }

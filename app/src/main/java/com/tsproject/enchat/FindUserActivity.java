@@ -226,20 +226,25 @@ public class FindUserActivity extends AppCompatActivity{
         cursor.close();
     }
 
-    private String formatNumber(String number)
-    {
-        number = number.replaceAll("[^0-9]+","");
-        if(number.charAt(0) == '0')
-        {
+    private String formatNumber(String number) {
+//        String iso = getCountryIso();
+        String iso = "+880";
+        String fNum = "";
+        number = number.replaceAll("[^0-9]+", "");
+        if(number.charAt(0) == '0') {
             number = number.substring(1);
         }
-        if(number.charAt(0) != '+')
-        {
-            number = getCountryIso() + number;
+        else if(number.substring(0, iso.length() - 1).equals(iso.substring(1))) {
+            number = number.substring(iso.length());
         }
+        else {
 
-        return number;
+        }
+        fNum = iso + number;
+        Log.d("FormatTest", fNum);
+        return fNum;
     }
+
 
     private void getUserDetails(User phnContact) {
         userRef = db.getReference().child("user");
