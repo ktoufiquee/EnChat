@@ -130,10 +130,11 @@ public class FindUserActivity extends AppCompatActivity{
 
     private void searchUser(String s)
     {
-            userRef = db.getReference().child("user");
-            Query query = userRef.orderByChild("contactName")
-                              .startAt(s)
-                              .endAt(s+"\uf8ff");
+        userList.clear();
+        userRef = db.getReference().child("user");
+        Query query = userRef.orderByChild("contactName")
+                .startAt(s)
+                .endAt(s+"\uf8ff");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -148,73 +149,83 @@ public class FindUserActivity extends AppCompatActivity{
                 adapter.notifyDataSetChanged();
             }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
+            }
+        });
     }
     private void readUser()
     {
-
+        //This function will be called after pressing on Contact button
+        //Read all the contacts from users profile in Firebase
+        //Store them in an ArrayList
+        //Notify the adapter
     }
+
+    //Scenario:
+    //First Time Run = Permission -> getContact -> readUser
+    //Not First Time Run = Permission -> false -> Ask? -> getContact -> readUser
+    //Not First Time Run = Permission -> True -> readUser
+    //SearchBar TextLength() > 0 -> remove contacts from ArrayList that doesn't match with criteria -> Notify adapter
+    //SearchBar TextLength() = 0 -> readUser
 
     private void getPermission() {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                    ContextCompat.checkSelfPermission(FindUserActivity.this,
-                    Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED)
-            {
-                ActivityCompat.requestPermissions(FindUserActivity.this, new String[]{Manifest.permission.READ_CONTACTS},1);
-                Log.d(tag, "getPermission: request permission ");
-            }
-            else
-            {
-               // getContacts();
-                Log.d(tag, "getPermission: request permission accepted");
-            }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                ContextCompat.checkSelfPermission(FindUserActivity.this,
+                        Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_DENIED)
+        {
+            ActivityCompat.requestPermissions(FindUserActivity.this, new String[]{Manifest.permission.READ_CONTACTS},1);
+            Log.d(tag, "getPermission: request permission ");
+        }
+        else
+        {
+            // getContacts();
+            Log.d(tag, "getPermission: request permission accepted");
+        }
     }
 
-   private void initializeRecyclerView(){
+    private void initializeRecyclerView(){
         adapter = new ContactListAdapter(this);
         adapter.setContactList(userList);
-      //  adapter.setContactList(searchList);
+        //  adapter.setContactList(searchList);
         rvContact.setAdapter(adapter);
         rvContact.setLayoutManager(new LinearLayoutManager(this));
     }
+
     private void getContacts()
     {
         Uri uri = ContactsContract.Contacts.CONTENT_URI;
         String sort = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+" ASC";
         Cursor cursor = getContentResolver()
-                                          .query(uri, null, null, null, sort);
+                .query(uri, null, null, null, sort);
         if(cursor.getCount() > 0)
         {
             while(cursor.moveToNext())
             {
 
-                 String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                 String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
-                 Uri phnUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
-                 String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =?";
-                 Cursor phnCursor = getContentResolver().
-                                                    query(phnUri,null, selection,new String[]{id}, null);
+                String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                Uri phnUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+                String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =?";
+                Cursor phnCursor = getContentResolver().
+                        query(phnUri,null, selection,new String[]{id}, null);
 
-                       if(phnCursor.moveToNext())
-                        {
-                           String number = phnCursor.getString(phnCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            String rec_number = formatNumber(number);
-                            User phnContact = new User(contactName, rec_number);
-                            contactList.add(phnContact);
-                            getUserDetails(phnContact);
-                            phnCursor.close();
+                if(phnCursor.moveToNext())
+                {
+                    String number = phnCursor.getString(phnCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    String rec_number = formatNumber(number);
+                    User phnContact = new User(contactName, rec_number);
+                    contactList.add(phnContact);
+                    getUserDetails(phnContact);
+                    phnCursor.close();
 
-                        }
-
+                }
             }
         }
         cursor.close();
-
     }
+
     private String formatNumber(String number)
     {
         number = number.replaceAll("[^0-9]+","");
@@ -258,8 +269,8 @@ public class FindUserActivity extends AppCompatActivity{
                         Map<String,Object> save = new HashMap<>();
                         save.put("userName",userName);
                         dRef.child("connectedUser").child(childSnapshot.getKey()).setValue(save);
-                      //  userList.add(appUser);
-                    //    adapter.notifyDataSetChanged();
+                        //  userList.add(appUser);
+                        //    adapter.notifyDataSetChanged();
                     }
 
                 }
@@ -278,7 +289,7 @@ public class FindUserActivity extends AppCompatActivity{
         String countryIso = "";
         String iso = "";
         TelephonyManager telephonyManager = (TelephonyManager) getApplicationContext().
-                                            getSystemService(getApplicationContext().TELEPHONY_SERVICE);
+                getSystemService(getApplicationContext().TELEPHONY_SERVICE);
         if(telephonyManager.getNetworkCountryIso() != null)
         {
             if(!telephonyManager.getNetworkCountryIso().equals(""))
@@ -294,13 +305,13 @@ public class FindUserActivity extends AppCompatActivity{
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
         {
-         //      getContacts();
-               dRef.child("contactPermission").setValue("true");
+            //      getContacts();
+            dRef.child("contactPermission").setValue("true");
         }
         else
         {
-               Log.d("tag", "onRequestPermissionsResult: "+ "can't show");
-               dRef.child("contactPermission").setValue("false");
+            Log.d("tag", "onRequestPermissionsResult: "+ "can't show");
+            dRef.child("contactPermission").setValue("false");
         }
     }
 }

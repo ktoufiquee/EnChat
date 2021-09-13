@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Message {
     private long timestamp;
-    private int react;
+    private int react = -1;
     private String messageID;
     private String senderId;
     private String message;

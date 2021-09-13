@@ -5,27 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="5dp"
-    android:layout_marginBottom="5dp">
+    android:layout_marginBottom="5dp"
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/tvMessageSend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/send_drawable"
-        android:padding="5dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
         android:text="TextView"
         android:textColor="#000000"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ivReactSend"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/tvMessageSend"
         app:layout_constraintEnd_toStartOf="@+id/tvMessageSend"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/tvMessageSend"
         app:layout_constraintTop_toBottomOf="@+id/tvMessageSend"
         app:srcCompat="@mipmap/ic_react_love_foreground" />

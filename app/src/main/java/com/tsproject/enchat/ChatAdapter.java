@@ -70,13 +70,16 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 SendViewHolder sendViewHolder = (SendViewHolder) holder;
                 sendViewHolder.binding.ivReactSend.setImageResource(reacts[pos]);
                 sendViewHolder.binding.ivReactSend.setVisibility(View.VISIBLE);
-            }
-            else {
+            } else {
                 ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) holder;
                 receiveViewHolder.binding.ivReactRecieve.setImageResource(reacts[pos]);
             }
-            Log.d("TEST", pos + " " + chatID + " " + message.getMessageID());
-            message.setReact(pos);
+            //Log.d("TEST", pos + " " + chatID + " " + message.getMessageID());
+            if (message.getReact() == pos) {
+                message.setReact(-1);
+            } else {
+                message.setReact(pos);
+            }
             FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).child(message.getMessageID()).setValue(message);
 
             return true; // true is closing popup, false is requesting a new selection
@@ -86,6 +89,13 @@ public class ChatAdapter extends RecyclerView.Adapter {
         if (holder.getClass() == SendViewHolder.class) {
             SendViewHolder sendViewHolder = (SendViewHolder) holder;
             sendViewHolder.binding.tvMessageSend.setText(message.getMessage());
+            if (message.getReact() >= 0) {
+                sendViewHolder.binding.ivReactSend.setImageResource(reacts[(int) message.getReact()]);
+                sendViewHolder.binding.ivReactSend.setVisibility(View.VISIBLE);
+            } else {
+                sendViewHolder.binding.ivReactSend.setVisibility(View.GONE);
+            }
+
             sendViewHolder.binding.tvMessageSend.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -96,6 +106,13 @@ public class ChatAdapter extends RecyclerView.Adapter {
         } else {
             ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) holder;
             receiveViewHolder.binding.tvMessageRecieve.setText(message.getMessage());
+            if (message.getReact() >= 0) {
+                receiveViewHolder.binding.ivReactRecieve.setImageResource(reacts[(int) message.getReact()]);
+                receiveViewHolder.binding.ivReactRecieve.setVisibility(View.VISIBLE);
+            } else {
+                receiveViewHolder.binding.ivReactRecieve.setVisibility(View.GONE);
+            }
+
             receiveViewHolder.binding.tvMessageRecieve.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -123,6 +140,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
     public class SendViewHolder extends RecyclerView.ViewHolder {
         ItemSendBinding binding;
+
         public SendViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = ItemSendBinding.bind(itemView);
@@ -131,6 +149,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
     public class ReceiveViewHolder extends RecyclerView.ViewHolder {
         ItemReceiveBinding binding;
+
         public ReceiveViewHolder(@NonNull View itemView) {
             super(itemView);
             binding = ItemReceiveBinding.bind(itemView);
