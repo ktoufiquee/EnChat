@@ -47,6 +47,7 @@ public class FindUserActivity extends AppCompatActivity{
     private DatabaseReference dRef,userRef;
     private FirebaseUser currentUser;
     private ArrayList<User> contactList, userList;
+    private ArrayList<User> searchList;
     private ContactListAdapter adapter;
     private EditText etSearchUser;
 
@@ -59,6 +60,7 @@ public class FindUserActivity extends AppCompatActivity{
         etSearchUser = findViewById(R.id.etSearchFilter);
         contactList = new ArrayList<>();
         userList = new ArrayList<>();
+        searchList = new ArrayList<>();
         db = FirebaseDatabase.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         dRef = db.getReference().child("user").child(currentUser.getUid());
@@ -113,41 +115,38 @@ public class FindUserActivity extends AppCompatActivity{
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
         alert.setMessage("EnChat needs access to your contacts to connect with your friends");
         alert.setCancelable(false);
-        alert.setPositiveButton("Continue", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                getPermission();
-            }
+        alert.setPositiveButton("Continue", (dialog, which) -> {
+            dialog.cancel();
+            getPermission();
         });
-        alert.setNegativeButton("Not now", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                Intent intent = new Intent(FindUserActivity.this,MainActivity.class);
-                finish();
-                startActivity(intent);
-            }
+        alert.setNegativeButton("Not now", (dialog, which) -> {
+            dialog.cancel();
+            Intent intent = new Intent(FindUserActivity.this,MainActivity.class);
+            finish();
+            startActivity(intent);
         });
         alert.create().show();
     }
 
     private void searchUser(String s)
     {
-            Query query = dRef.orderByChild("userName")
+            userRef = db.getReference().child("user");
+            Query query = userRef.orderByChild("contactName")
                               .startAt(s)
                               .endAt(s+"\uf8ff");
-            query.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot childSnapshot : snapshot.getChildren())
-                        {
-                            if(!childSnapshot.getKey().equals(currentUser.getUid()))
-                            {
-
-                            }
-                        }
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    String name = "";
+                    String number = "";
+                    for (DataSnapshot childSnapshot : snapshot.getChildren()) {
+                        User user = childSnapshot.getValue(User.class);
+                        userList.add(user);
+                    }
                 }
+                adapter.notifyDataSetChanged();
+            }
 
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
@@ -155,7 +154,10 @@ public class FindUserActivity extends AppCompatActivity{
                 }
             });
     }
+    private void readUser()
+    {
 
+    }
 
     private void getPermission() {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -175,6 +177,7 @@ public class FindUserActivity extends AppCompatActivity{
    private void initializeRecyclerView(){
         adapter = new ContactListAdapter(this);
         adapter.setContactList(userList);
+      //  adapter.setContactList(searchList);
         rvContact.setAdapter(adapter);
         rvContact.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -189,7 +192,7 @@ public class FindUserActivity extends AppCompatActivity{
             while(cursor.moveToNext())
             {
 
-                 String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                 String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
                  String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                  Uri phnUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
                  String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =?";
@@ -198,9 +201,9 @@ public class FindUserActivity extends AppCompatActivity{
 
                        if(phnCursor.moveToNext())
                         {
-                            String number = phnCursor.getString(phnCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                           String number = phnCursor.getString(phnCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                             String rec_number = formatNumber(number);
-                            User phnContact = new User(name,rec_number);
+                            User phnContact = new User(contactName, rec_number);
                             contactList.add(phnContact);
                             getUserDetails(phnContact);
                             phnCursor.close();
@@ -214,18 +217,16 @@ public class FindUserActivity extends AppCompatActivity{
     }
     private String formatNumber(String number)
     {
-        number.replaceAll("[^0-9]+","");
+        number = number.replaceAll("[^0-9]+","");
         if(number.charAt(0) == '0')
         {
-            StringBuilder remove = new StringBuilder(number);
-            remove.deleteCharAt(0);
-            number = remove.toString();
+            number = number.substring(1);
         }
         if(number.charAt(0) != '+')
         {
             number = getCountryIso() + number;
         }
-        Log.d("check", "formatNumber: " + number);
+
         return number;
     }
 
@@ -238,21 +239,27 @@ public class FindUserActivity extends AppCompatActivity{
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
-                    String name = "";
+                    String userName = "";
                     String number = "";
+                    String contactName = "";
                     for(DataSnapshot childSnapshot : snapshot.getChildren())
                     {
                         if(childSnapshot.child("userName").getValue() != null)
                         {
-                            name = childSnapshot.child("userName").getValue().toString();
+                            userName = childSnapshot.child("userName").getValue().toString();
+                            contactName = phnContact.getContactName();
+                            Log.d("contact Name", "onDataChange: " + contactName);
                         }
                         if(childSnapshot.child("phnNum").getValue() != null)
                         {
                             number = childSnapshot.child("phnNum").getValue().toString();
                         }
-                        User appUser = new User(name, number);
-                        userList.add(appUser);
-                        adapter.notifyDataSetChanged();
+                        User appUser = new User(contactName, number);
+                        Map<String,Object> save = new HashMap<>();
+                        save.put("userName",userName);
+                        dRef.child("connectedUser").child(childSnapshot.getKey()).setValue(save);
+                      //  userList.add(appUser);
+                    //    adapter.notifyDataSetChanged();
                     }
 
                 }

@@ -39,7 +39,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ContactListAdapter.ViewHolder holder, int position) {
-            holder.tvContactName.setText(contactList.get(position).userName);
+            holder.tvContactName.setText(contactList.get(position).contactName);
             holder.tvContactNumber.setText(contactList.get(position).phnNum);
     }
 
