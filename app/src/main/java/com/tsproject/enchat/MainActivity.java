@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button startChat = findViewById(R.id.startChat);
         //startChat.setOnClickListener(v -> startChatOnClick());
+
         startChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

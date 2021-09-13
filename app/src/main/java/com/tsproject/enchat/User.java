@@ -11,8 +11,8 @@ public class User {
     {
 
     }
-    public User(String contactName, String phnNum) {
-        this.contactName = contactName;
+    public User(String userName, String phnNum) {
+        this.userName = userName;
         this.phnNum = phnNum;
     }
 
