@@ -11,4 +11,13 @@
     <color name="grey_tg_menu">#282E33</color>
     <color name="grey_tg_chat">#33393F</color>
     <color name="black_tg_back">#18191D</color>
+    <color name="solid_circle">#80FFFFFF</color>
+    <color name="circle_border">#30FFFFFF</color>
+    <color name = "grad_start">#B1F2FF</color>
+    <color name = "grad_end">#63E5FF</color>
+    <color name = "title">#00bfff</color>
+    <color name = "grey">#E5E5E5 </color>
+
+
+
 </resources>

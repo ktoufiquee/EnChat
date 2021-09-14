@@ -3,11 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.17604166666666668" />
+        <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/drawable/circle_border.xml" value="0.178125" />
+        <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/drawable/gradient.xml" value="0.178125" />
+        <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/drawable/ic_attachment.xml" value="0.17604166666666668" />
+        <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/drawable/ic_launcher_background.xml" value="0.17604166666666668" />
         <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/layout/activity_find_user.xml" value="0.17604166666666668" />
         <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/layout/activity_main.xml" value="0.21" />
         <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/layout/activity_otp.xml" value="0.18" />
-        <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/layout/activity_profile.xml" value="0.19" />
+        <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/layout/activity_profile.xml" value="0.25" />
+        <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/layout/activity_profile_friend.xml" value="0.33" />
+        <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/layout/activity_profile_info.xml" value="0.14635416666666667" />
         <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/layout/item_contact.xml" value="0.21" />
         <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/layout/item_message.xml" value="0.15" />
         <entry key="..\:/Users/Srishti/Documents/Git/EnChat/app/src/main/res/layout/login.xml" value="0.22" />

@@ -81,7 +81,7 @@ public class OTPActivity extends AppCompatActivity {
     private void userLogin() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            Intent intent = new Intent(OTPActivity.this, ProfileActivity.class);
+            Intent intent = new Intent(OTPActivity.this, ProfileInfoActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("number", usernumber);
             startActivity(intent);

@@ -1,47 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="30dp"
-    android:padding="10dp">
+    tools:context=".ProfileActivity">
 
-    <TextView
+    <RelativeLayout
+        android:id="@+id/rlShowImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/andada"
-        android:gravity="center_horizontal"
-        android:text="@string/profile_info"
-        android:textAlignment="center"
-        android:id="@+id/tvProfileTitle"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:background="@drawable/gradient">
 
-    <TextView
-        android:id="@+id/tvProfileInstruction"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/ivShowProfileImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="10dp"
+            android:src="@drawable/ic_check"
+            app:civ_border_color="@color/solid_circle"
+            app:civ_border_width="3dp" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvProfileTitle"
-        android:layout_marginTop="20dp"
-        android:text="@string/please_provide_your_name_and_optional_profile_photo"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        android:gravity="center_horizontal" />
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvProfileInstruction"
-        android:padding="16sp"
-        android:hint="@string/type_your_name_here"
-        android:textSize="16sp"
-        android:layout_marginTop="30dp"
-        android:id="@+id/etName"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/etName"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
-        android:backgroundTint="@color/teal_200"
-        android:id="@+id/btnProfileNext"
-        android:text="@string/next"/>
-</RelativeLayout>
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rlShowImage">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:padding="20dp"
+            android:orientation="vertical">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Name"
+                    android:textColor="@color/title"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Swarna"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/grey" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="About"
+                    android:textColor="@color/title"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Battery about to die"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/grey" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/title"
+                    android:text="Phone"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:text="122222"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@color/grey" />
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    </RelativeLayout>
