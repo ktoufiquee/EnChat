@@ -8,30 +8,45 @@
     android:layout_marginBottom="5dp"
     android:padding="5dp">
 
-    <TextView
-        android:id="@+id/tvMessageSend"
+    <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/send_drawable"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="5dp"
-        android:text="TextView"
-        android:textColor="#000000"
-        android:textSize="16sp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivMediaSend"
+            android:layout_width="200dp"
+            android:layout_height="130dp"
+            android:layout_margin="5dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvMessageSend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="TextView"
+            android:textColor="#000000"
+            android:textSize="16sp" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/ivReactSend"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/tvMessageSend"
-        app:layout_constraintEnd_toStartOf="@+id/tvMessageSend"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/tvMessageSend"
-        app:layout_constraintTop_toBottomOf="@+id/tvMessageSend"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         app:srcCompat="@mipmap/ic_react_love_foreground" />
 </androidx.constraintlayout.widget.ConstraintLayout>

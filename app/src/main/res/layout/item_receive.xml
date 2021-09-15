@@ -8,29 +8,49 @@
     android:layout_marginTop="5dp"
     android:layout_marginBottom="5dp">
 
-    <TextView
-        android:id="@+id/tvMessageRecieve"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/receive_drawable"
-        android:paddingLeft="10dp"
-        android:paddingTop="5dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="5dp"
-        android:text="TextView"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/ivMediaReceive"
+            android:layout_width="200dp"
+            android:layout_height="130dp"
+            android:layout_margin="5dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvMessageRecieve"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp"
+            android:text="TextView"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/ivReactRecieve"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/tvMessageRecieve"
-        app:layout_constraintEnd_toEndOf="@+id/tvMessageRecieve"
-        app:layout_constraintStart_toEndOf="@+id/tvMessageRecieve"
-        app:layout_constraintTop_toBottomOf="@+id/tvMessageRecieve"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@mipmap/ic_react_love_foreground" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

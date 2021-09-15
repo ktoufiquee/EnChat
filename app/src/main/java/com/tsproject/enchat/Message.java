@@ -10,6 +10,7 @@ public class Message {
     private String senderId;
     private String message;
     private ArrayList<String> mediaUrlList;
+    private String mediaUrl;
 
     public Message(String messageID, String senderId, String message, ArrayList<String> mediaUrlList) {
         this.messageID = messageID;
@@ -27,6 +28,15 @@ public class Message {
         this.message = message;
         this.messageID = messageID;
         this.timestamp = timestamp;
+    }
+
+    public Message(long timestamp, int react, String messageID, String senderId, String message, String mediaUrl) {
+        this.timestamp = timestamp;
+        this.react = react;
+        this.messageID = messageID;
+        this.senderId = senderId;
+        this.message = message;
+        this.mediaUrl = mediaUrl;
     }
 
     public String getMessageID() {
@@ -75,5 +85,13 @@ public class Message {
 
     public void setMediaUrlList(ArrayList<String> mediaUrlList) {
         this.mediaUrlList = mediaUrlList;
+    }
+
+    public String getMediaUrl() {
+        return mediaUrl;
+    }
+
+    public void setMediaUrl(String mediaUrl) {
+        this.mediaUrl = mediaUrl;
     }
 }

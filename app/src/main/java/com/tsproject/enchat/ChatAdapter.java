@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.github.pgreze.reactions.ReactionPopup;
 import com.github.pgreze.reactions.ReactionsConfig;
 import com.github.pgreze.reactions.ReactionsConfigBuilder;
@@ -96,6 +97,14 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 sendViewHolder.binding.ivReactSend.setVisibility(View.GONE);
             }
 
+            if(message.getMediaUrl() != null) {
+                sendViewHolder.binding.ivMediaSend.setVisibility(View.VISIBLE);
+                Glide.with(context).load(message.getMediaUrl()).into(sendViewHolder.binding.ivMediaSend);
+                if(message.getMessage().isEmpty()) {
+                    sendViewHolder.binding.tvMessageSend.setVisibility(View.GONE);
+                }
+            }
+
 //            sendViewHolder.binding.tvMessageSend.setOnTouchListener(new View.OnTouchListener() {
 //                @Override
 //                public boolean onTouch(View v, MotionEvent event) {
@@ -111,6 +120,14 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 receiveViewHolder.binding.ivReactRecieve.setVisibility(View.VISIBLE);
             } else {
                 receiveViewHolder.binding.ivReactRecieve.setVisibility(View.GONE);
+            }
+
+            if(message.getMediaUrl() != null) {
+                receiveViewHolder.binding.ivMediaReceive.setVisibility(View.VISIBLE);
+                Glide.with(context).load(message.getMediaUrl()).into(receiveViewHolder.binding.ivMediaReceive);
+                if(message.getMessage().isEmpty()) {
+                    receiveViewHolder.binding.tvMessageRecieve.setVisibility(View.GONE);
+                }
             }
 
             receiveViewHolder.binding.tvMessageRecieve.setOnTouchListener(new View.OnTouchListener() {
