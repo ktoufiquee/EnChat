@@ -12,7 +12,7 @@
     <string name="profile_info">Profile Info</string>
     <string name="please_provide_your_name_and_optional_profile_photo">Please provide your name and optional profile photo</string>
     <string name="type_your_name_here">Type your name here</string>
-    <string name="next">Next</string>
+    <string name="finished">Finished</string>
     <string name="otpview">otpView</string>
     <string name="profilepic">profilePic</string>
 </resources>
