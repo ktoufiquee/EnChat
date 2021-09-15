@@ -33,10 +33,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:padding="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-        <LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -48,10 +48,12 @@
                     android:textColor="@color/title"
                     android:textSize="13sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/etShowName"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Swarna"
+                    android:background="@android:color/transparent"
+                    android:clickable="true"
                     android:textColor="#000000"
                     android:textSize="18sp" />
 
@@ -76,10 +78,12 @@
                     android:textColor="@color/title"
                     android:textSize="13sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/eTShowAbout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Battery about to die"
+                    android:clickable="true"
+                    android:background="@android:color/transparent"
                     android:textColor="#000000"
                     android:textSize="18sp" />
 
@@ -101,15 +105,17 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/title"
                     android:text="Phone"
+                    android:textColor="@color/title"
                     android:textSize="13sp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/etShowNumber"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:background="@android:color/transparent"
                     android:textColor="#000000"
-                    android:text="122222"
                     android:textSize="18sp" />
 
                 <View
@@ -119,7 +125,6 @@
                     android:background="@color/grey" />
 
             </LinearLayout>
-
 
 
         </LinearLayout>
