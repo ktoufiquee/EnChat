@@ -192,7 +192,6 @@ public class FindUserActivity extends AppCompatActivity {
         userRef.addValueEventListener(new ValueEventListener() {
             String contactName = "";
             String number = "";
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -211,6 +210,8 @@ public class FindUserActivity extends AppCompatActivity {
                         Log.d("SEARCH", "onDataChange: " + contactName + "number =  " + number);
                         appUser.setContactName(contactName);
                         appUser.setPhnNum(number);
+                        appUser.setuID(childSnapShot.getKey());
+                        Log.d("CHECK_ID", childSnapShot.getKey());
                         userList.add(appUser);
                         adapter.notifyDataSetChanged();
                     }
@@ -268,8 +269,8 @@ public class FindUserActivity extends AppCompatActivity {
 
     private String formatNumber(String number) {
 
-        String iso = getCountryIso();
-        //   String iso = "+880";
+        //String iso = getCountryIso();
+        String iso = "+880";
         String fNum = "";
         number = number.replaceAll("[^0-9]+", "");
         if (number.charAt(0) == '0') {
@@ -286,8 +287,9 @@ public class FindUserActivity extends AppCompatActivity {
 
     private void getUserDetails(User phnContact) {
         dRef = db.getReference().child("user").child(currentUser.getUid());
-        Log.d("SEARCH", "getUserDetails: " + currentUser.getUid());
-        Log.d("SEARCH", "getUserDetails: USERCONTACT");
+//        Log.d("SEARCH", "getUserDetails: " + currentUser.getUid());
+//        Log.d("SEARCH", "getUserDetails: USERCONTACT");
+        Log.d("EMU_CHECK", phnContact.getPhnNum());
         userRef = db.getReference().child("user");
         Log.d("TESTING", phnContact.getPhnNum());
         Query query = userRef.orderByChild("phnNum").equalTo(phnContact.getPhnNum());
@@ -299,6 +301,7 @@ public class FindUserActivity extends AppCompatActivity {
                         Map<String, String> save = new HashMap<>();
                         save.put("contactName", phnContact.getContactName());
                         save.put("search", phnContact.getContactName().toLowerCase());
+                        save.put("phnNum", phnContact.getPhnNum());
                         dRef.child("connectedUser").child(childSnapshot.getKey()).setValue(save);
                     }
 
@@ -334,7 +337,7 @@ public class FindUserActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(FindUserActivity.this, new String[]{Manifest.permission.READ_CONTACTS}, 1);
             Log.d("PERMISSION", "getPermission: request permission ");
         } else {
-            //   dRef.child("contactPermission").setValue("true");
+//            dRef.child("contactPermission").setValue("true");
             Log.d("PERMISSION", "getPermission: request permission accepted");
             // getContacts();
 

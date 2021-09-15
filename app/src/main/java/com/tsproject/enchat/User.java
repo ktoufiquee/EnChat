@@ -6,6 +6,7 @@ public class User {
     String contactPermission;
     String contactName;
     String uID;
+    String chatID;
 
     public User()
     {
@@ -14,6 +15,21 @@ public class User {
     public User(String userName, String phnNum) {
         this.userName = userName;
         this.phnNum = phnNum;
+    }
+
+    public User(String userName, String phnNum, String contactPermission, String uID) {
+        this.userName = userName;
+        this.phnNum = phnNum;
+        this.contactPermission = contactPermission;
+        this.uID = uID;
+    }
+
+    public String getChatID() {
+        return chatID;
+    }
+
+    public void setChatID(String chatID) {
+        this.chatID = chatID;
     }
 
     public String getUserName() {

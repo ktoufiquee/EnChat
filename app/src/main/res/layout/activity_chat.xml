@@ -35,8 +35,8 @@
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
                 android:ems="10"
-                android:inputType="textPersonName"
-                android:text="Write a message..." />
+                android:hint="Write a message..."
+                android:inputType="textPersonName" />
 
             <ImageView
                 android:id="@+id/btnMedia"

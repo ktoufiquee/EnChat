@@ -96,13 +96,13 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 sendViewHolder.binding.ivReactSend.setVisibility(View.GONE);
             }
 
-            sendViewHolder.binding.tvMessageSend.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    popup.onTouch(v, event);
-                    return false;
-                }
-            });
+//            sendViewHolder.binding.tvMessageSend.setOnTouchListener(new View.OnTouchListener() {
+//                @Override
+//                public boolean onTouch(View v, MotionEvent event) {
+//                    popup.onTouch(v, event);
+//                    return false;
+//                }
+//            });
         } else {
             ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) holder;
             receiveViewHolder.binding.tvMessageRecieve.setText(message.getMessage());

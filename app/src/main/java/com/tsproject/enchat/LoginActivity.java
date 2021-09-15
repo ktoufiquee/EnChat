@@ -41,8 +41,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         FirebaseApp.initializeApp(this);
+
+
         userAlreadyLoggedIn();
         fbAuth = FirebaseAuth.getInstance();
+        fbAuth.getFirebaseAuthSettings().setAppVerificationDisabledForTesting(true);
         etPhnNum = findViewById(R.id.etPhnNum);
         btnLoginContinue = findViewById(R.id.btnLoginContinue);
         pbLoadLogin = findViewById(R.id.pbLogin);
