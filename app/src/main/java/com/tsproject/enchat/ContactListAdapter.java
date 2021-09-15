@@ -78,7 +78,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                         dbUser.setValue(hMap);
                         Intent intent = new Intent(context, ChatActivity.class);
                         intent.putExtra("chatID", randKey);
-                        intent.putExtra("friendName", contactList.get(holder.getAdapterPosition()).userName);
+                        intent.putExtra("friendName", contactList.get(holder.getAdapterPosition()).getContactName());
                         context.startActivity(intent);
                     }
 
