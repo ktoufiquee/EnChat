@@ -99,7 +99,9 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
             if(message.getMediaUrl() != null) {
                 sendViewHolder.binding.ivMediaSend.setVisibility(View.VISIBLE);
-                Glide.with(context).load(message.getMediaUrl()).into(sendViewHolder.binding.ivMediaSend);
+                Glide.with(context).load(message.getMediaUrl())
+                        .placeholder(R.mipmap.ic_image_placeholder_foreground)
+                        .into(sendViewHolder.binding.ivMediaSend);
                 if(message.getMessage().isEmpty()) {
                     sendViewHolder.binding.tvMessageSend.setVisibility(View.GONE);
                 }
@@ -124,7 +126,9 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
             if(message.getMediaUrl() != null) {
                 receiveViewHolder.binding.ivMediaReceive.setVisibility(View.VISIBLE);
-                Glide.with(context).load(message.getMediaUrl()).into(receiveViewHolder.binding.ivMediaReceive);
+                Glide.with(context).load(message.getMediaUrl())
+                        .placeholder(R.mipmap.ic_image_placeholder_foreground)
+                        .into(receiveViewHolder.binding.ivMediaReceive);
                 if(message.getMessage().isEmpty()) {
                     receiveViewHolder.binding.tvMessageRecieve.setVisibility(View.GONE);
                 }
@@ -137,6 +141,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     return false;
                 }
             });
+
         }
     }
 

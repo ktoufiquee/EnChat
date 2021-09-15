@@ -55,6 +55,9 @@ public class ChatActivity extends AppCompatActivity {
         uID = FirebaseAuth.getInstance().getUid();
         chatID = getIntent().getExtras().getString("chatID");
 
+        String friendName = getIntent().getExtras().getString("friendName");
+        binding.tvFriendName.setText(friendName);
+
         messageList = new ArrayList<>();
         adapter = new ChatAdapter(this, messageList, chatID);
 

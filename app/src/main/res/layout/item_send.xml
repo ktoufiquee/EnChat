@@ -9,7 +9,7 @@
     android:padding="5dp">
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/sendLinear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/send_drawable"
@@ -44,9 +44,9 @@
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintBottom_toBottomOf="@+id/sendLinear"
+        app:layout_constraintEnd_toStartOf="@+id/sendLinear"
+        app:layout_constraintStart_toStartOf="@+id/sendLinear"
+        app:layout_constraintTop_toBottomOf="@+id/sendLinear"
         app:srcCompat="@mipmap/ic_react_love_foreground" />
 </androidx.constraintlayout.widget.ConstraintLayout>

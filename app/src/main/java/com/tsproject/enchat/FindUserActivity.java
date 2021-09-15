@@ -161,12 +161,12 @@ public class FindUserActivity extends AppCompatActivity {
                         name = childSnapshot.child("contactName").getValue().toString();
 
                     }
-                    if (childSnapshot.child("phnNum").getValue() != null) {
-                        number = childSnapshot.child("phnName").getValue().toString();
-                    }
+//                    if (childSnapshot.child("phnNum").getValue() != null) {
+//                        number = childSnapshot.child("phnName").getValue().toString();
+//                    }
                     Log.d("SEARCH", "onDataChange: SEARCH USER" + "name = " + name + "number = " + number);
                     user.setContactName(name);
-                    user.setPhnNum(number);
+                    //user.setPhnNum(number);
                     userList.add(user);
 
                 }
