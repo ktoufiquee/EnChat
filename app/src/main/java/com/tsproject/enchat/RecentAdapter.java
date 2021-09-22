@@ -52,7 +52,13 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("userID", FirebaseAuth.getInstance().getUid());
                 intent.putExtra("chatID", recentList.get(holder.getAdapterPosition()).getChatID());
-                intent.putExtra("friendName", recentList.get(holder.getAdapterPosition()).getContactName());
+                String contactName;
+                if(recentList.get(holder.getAdapterPosition()).getContactName() != null) {
+                    contactName = recentList.get(holder.getAdapterPosition()).getContactName();
+                } else {
+                    contactName = recentList.get(holder.getAdapterPosition()).getUserName();
+                }
+                intent.putExtra("friendName", contactName);
                 context.startActivity(intent);
             }
         });

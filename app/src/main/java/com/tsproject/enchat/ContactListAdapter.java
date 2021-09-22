@@ -48,7 +48,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
-
+    //ArrayList<Menu> m;
     @Override
     public void onBindViewHolder(@NonNull ContactListAdapter.ViewHolder holder, int position) {
         holder.tvContactName.setText(contactList.get(position).contactName);
@@ -56,6 +56,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         holder.clContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 DatabaseReference dbUser = FirebaseDatabase.getInstance().getReference()
                         .child("user")
                         .child(FirebaseAuth.getInstance().getUid())
