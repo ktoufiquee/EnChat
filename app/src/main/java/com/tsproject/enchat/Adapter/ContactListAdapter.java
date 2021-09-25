@@ -1,8 +1,7 @@
-package com.tsproject.enchat;
+package com.tsproject.enchat.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tsproject.enchat.Activity.ChatActivity;
+import com.tsproject.enchat.R;
+import com.tsproject.enchat.Model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,8 +53,8 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
     //ArrayList<Menu> m;
     @Override
     public void onBindViewHolder(@NonNull ContactListAdapter.ViewHolder holder, int position) {
-        holder.tvContactName.setText(contactList.get(position).contactName);
-        holder.tvContactNumber.setText(contactList.get(position).phnNum);
+        holder.tvContactName.setText(contactList.get(position).getContactName());
+        holder.tvContactNumber.setText(contactList.get(position).getPhnNum());
         holder.clContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

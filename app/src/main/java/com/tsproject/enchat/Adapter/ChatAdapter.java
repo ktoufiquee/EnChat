@@ -1,7 +1,6 @@
-package com.tsproject.enchat;
+package com.tsproject.enchat.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,7 +15,8 @@ import com.github.pgreze.reactions.ReactionsConfig;
 import com.github.pgreze.reactions.ReactionsConfigBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.rpc.DebugInfo;
+import com.tsproject.enchat.Model.Message;
+import com.tsproject.enchat.R;
 import com.tsproject.enchat.databinding.ItemReceiveBinding;
 import com.tsproject.enchat.databinding.ItemSendBinding;
 

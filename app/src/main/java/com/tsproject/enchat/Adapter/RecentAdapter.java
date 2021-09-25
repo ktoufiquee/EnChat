@@ -1,4 +1,4 @@
-package com.tsproject.enchat;
+package com.tsproject.enchat.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.tsproject.enchat.databinding.ItemChatHeadsBinding;
+import com.tsproject.enchat.Activity.ChatActivity;
+import com.tsproject.enchat.R;
+import com.tsproject.enchat.Model.User;
 
 import java.util.ArrayList;
 
@@ -45,7 +47,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //holder.ivProfilePic.setImageResource(recentList.get(position).);
-        holder.tvName.setText(recentList.get(position).userName);
+        holder.tvName.setText(recentList.get(position).getUserName());
         holder.parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

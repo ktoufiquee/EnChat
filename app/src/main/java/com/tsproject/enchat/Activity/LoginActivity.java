@@ -1,4 +1,4 @@
-package com.tsproject.enchat;
+package com.tsproject.enchat.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,17 +14,11 @@ import android.widget.Toast;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
+import com.tsproject.enchat.R;
 
 import java.util.concurrent.TimeUnit;
 
@@ -70,7 +64,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 super.onCodeSent(verificationID, forceResendingToken);
                 pbLoadLogin.setVisibility(View.GONE);
                 btnLoginContinue.setVisibility(View.VISIBLE);
-                Intent intent = new Intent(LoginActivity.this,OTPActivity.class);
+                Intent intent = new Intent(LoginActivity.this, OTPActivity.class);
                 intent.putExtra("number", number);
                 intent.putExtra("verification",verificationID);
                 startActivity(intent);
@@ -116,7 +110,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(currentUser != null)
         {
             Log.d(TAG, "userLogin: "+currentUser.getPhoneNumber());
-            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             finish();

@@ -13,27 +13,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.EnChat">
         <activity
-            android:name=".ProfileFriendActivity"
+            android:name=".Activity.ProfileFriendActivity"
             android:exported="true" />
         <activity
-            android:name=".ProfileActivity"
+            android:name=".Activity.ProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".FindUserActivity"
+            android:name=".Activity.FindUserActivity"
             android:exported="true" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Activity.MainActivity"
             android:exported="true" />
         <activity
-            android:name=".OTPActivity"
+            android:name=".Activity.OTPActivity"
             android:exported="true" />
         <activity
-            android:name=".ProfileInfoActivity"
+            android:name=".Activity.ProfileInfoActivity"
             android:exported="true" />
         <activity
-            android:name=".ChatActivity"
+            android:name=".Activity.ChatActivity"
             android:exported="true" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".Activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

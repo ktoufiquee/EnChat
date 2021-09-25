@@ -1,4 +1,4 @@
-package com.tsproject.enchat;
+package com.tsproject.enchat.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.tsproject.enchat.R;
 
 
 public class OTPActivity extends AppCompatActivity {

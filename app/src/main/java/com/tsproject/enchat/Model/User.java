@@ -1,4 +1,4 @@
-package com.tsproject.enchat;
+package com.tsproject.enchat.Model;
 
 public class User {
     String userName;

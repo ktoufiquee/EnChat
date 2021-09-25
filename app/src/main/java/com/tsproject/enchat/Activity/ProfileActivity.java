@@ -1,4 +1,4 @@
-package com.tsproject.enchat;
+package com.tsproject.enchat.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -12,6 +12,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tsproject.enchat.R;
 
 public class ProfileActivity extends AppCompatActivity {
     EditText etShowAbout, etShowName, etShowNumber;

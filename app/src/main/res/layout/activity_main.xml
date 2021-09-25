@@ -13,8 +13,8 @@
         android:layout_height="match_parent">
 
         <include
-            layout="@layout/toolbar"
-            android:id="@+id/toolbar"/>
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecent"

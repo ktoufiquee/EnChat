@@ -1,18 +1,18 @@
-//package com.tsproject.enchat;
+package com.tsproject.enchat.Extra;
 //
-//import android.os.Debug;
-//import android.util.Log;
-//
-//import androidx.annotation.NonNull;
-//
-//import com.google.firebase.database.DataSnapshot;
-//import com.google.firebase.database.DatabaseError;
-//import com.google.firebase.database.FirebaseDatabase;
-//import com.google.firebase.database.ValueEventListener;
-//
-//import java.util.ArrayList;
-//
-//public class Utility {
+import android.os.Debug;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+
+public class Utility {
 //
 //    private User user;
 //
@@ -54,4 +54,4 @@
 //    public void setUser(User user) {
 //        this.user = user;
 //    }
-//}
+}

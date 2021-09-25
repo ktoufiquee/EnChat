@@ -1,8 +1,10 @@
-package com.tsproject.enchat;
+package com.tsproject.enchat.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.tsproject.enchat.R;
 
 public class ProfileFriendActivity extends AppCompatActivity {
 
