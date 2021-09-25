@@ -102,6 +102,8 @@ public class ChatActivity extends AppCompatActivity {
                     messageList.add(message);
                 }
                 adapter.notifyDataSetChanged();
+                int size = binding.recyclerView.getAdapter().getItemCount();
+                binding.recyclerView.smoothScrollToPosition(size);
             }
 
             @Override
