@@ -1,53 +1,128 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_centerInParent="true"
-
+    android:background="@drawable/bg_gradient"
+    tools:context=".Activity.LoginActivity"
     android:padding="10dp">
+
+
     <ProgressBar
+        style = "?android:progressBarStyleLarge"
         android:id="@+id/pbLogin"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-    <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:layout_centerHorizontal="true"
-        android:contentDescription="@string/loginLogo"
-        android:src="@mipmap/ic_login_2_foreground"
-        android:id = "@+id/iv_loginIcon"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/custom_progress_bar"
+        android:visibility="gone"
+        android:indeterminateDuration="@android:integer/config_longAnimTime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="351dp"
+        android:layout_height="264dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_login"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:padding="15dp"/>
+        app:layout_constraintVertical_bias="0.119" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="344dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="368dp"
+        android:gravity="center"
+        android:fontFamily="@font/lato"
+        android:text="Please confirm your country code and enter your phone number"
+        android:textSize="21sp"
+        android:textColor="#747474"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.hbb20.CountryCodePicker
+        android:id="@+id/countryCodePicker"
+        android:layout_width="204dp"
+        android:layout_height="wrap_content"
+        app:ccpDialog_background="@drawable/ccp_bg_gradient"
+        app:ccpDialog_showFlag="false"
+        app:ccpDialog_showTitle="false"
+        app:ccpDialog_keyboardAutoPopup="false"
+        app:ccpDialog_showNameCode="false"
+        app:ccpDialog_showPhoneCode="false"
+        app:ccpDialog_textColor="#747474"
+        app:ccp_contentColor="#747474"
+        app:ccp_defaultNameCode="BD"
+        app:ccp_rememberLastSelection="true"
+        app:ccp_showFlag="false"
+        app:ccp_showFullName="true"
+        app:ccp_showNameCode="false"
+        app:ccp_showPhoneCode="false"
+        app:ccp_textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.159"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.635" />
+
     <EditText
-        android:layout_width="match_parent"
+        android:id="@+id/etCountryCode"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/iv_loginIcon"
-        android:layout_marginTop="20dp"
-        android:autofillHints="phone"
-        android:id="@+id/etPhnNum"
-        android:hint="@string/enter_your_phone_number"
+        android:textColor="#747474"
+        android:textSize="21sp"
         android:inputType="phone"
-        android:padding="20dp"
-        android:textSize="16sp"/>
+        android:backgroundTint="@color/line_default"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.087"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.719" />
 
-    <Button
-        android:layout_width="140dp"
+    <EditText
+        android:id="@+id/etPhnNum"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:padding="10dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/loginContinue"
-        android:textColor="@color/black"
-        android:background="@android:color/transparent"
-        android:layout_below="@+id/etPhnNum"
-        android:id="@+id/btnLoginContinue"/>
+        android:autofillHints="phone"
+        android:inputType="number"
+        android:textColor="#747474"
+        android:textSize="21sp"
+        android:backgroundTint="@color/line_default"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.873"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.719" />
 
-</RelativeLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabBtnNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_action_forward"
+        android:tint="@android:color/white"
+        app:backgroundTint="#305ADA"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.959"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.928"
+        app:rippleColor="#93d3fb"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

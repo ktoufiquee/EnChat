@@ -1,60 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:layout_centerInParent="true"
-    android:padding="10dp">
+    android:background="@drawable/bg_gradient">
     <ProgressBar
         android:id="@+id/pbOTP"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-    <ImageView
+        style = "?android:progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_centerHorizontal="true"
-        android:contentDescription="@string/otpLogo"
-        android:src="@mipmap/ic_otp_1_foreground"
-        android:id = "@+id/iv_OTPIcon"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/custom_progress_bar"
+        android:visibility="gone"
+        android:indeterminateDuration="@android:integer/config_longAnimTime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="290dp"
+        android:layout_height="306dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_otp_check"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.014" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato"
+        android:gravity="center"
+        android:text="Enter Verification Code"
+        android:textColor="#959ca0"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:padding="15dp"/>
+        app:layout_constraintVertical_bias="0.483" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/iv_OTPIcon"
-        android:layout_marginTop="15dp"
-        android:text="@string/enter_the_verification_code"
-        android:gravity="center"
         android:id="@+id/tvOtpTitle"
-        android:textSize="24sp"
-        android:textColor="@color/black"/>
-    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tvOtpTitle"
-        android:id = "@+id/tvPhnNum"
-        android:textAlignment="center"
-        android:gravity="center"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:textStyle="bold"
-        android:textSize="28sp"/>
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/lato"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="We have sent a text message with your verification code to"
+        android:textColor="#959ca0"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.0" />
 
-    <EditText
-        android:id="@+id/etOTPPin"
-        android:layout_width="match_parent"
+    <com.chaos.view.PinView
+        android:id="@+id/pinView"
+        style="@style/PinWidget.PinView"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvPhnNum"
-        android:layout_margin="20dp"
-        android:gravity="center"
-        android:minHeight="48dp"
-        android:textAlignment="center" />
+        android:layout_marginTop="10dp"
+        android:cursorVisible="true"
+        android:inputType="number"
+        android:padding="10dp"
+        android:textColor="#959ca0"
+        android:textSize="30sp"
+        app:itemCount="6"
+        app:itemHeight="48sp"
+        app:lineColor="@drawable/otp_pin_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvOtpTitle"
+        app:layout_constraintVertical_bias="0.0"
+        app:viewType="line" />
 
-</RelativeLayout>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabBtnNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_action_forward"
+        android:tint="@android:color/white"
+        app:backgroundTint="#305ADA"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.959"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.928"
+        app:rippleColor="#93d3fb" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

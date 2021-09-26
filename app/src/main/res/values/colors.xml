@@ -17,7 +17,11 @@
     <color name = "grad_end">#63E5FF</color>
     <color name = "title">#00bfff</color>
     <color name = "grey">#E5E5E5 </color>
-
+    <color name = "ccpDialog">#c3e7fd</color>
+    <color name= "underlineText">#4663AC</color>
+    <color name = "line_selected">#1c54f3</color>
+    <color name = "line_default">#688be9 </color>
+    <color name = "progressbar">#305ADA</color>
 
 
 </resources>

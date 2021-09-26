@@ -13,6 +13,7 @@ import android.text.TextWatcher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.chaos.view.PinView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -24,25 +25,26 @@ import com.tsproject.enchat.R;
 
 
 public class OTPActivity extends AppCompatActivity {
-    private TextView tvShowNumber;
-    private String verification, username, usernumber;
+    private String verification, username, userNumber, description;
     private FirebaseAuth fbAuth;
     private ProgressBar pbOTP;
-    private EditText etOTP;
+    private TextView tvShowNumber;
+    private PinView otpPinview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otp);
-        tvShowNumber = findViewById(R.id.tvPhnNum);
-        etOTP = findViewById(R.id.etOTPPin);
+        tvShowNumber = findViewById(R.id.tvOtpTitle);
+        otpPinview = findViewById(R.id.pinView);
         pbOTP = findViewById(R.id.pbOTP);
+
         fbAuth = FirebaseAuth.getInstance();
         tvShowNumber.setText(getIntent().getStringExtra("number"));
         verification = getIntent().getStringExtra("verification");
-        usernumber = getIntent().getStringExtra("number");
+        userNumber = getIntent().getStringExtra("countryCode") + getIntent().getStringExtra("number");
 
-        etOTP.addTextChangedListener(new TextWatcher() {
+        otpPinview.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -55,7 +57,7 @@ public class OTPActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String otp = etOTP.getText().toString();
+                String otp = otpPinview.getText().toString().trim();
                 if (otp.length() == 6) {
                     if (verification != null) {
                         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verification, otp);
@@ -65,7 +67,6 @@ public class OTPActivity extends AppCompatActivity {
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(OTPActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
-
                                             userLogin();
                                         } else {
                                             pbOTP.setVisibility(View.GONE);
@@ -84,7 +85,7 @@ public class OTPActivity extends AppCompatActivity {
         if (currentUser != null) {
             Intent intent = new Intent(OTPActivity.this, ProfileInfoActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("number", usernumber);
+            intent.putExtra("number", userNumber);
             startActivity(intent);
             finish();
 

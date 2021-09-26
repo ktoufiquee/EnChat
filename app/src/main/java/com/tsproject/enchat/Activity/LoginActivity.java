@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.hbb20.CountryCodePicker;
 import com.tsproject.enchat.R;
 
 import java.util.concurrent.TimeUnit;
@@ -25,26 +28,33 @@ import java.util.concurrent.TimeUnit;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String TAG = "Login";
     ProgressBar pbLoadLogin;
-    private EditText etPhnNum;
-    private Button btnLoginContinue;
+    private CountryCodePicker ccp;
+    private EditText etCountryCode, etPhnNum;
+    private FloatingActionButton btnNext;
     private FirebaseAuth fbAuth;
-    private String number;
+    private String number, countryCode;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks verCallbacks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         FirebaseApp.initializeApp(this);
-
-
         userAlreadyLoggedIn();
         fbAuth = FirebaseAuth.getInstance();
         fbAuth.getFirebaseAuthSettings().setAppVerificationDisabledForTesting(true);
+        ccp = findViewById(R.id.countryCodePicker);
+        etCountryCode = findViewById(R.id.etCountryCode);
         etPhnNum = findViewById(R.id.etPhnNum);
-        btnLoginContinue = findViewById(R.id.btnLoginContinue);
+        btnNext = findViewById(R.id.fabBtnNext);
         pbLoadLogin = findViewById(R.id.pbLogin);
-        btnLoginContinue.setOnClickListener(this);
-
+        btnNext.setOnClickListener(this);
+        etCountryCode.setText("+"+ccp.getDefaultCountryCode());
+        ccp.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
+            @Override
+            public void onCountrySelected() {
+                etCountryCode.setText("+"+ccp.getSelectedCountryCode());
+            }
+        });
         verCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
@@ -54,19 +64,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
                 pbLoadLogin.setVisibility(View.GONE);
-                btnLoginContinue.setVisibility(View.VISIBLE);
+                btnNext.setVisibility(View.VISIBLE);
                 Log.d(TAG, "onVerificationFailed: " + e.toString());
-                Toast.makeText(LoginActivity.this, "Verification failed due to "+e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onVerificationFailed: " +e.getLocalizedMessage());
+                Toast.makeText(LoginActivity.this, "Invalid number", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCodeSent(@NonNull String verificationID, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(verificationID, forceResendingToken);
                 pbLoadLogin.setVisibility(View.GONE);
-                btnLoginContinue.setVisibility(View.VISIBLE);
                 Intent intent = new Intent(LoginActivity.this, OTPActivity.class);
                 intent.putExtra("number", number);
                 intent.putExtra("verification",verificationID);
+                intent.putExtra("countryCode", countryCode);
                 startActivity(intent);
                 finish();
             }
@@ -76,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch(v.getId())
         {
-            case R.id.btnLoginContinue:
+            case R.id.fabBtnNext:
                     checkNumber();
                 break;
             default:
@@ -86,7 +97,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void checkNumber(){
         number = etPhnNum.getText().toString().trim();
-        number = "+88" + number;
+        countryCode = etCountryCode.getText().toString().trim();
+        number = countryCode + number;
         PhnNumVerification();
     }
 
@@ -94,7 +106,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void PhnNumVerification() {
 
         pbLoadLogin.setVisibility(View.VISIBLE);
-        btnLoginContinue.setVisibility(View.GONE);
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(fbAuth)
                // .setPhoneNumber("+88"+ " " + rec_phnNum)//
                 .setPhoneNumber(number)
