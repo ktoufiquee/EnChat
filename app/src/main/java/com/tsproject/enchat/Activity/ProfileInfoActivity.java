@@ -89,6 +89,8 @@ public class ProfileInfoActivity extends AppCompatActivity {
                                         public void onSuccess(Uri uri) {
                                             Toast.makeText(ProfileInfoActivity.this , "Image added", Toast.LENGTH_SHORT).show();
                                             imageURL = uri.toString();
+                                            boolean isUploaded = dRef.child("imageURL").setValue(imageURL).isSuccessful();
+                                            Log.d("Image url", "onClick inside Upload: " + !isUploaded + " " +imageURL);
                                         }
                                     });
                                 }
@@ -101,14 +103,11 @@ public class ProfileInfoActivity extends AppCompatActivity {
                     user.setUserName(rec_name);
                     user.setPhnNum(rec_number);
                     user.setuID(uID);
-                    if(imageURL != null) {
-                        user.setImageURL(imageURL);
-                        Log.d("Image url", "onClick: " +imageURL);
+                    if(imageURL == null) {
+                        imageURL = "No Image";
                     }
-                    else
-                    {
-                        user.setImageURL("No image");
-                    }
+                    user.setImageURL(imageURL);
+                    Log.d("TEST IMAGE", imageURL);
                     dRef.setValue(user)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
@@ -127,7 +126,6 @@ public class ProfileInfoActivity extends AppCompatActivity {
                                     Log.d("Profile", "onFailure: "+e.toString() + "Localized = " + e.toString());
                                 }
                             });
-
                 }
             }
         });
