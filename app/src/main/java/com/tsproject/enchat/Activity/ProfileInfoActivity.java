@@ -7,9 +7,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 
@@ -17,6 +19,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.api.LogDescriptor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -30,23 +34,25 @@ import com.tsproject.enchat.Model.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileInfoActivity extends AppCompatActivity {
-    Button btnFinish;
+    FloatingActionButton fabBtnNext, fabBtnAddPhoto;
     EditText etName;
     FirebaseAuth auth;
     FirebaseStorage storage;
     FirebaseDatabase db;
-    CircleImageView civProfile;
     Uri selectedImage;
     FirebaseUser currentUser;
     DatabaseReference dRef;
+    String imageURL;
+    ProgressBar pbProfileInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_info);
-        btnFinish = findViewById(R.id.btnProfileNext);
-        etName = findViewById(R.id.etName);
-        civProfile = findViewById(R.id.ivProfilePhoto);
+        fabBtnNext = findViewById(R.id.fabBtnNext);
+        fabBtnAddPhoto = findViewById(R.id.fabBtnAddPhoto);
+        etName = findViewById(R.id.etUserName);
+        pbProfileInfo = findViewById(R.id.pbProfileInfo);
 
         db = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -54,7 +60,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
         currentUser = auth.getCurrentUser();
         dRef = db.getReference().child("user").child(currentUser.getUid());
 
-        civProfile.setOnClickListener(new View.OnClickListener() {
+        fabBtnAddPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -63,7 +69,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
                 startActivityForResult(intent, 2);
             }
         });
-        btnFinish.setOnClickListener(new View.OnClickListener() {
+        fabBtnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -76,42 +82,52 @@ public class ProfileInfoActivity extends AppCompatActivity {
                         reference.putFile(selectedImage).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                Log.d("Image url", "onClick: " );
                                 if (task.isSuccessful()) {
                                     reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {
-                                            String imageURL = uri.toString();
-                                            String uID = auth.getUid();
-                                            String rec_number = getIntent().getStringExtra("number");
-                                            User user = new User();
-                                            user.setUserName(rec_name);
-                                            user.setPhnNum(rec_number);
-                                            user.setuID(uID);
-                                            user.setImageURL(imageURL);
-                                            dRef.setValue(user)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void unused) {
-                                                            Toast.makeText(ProfileInfoActivity.this, "Account created successfully!", Toast.LENGTH_SHORT).show();
-                                                            Intent intent = new Intent(ProfileInfoActivity.this, MainActivity.class);
-                                                            startActivity(intent);
-                                                            finish();
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Toast.makeText(ProfileInfoActivity.this, "Check your internet!", Toast.LENGTH_SHORT).show();
-                                                        }
-                                                    });
+                                            Toast.makeText(ProfileInfoActivity.this , "Image added", Toast.LENGTH_SHORT).show();
+                                            imageURL = uri.toString();
                                         }
                                     });
                                 }
                             }
                         });
-
-
                     }
+                    String uID = auth.getUid();
+                    String rec_number = getIntent().getStringExtra("number");
+                    User user = new User();
+                    user.setUserName(rec_name);
+                    user.setPhnNum(rec_number);
+                    user.setuID(uID);
+                    if(imageURL != null) {
+                        user.setImageURL(imageURL);
+                        Log.d("Image url", "onClick: " +imageURL);
+                    }
+                    else
+                    {
+                        user.setImageURL("No image");
+                    }
+                    dRef.setValue(user)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    pbProfileInfo.setVisibility(View.VISIBLE);
+                                    Log.d("Profile", "onSuccess: Image Uploaded Successfully");
+                                    Intent intent = new Intent(ProfileInfoActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    pbProfileInfo.setVisibility(View.GONE);
+                                    Log.d("Profile", "onFailure: "+e.toString() + "Localized = " + e.toString());
+                                }
+                            });
+
                 }
             }
         });
@@ -121,10 +137,11 @@ public class ProfileInfoActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("ImageURL", "onActivityResult: NULL" );
         if (data != null) {
             if (data.getData() != null) {
-                civProfile.setImageURI(data.getData());
                 selectedImage = data.getData();
+                Log.d("ImageURL", "onActivityResult: " + selectedImage);
             }
         }
     }

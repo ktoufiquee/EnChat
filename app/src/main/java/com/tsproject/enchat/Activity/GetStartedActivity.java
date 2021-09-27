@@ -5,11 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.tsproject.enchat.R;
 
 public class GetStartedActivity extends AppCompatActivity {
@@ -24,6 +27,7 @@ public class GetStartedActivity extends AppCompatActivity {
         btnStart = findViewById(R.id.btnStart);
         title = findViewById(R.id.tvTitle);
         description = findViewById(R.id.tvDescription);
+        userAlreadyLoggedIn();
         btnStart.setOnClickListener(view -> {
             lottie.animate().translationX(2000).setDuration(900).setStartDelay(0);
             title.animate().translationY(-500).setDuration(800).setStartDelay(0);
@@ -38,5 +42,16 @@ public class GetStartedActivity extends AppCompatActivity {
                 }
             },950);
         });
+    }
+    private void userAlreadyLoggedIn() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if(currentUser != null)
+        {
+            Log.d("Get Started", "userLogin: "+currentUser.getPhoneNumber());
+            Intent intent = new Intent(GetStartedActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        }
     }
 }

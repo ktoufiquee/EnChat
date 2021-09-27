@@ -64,15 +64,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
                 pbLoadLogin.setVisibility(View.GONE);
-                btnNext.setVisibility(View.VISIBLE);
                 Log.d(TAG, "onVerificationFailed: " + e.toString());
                 Log.d(TAG, "onVerificationFailed: " +e.getLocalizedMessage());
-                Toast.makeText(LoginActivity.this, "Invalid number", Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(LoginActivity.this, "Invalid number", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
-            public void onCodeSent(@NonNull String verificationID, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                super.onCodeSent(verificationID, forceResendingToken);
+            public void onCodeSent(@NonNull String verificationID, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {                super.onCodeSent(verificationID, forceResendingToken);
                 pbLoadLogin.setVisibility(View.GONE);
                 Intent intent = new Intent(LoginActivity.this, OTPActivity.class);
                 intent.putExtra("number", number);

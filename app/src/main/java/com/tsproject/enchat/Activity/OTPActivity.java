@@ -59,6 +59,7 @@ public class OTPActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 String otp = otpPinview.getText().toString().trim();
                 if (otp.length() == 6) {
+                    pbOTP.setVisibility(View.VISIBLE);
                     if (verification != null) {
                         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verification, otp);
                         fbAuth.signInWithCredential(credential)
@@ -66,7 +67,6 @@ public class OTPActivity extends AppCompatActivity {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {
                                         if (task.isSuccessful()) {
-                                            Toast.makeText(OTPActivity.this, "Login Successful", Toast.LENGTH_SHORT).show();
                                             userLogin();
                                         } else {
                                             pbOTP.setVisibility(View.GONE);
