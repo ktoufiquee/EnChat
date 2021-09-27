@@ -1,59 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="30dp"
-    android:padding="10dp">
-
+    android:background="@drawable/bg_gradient">
+    <ProgressBar
+        style = "?android:progressBarStyleLarge"
+        android:id="@+id/pbProfileInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateDrawable="@drawable/custom_progress_bar"
+        android:visibility="gone"
+        android:indeterminateDuration="@android:integer/config_longAnimTime"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
     <TextView
+        android:id="@+id/tvProfileTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/andada"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/lato"
         android:gravity="center_horizontal"
-        android:text="@string/profile_info"
-        android:textAlignment="center"
-        android:id="@+id/tvProfileTitle"
-        android:textSize="30sp"
-        android:textStyle="bold" />
+        android:text="Profile Info"
+        android:textColor="@color/introTextColour"
+        android:textSize="40sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.059" />
 
     <TextView
         android:id="@+id/tvProfileInstruction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvProfileTitle"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
-        android:text="@string/please_provide_your_name_and_optional_profile_photo"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        android:gravity="center_horizontal" />
+        android:layout_marginEnd="10dp"
+        android:gravity="center_horizontal"
+        android:padding="10dp"
+        android:text="Please provide your name with optional profile photo"
+        android:textSize="20sp"
+        android:textColor="@color/introTextColour"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvProfileTitle"
+        app:layout_constraintVertical_bias="0.025" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/ivProfilePhoto"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_below="@id/tvProfileInstruction"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
-        android:clickable="true"
-        android:src="@drawable/avatar"/>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivProfilePhoto"
-        android:padding="16sp"
-        android:hint="@string/type_your_name_here"
-        android:textSize="16sp"
-        android:layout_marginTop="30dp"
-        android:id="@+id/etName"/>
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabBtnAddPhoto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/etName"
-        android:layout_marginTop="20dp"
-        android:layout_centerHorizontal="true"
-        android:backgroundTint="@color/teal_200"
-        android:id="@+id/btnProfileNext"
-        android:text="@string/finished"/>
-</RelativeLayout>
+        android:layout_marginStart="10dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_add_photo"
+        android:tint="@android:color/white"
+        app:backgroundTint="#305ADA"
+        app:fabCustomSize="80dp"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.059"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499"
+        app:maxImageSize="40dp"
+        app:rippleColor="#93d3fb" />
+
+    <EditText
+        android:layout_width="252dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:backgroundTint="@color/line_default"
+        android:hint="Type your name here"
+        android:id="@+id/etUserName"
+        android:textColor="@color/introTextColour"
+        android:textSize="20sp"
+        android:fontFamily="@font/lato"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.848"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabBtnNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_action_forward"
+        android:tint="@android:color/white"
+        app:backgroundTint="#305ADA"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.959"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.928"
+        app:rippleColor="#93d3fb"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
