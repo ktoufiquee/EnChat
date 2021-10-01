@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         verCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+
                 Log.d(TAG, "onVerificationCompleted: "+phoneAuthCredential);
             }
 
@@ -71,17 +72,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
             @Override
-            public void onCodeSent(@NonNull String verificationID, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {                super.onCodeSent(verificationID, forceResendingToken);
+            public void onCodeSent(@NonNull String verificationID, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                super.onCodeSent(verificationID, forceResendingToken);
                 pbLoadLogin.setVisibility(View.GONE);
                 Intent intent = new Intent(LoginActivity.this, OTPActivity.class);
                 intent.putExtra("number", number);
                 intent.putExtra("verification",verificationID);
-                intent.putExtra("countryCode", countryCode);
+                intent.putExtra("token",forceResendingToken);
                 startActivity(intent);
                 finish();
             }
         };
     }
+
+
     @Override
     public void onClick(View v) {
         switch(v.getId())
@@ -113,6 +117,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 .setCallbacks(verCallbacks)
                 .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
+        Log.d(TAG, "PhnNumVerification: "+number);
 
     }
     private void userAlreadyLoggedIn() {

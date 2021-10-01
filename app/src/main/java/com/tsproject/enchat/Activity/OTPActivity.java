@@ -25,7 +25,7 @@ import com.tsproject.enchat.R;
 
 
 public class OTPActivity extends AppCompatActivity {
-    private String verification, username, userNumber, description;
+    private String verification, username, userNumber, description, token;
     private FirebaseAuth fbAuth;
     private ProgressBar pbOTP;
     private TextView tvShowNumber;
@@ -40,10 +40,10 @@ public class OTPActivity extends AppCompatActivity {
         pbOTP = findViewById(R.id.pbOTP);
 
         fbAuth = FirebaseAuth.getInstance();
-        tvShowNumber.setText(getIntent().getStringExtra("number"));
+        userNumber = getIntent().getStringExtra("number");
+        tvShowNumber.setText(userNumber);
         verification = getIntent().getStringExtra("verification");
-        userNumber = getIntent().getStringExtra("countryCode") + getIntent().getStringExtra("number");
-
+        token = getIntent().getStringExtra("token");
         otpPinview.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

@@ -15,14 +15,14 @@
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:contentScrim="@color/white"
+            app:contentScrim="@color/teal_200"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
             app:title="Hello there">
 
             <ImageView
                 android:id="@+id/ivShowFriendImage"
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
+                android:layout_height="300dp"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_check_2" />
 

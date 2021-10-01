@@ -87,7 +87,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
                                     reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
                                         public void onSuccess(Uri uri) {
-                                            Toast.makeText(ProfileInfoActivity.this , "Image added", Toast.LENGTH_SHORT).show();
+                                           // Toast.makeText(ProfileInfoActivity.this , "Image added", Toast.LENGTH_SHORT).show();
                                             imageURL = uri.toString();
                                             boolean isUploaded = dRef.child("imageURL").setValue(imageURL).isSuccessful();
                                             Log.d("Image url", "onClick inside Upload: " + !isUploaded + " " +imageURL);
@@ -139,7 +139,8 @@ public class ProfileInfoActivity extends AppCompatActivity {
         if (data != null) {
             if (data.getData() != null) {
                 selectedImage = data.getData();
-                Log.d("ImageURL", "onActivityResult: " + selectedImage);
+              //  fabBtnAddPhoto.setImageURI(selectedImage);
+                Log.d("ImageURL", "onActivityResult: IS IMAGE ADDED?" );
             }
         }
     }

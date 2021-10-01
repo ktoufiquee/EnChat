@@ -27,9 +27,9 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        etShowName = findViewById(R.id.etShowName);
-        etShowAbout = findViewById(R.id.eTShowAbout);
-        etShowNumber = findViewById(R.id.etShowNumber);
+  //      etShowName = findViewById(R.id.etShowName);
+  //      etShowAbout = findViewById(R.id.eTShowAbout);
+    //    etShowNumber = findViewById(R.id.etShowNumber);
 
 
        auth = FirebaseAuth.getInstance();

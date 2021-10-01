@@ -23,6 +23,8 @@
     <color name = "line_default">#688be9 </color>
     <color name = "progressbar">#305ADA</color>
     <color name = "introTextColour">#747474</color>
+    <color name= "toolbarColour">#93d3fb</color>
+    <color name = "btnColor">#305ADA</color>
 
 
 </resources>

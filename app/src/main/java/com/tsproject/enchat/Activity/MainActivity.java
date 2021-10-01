@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                         loadFindUserActivity();
                         break;
                     case R.id.btnProfile:
+                        loadProfileActivity();
                         break;
                     default:
                         break;
@@ -86,6 +87,11 @@ public class MainActivity extends AppCompatActivity {
 //        startChat.setOnClickListener(v -> startChatOnClick());
         initRecyclerView();
 
+    }
+
+    private void loadProfileActivity() {
+        Intent intent = new Intent(MainActivity.this, ProfileFriendActivity.class);
+        startActivity(intent);
     }
 
     private void loadFindUserActivity() {

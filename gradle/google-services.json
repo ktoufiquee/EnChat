@@ -15,14 +15,6 @@
       },
       "oauth_client": [
         {
-          "client_id": "532523994629-0lubqqboabi8204hr41o609er05857hj.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.tsproject.enchat",
-            "certificate_hash": "dbdf174ef650ec1cbb5ca9137190d2f61d90cdb6"
-          }
-        },
-        {
           "client_id": "532523994629-8ma5jcdbsl5a1dsejkdp7u8kmuaaqvi5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
