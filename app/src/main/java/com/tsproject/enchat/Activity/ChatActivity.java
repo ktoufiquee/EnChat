@@ -3,12 +3,17 @@ package com.tsproject.enchat.Activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Debug;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -24,21 +29,40 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.tsproject.enchat.Adapter.ChatAdapter;
+import com.tsproject.enchat.Adapter.ExtraAdapter;
 import com.tsproject.enchat.Model.Message;
 import com.tsproject.enchat.databinding.ActivityChatBinding;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.StringWriter;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 
 public class ChatActivity extends AppCompatActivity {
     ActivityChatBinding binding;
     ArrayList<Message> messageList;
+    ArrayList<String> urlList;
     ChatAdapter adapter;
+    ExtraAdapter extraAdapter;
     FirebaseDatabase database;
     String uID, chatID;
     FirebaseStorage storage;
     ProgressDialog dialog;
+
+
+    private static final String TENOR_KEY = "RONF4J9X08K8";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +89,13 @@ public class ChatActivity extends AppCompatActivity {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
 
+
+        urlList = new ArrayList<>();
+        extraAdapter = new ExtraAdapter(this, urlList, chatID);
+        binding.rvExtra.setLayoutManager(new GridLayoutManager(this, 2));
+        binding.rvExtra.setAdapter(extraAdapter);
+
+        //Sends the message written in etMessage
         binding.btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +114,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        //Opens Gallery to select Image
         binding.btnMedia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +125,8 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        //Reads all the message from database to ChatAdapter
+        //Scrolls to the bottom of the RecyclerView
         database.getReference().child("chat").child(chatID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -112,6 +146,38 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        //Functionality for btnExtra and btnCloseExtra
+        binding.btnExtra.setOnClickListener(view -> btnExtraClicked());
+        binding.btnCloseExtra.setOnClickListener(view -> btnCloseExtraClicked());
+        binding.etExtraSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                updateGIFUrl(charSequence.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+    }
+
+
+    private void btnCloseExtraClicked() {
+        binding.cardView.setVisibility(View.VISIBLE);
+        binding.layoutExtra.setVisibility(View.GONE);
+    }
+
+    private void btnExtraClicked() {
+        binding.cardView.setVisibility(View.GONE);
+        binding.layoutExtra.setVisibility(View.VISIBLE);
+        binding.etExtraSearch.setText("");
     }
 
     @Override
@@ -158,4 +224,127 @@ public class ChatActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void updateGIFUrl(String searchTerm) {
+
+        new Thread() {
+            @Override
+            public void run() {
+                int limit = 32;
+                // make initial search request for the first 8 items
+                JSONObject searchResult = searchTerm.equals("") ? getTrendingGifs(limit) : getSearchResults(searchTerm, limit);
+                // load the results for the user
+                JSONArray results = new JSONArray();
+                try {
+                    results = searchResult.getJSONArray("results");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                urlList.clear();
+                for (int i = 0; i < results.length(); ++i) {
+                    String url = "";
+                    try {
+                        JSONArray jsonArray = results.getJSONObject(i).getJSONArray("media");
+                        JSONObject jsonObject = (JSONObject) jsonArray.get(0);
+                        JSONObject gifObject = (JSONObject) jsonObject.get("gif");
+                        urlList.add(gifObject.getString("url"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                ChatActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Collections.shuffle(urlList);
+                        extraAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        }.start();
+
+    }
+
+    //Creates the connection URL for TENOR
+    public static JSONObject getSearchResults(String searchTerm, int limit) {
+
+        // make search request - using default locale of EN_US
+
+        final String url = String.format("https://g.tenor.com/v1/search?q=%1$s&key=%2$s&limit=%3$s",
+                searchTerm, TENOR_KEY, limit);
+        try {
+            return get(url);
+        } catch (IOException | JSONException ignored) {
+        }
+        return null;
+    }
+
+    public static JSONObject getTrendingGifs(int limit) {
+
+        // get the trending GIFS - using the default locale of en_US
+        final String url = String.format("https://g.tenor.com/v1/trending?key=%1$s&limit=%2$s",
+                TENOR_KEY, limit);
+        try {
+            return get(url);
+        } catch (IOException | JSONException ignored) {
+        }
+        return null;
+    }
+
+
+    //Constructs and run a get request
+    private static JSONObject get(String url) throws IOException, JSONException {
+        HttpURLConnection connection = null;
+        try {
+            // Get request
+            connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+
+            // Handle failure
+            int statusCode = connection.getResponseCode();
+            if (statusCode != HttpURLConnection.HTTP_OK && statusCode != HttpURLConnection.HTTP_CREATED) {
+                String error = String.format("HTTP Code: '%1$s' from '%2$s'", statusCode, url);
+                throw new ConnectException(error);
+            }
+
+            // Parse response
+            return parser(connection);
+        } catch (Exception ignored) {
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+        return new JSONObject("");
+    }
+
+    //Parse the responses into a JSONObject
+    private static JSONObject parser(HttpURLConnection connection) throws JSONException {
+        char[] buffer = new char[1024 * 4];
+        int n;
+        InputStream stream = null;
+        try {
+            stream = new BufferedInputStream(connection.getInputStream());
+            InputStreamReader reader = new InputStreamReader(stream, "UTF-8");
+            StringWriter writer = new StringWriter();
+            while (-1 != (n = reader.read(buffer))) {
+                writer.write(buffer, 0, n);
+            }
+            return new JSONObject(writer.toString());
+        } catch (IOException ignored) {
+        } finally {
+            if (stream != null) {
+                try {
+                    stream.close();
+                } catch (IOException ignored) {
+                }
+            }
+        }
+        return new JSONObject("");
+    }
+
 }

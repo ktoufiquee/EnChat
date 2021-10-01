@@ -8,9 +8,10 @@ public class Message {
     private int react = -1;
     private String messageID;
     private String senderId;
-    private String message;
+    private String message = "";
     private ArrayList<String> mediaUrlList;
     private String mediaUrl;
+    private String messageType;
 
     public Message(String messageID, String senderId, String message, ArrayList<String> mediaUrlList) {
         this.messageID = messageID;
@@ -37,6 +38,31 @@ public class Message {
         this.senderId = senderId;
         this.message = message;
         this.mediaUrl = mediaUrl;
+    }
+
+    public Message(long timestamp, int react, String messageID, String senderId, String message, String mediaUrl, String messageType) {
+        this.timestamp = timestamp;
+        this.react = react;
+        this.messageID = messageID;
+        this.senderId = senderId;
+        this.message = message;
+        this.mediaUrl = mediaUrl;
+        this.messageType = messageType;
+    }
+
+    public Message(long timestamp, String messageID, String mediaUrl, String messageType) {
+        this.timestamp = timestamp;
+        this.messageID = messageID;
+        this.mediaUrl = mediaUrl;
+        this.messageType = messageType;
+    }
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
     }
 
     public String getMessageID() {
@@ -94,4 +120,5 @@ public class Message {
     public void setMediaUrl(String mediaUrl) {
         this.mediaUrl = mediaUrl;
     }
+
 }
