@@ -97,12 +97,21 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 sendViewHolder.binding.ivReactSend.setVisibility(View.GONE);
             }
 
-            if(message.getMediaUrl() != null) {
+            if (message.getMediaUrl() != null) {
+
+
                 sendViewHolder.binding.ivMediaSend.setVisibility(View.VISIBLE);
-                Glide.with(context).load(message.getMediaUrl())
-                        .placeholder(R.mipmap.ic_image_placeholder_foreground)
-                        .into(sendViewHolder.binding.ivMediaSend);
-                if(message.getMessage().isEmpty()) {
+                if (message.getMessageType().equals("GIF")) {
+                    Glide.with(context)
+                            .asGif()
+                            .load(message.getMediaUrl())
+                            .into(sendViewHolder.binding.ivMediaSend);
+                } else {
+                    Glide.with(context).load(message.getMediaUrl())
+                            .placeholder(R.mipmap.ic_image_placeholder_foreground)
+                            .into(sendViewHolder.binding.ivMediaSend);
+                }
+                if (message.getMessage().isEmpty()) {
                     sendViewHolder.binding.tvMessageSend.setVisibility(View.GONE);
                 }
             }
@@ -124,12 +133,19 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 receiveViewHolder.binding.ivReactRecieve.setVisibility(View.GONE);
             }
 
-            if(message.getMediaUrl() != null) {
+            if (message.getMediaUrl() != null) {
                 receiveViewHolder.binding.ivMediaReceive.setVisibility(View.VISIBLE);
-                Glide.with(context).load(message.getMediaUrl())
-                        .placeholder(R.mipmap.ic_image_placeholder_foreground)
-                        .into(receiveViewHolder.binding.ivMediaReceive);
-                if(message.getMessage().isEmpty()) {
+                if (message.getMessageType().equals("GIF")) {
+                    Glide.with(context)
+                            .asGif()
+                            .load(message.getMediaUrl())
+                            .into(receiveViewHolder.binding.ivMediaReceive);
+                } else {
+                    Glide.with(context).load(message.getMediaUrl())
+                            .placeholder(R.mipmap.ic_image_placeholder_foreground)
+                            .into(receiveViewHolder.binding.ivMediaReceive);
+                }
+                if (message.getMessage().isEmpty()) {
                     receiveViewHolder.binding.tvMessageRecieve.setVisibility(View.GONE);
                 }
             }
