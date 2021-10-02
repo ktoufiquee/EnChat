@@ -30,6 +30,7 @@
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/ccp_bg_gradient.xml" value="0.14010416666666667" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/circle_drawable.xml" value="0.20989583333333334" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/custom_cardview_username.xml" value="0.18645833333333334" />
+        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/custom_edit_dialog.xml" value="0.22552083333333334" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/custom_profile_shape.xml" value="0.18645833333333334" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/custom_progress_bar.xml" value="0.14444444444444443" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/extra_rounded_corners.xml" value="0.18802083333333333" />
@@ -54,7 +55,10 @@
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_profile.xml" value="0.18" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_profile_friend.xml" value="0.19" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_profile_info.xml" value="0.18" />
+        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/custom_alert_dialog.xml" value="0.22" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/custom_cardview_username.xml" value="0.1408514492753623" />
+        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/dialog_edit_about.xml" value="0.18" />
+        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/dialog_edit_name.xml" value="0.2046875" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/toolbar.xml" value="0.10597826086956522" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/mipmap-anydpi-v26/ic_contact.xml" value="0.15572916666666667" />
         <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/drawable/circle_drawable.xml" value="0.4036458333333333" />
