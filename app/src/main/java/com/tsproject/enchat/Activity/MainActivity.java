@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadProfileActivity() {
-        Intent intent = new Intent(MainActivity.this, ProfileFriendActivity.class);
+        Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
         startActivity(intent);
     }
 
