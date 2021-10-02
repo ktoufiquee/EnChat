@@ -19,9 +19,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvRecent"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@id/toolbar"
-            android:padding="10dp" />
+            android:layout_marginTop="-4dp"
+            android:padding="10dp">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
 
     </RelativeLayout>

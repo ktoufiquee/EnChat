@@ -90,6 +90,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
         if (holder.getClass() == SendViewHolder.class) {
             SendViewHolder sendViewHolder = (SendViewHolder) holder;
             sendViewHolder.binding.tvMessageSend.setText(message.getMessage());
+
             if (message.getReact() >= 0) {
                 sendViewHolder.binding.ivReactSend.setImageResource(reacts[(int) message.getReact()]);
                 sendViewHolder.binding.ivReactSend.setVisibility(View.VISIBLE);
@@ -98,8 +99,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
             }
 
             if (message.getMediaUrl() != null) {
-
-
                 sendViewHolder.binding.ivMediaSend.setVisibility(View.VISIBLE);
                 if (message.getMessageType().equals("GIF")) {
                     Glide.with(context)
@@ -126,6 +125,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
         } else {
             ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) holder;
             receiveViewHolder.binding.tvMessageRecieve.setText(message.getMessage());
+
             if (message.getReact() >= 0) {
                 receiveViewHolder.binding.ivReactRecieve.setImageResource(reacts[(int) message.getReact()]);
                 receiveViewHolder.binding.ivReactRecieve.setVisibility(View.VISIBLE);

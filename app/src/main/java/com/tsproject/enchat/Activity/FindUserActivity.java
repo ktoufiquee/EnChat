@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -241,15 +242,15 @@ public class FindUserActivity extends AppCompatActivity {
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
 
-                String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+                @SuppressLint("Range") String contactName = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                @SuppressLint("Range") String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
                 Uri phnUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
                 String selection = ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " =?";
                 Cursor phnCursor = getContentResolver().
                         query(phnUri, null, selection, new String[]{id}, null);
 
                 if (phnCursor.moveToNext()) {
-                    String number = phnCursor.getString(phnCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                    @SuppressLint("Range") String number = phnCursor.getString(phnCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                     String rec_number = formatNumber(number);
                     User phnContact = new User();
                     phnContact.setContactName(contactName);

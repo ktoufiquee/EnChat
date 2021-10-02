@@ -48,6 +48,7 @@ public class ExtraAdapter extends RecyclerView.Adapter {
                 .load(urlExtra)
                 .into(gifHolder.binding.ivExtra);
 
+        //Sends a gif when clicked on it
         gifHolder.binding.ivExtra.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

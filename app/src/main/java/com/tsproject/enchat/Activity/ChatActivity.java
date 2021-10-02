@@ -5,9 +5,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
@@ -17,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -70,26 +73,26 @@ public class ChatActivity extends AppCompatActivity {
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        //Creates the dialog that will be shown while uploading Image
         dialog = new ProgressDialog(this);
         dialog.setMessage("Uploading image...");
         dialog.setCancelable(false);
 
         uID = FirebaseAuth.getInstance().getUid();
-        chatID = getIntent().getExtras().getString("chatID");
-
-        String friendName = getIntent().getExtras().getString("friendName");
-        binding.tvFriendName.setText(friendName);
-
-        messageList = new ArrayList<>();
-        adapter = new ChatAdapter(this, messageList, chatID);
-
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
 
+        chatID = getIntent().getExtras().getString("chatID");
+        String friendName = getIntent().getExtras().getString("friendName");
+        binding.tvFriendName.setText(friendName);
+
+        //Initializes the messageList ArrayList, Sets the adapter to show messages
+        messageList = new ArrayList<>();
+        adapter = new ChatAdapter(this, messageList, chatID);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
 
-
+        //Initializes the GIF URL arrayList, Sets the adapter for GIF keyboard
         urlList = new ArrayList<>();
         extraAdapter = new ExtraAdapter(this, urlList, chatID);
         binding.rvExtra.setLayoutManager(new GridLayoutManager(this, 2));
@@ -125,8 +128,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        //Reads all the message from database to ChatAdapter
-        //Scrolls to the bottom of the RecyclerView
+        //Reads all the message from database to ChatAdapter, Scrolls to the bottom of the RecyclerView (139,140)
         database.getReference().child("chat").child(chatID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -149,6 +151,8 @@ public class ChatActivity extends AppCompatActivity {
         //Functionality for btnExtra and btnCloseExtra
         binding.btnExtra.setOnClickListener(view -> btnExtraClicked());
         binding.btnCloseExtra.setOnClickListener(view -> btnCloseExtraClicked());
+
+        //Functionality for GIF Search
         binding.etExtraSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -167,7 +171,6 @@ public class ChatActivity extends AppCompatActivity {
         });
 
     }
-
 
     private void btnCloseExtraClicked() {
         binding.cardView.setVisibility(View.VISIBLE);
@@ -230,8 +233,9 @@ public class ChatActivity extends AppCompatActivity {
         new Thread() {
             @Override
             public void run() {
+                urlList.clear();
                 int limit = 32;
-                // make initial search request for the first 8 items
+                //If search box is empty, Show trending gif. Otherwise show with respect to search term
                 JSONObject searchResult = searchTerm.equals("") ? getTrendingGifs(limit) : getSearchResults(searchTerm, limit);
                 // load the results for the user
                 JSONArray results = new JSONArray();
@@ -240,7 +244,7 @@ public class ChatActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                urlList.clear();
+                //Loop to parse all the GIF url from JSON
                 for (int i = 0; i < results.length(); ++i) {
                     String url = "";
                     try {
@@ -252,6 +256,7 @@ public class ChatActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+                //Uses runOnUiThread to Notify the adapter as View elements can't be accessed from another thread
                 ChatActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -268,7 +273,6 @@ public class ChatActivity extends AppCompatActivity {
     public static JSONObject getSearchResults(String searchTerm, int limit) {
 
         // make search request - using default locale of EN_US
-
         final String url = String.format("https://g.tenor.com/v1/search?q=%1$s&key=%2$s&limit=%3$s",
                 searchTerm, TENOR_KEY, limit);
         try {

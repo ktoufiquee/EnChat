@@ -63,7 +63,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                         .child("user")
                         .child(FirebaseAuth.getInstance().getUid())
                         .child("connectedUser")
-                        .child(contactList.get(holder.getAdapterPosition()).getuID());
+                        .child(contactList.get(holder.getBindingAdapterPosition()).getuID());
                 dbUser.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
