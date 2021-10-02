@@ -11,13 +11,13 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/teal_200"
+        android:background="@color/toolbarColour"
         app:layout_constraintTop_toTopOf="parent" >
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/teal_200"
+        android:background="@color/toolbarColour"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back_arrow"
@@ -51,17 +51,25 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="96dp"
+            android:clickable="true"
             android:orientation="vertical"
+            android:padding="10dp"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.473"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="10dp">
+            app:layout_constraintVertical_bias="0.078">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cvUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
                 android:clickable="true"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="5dp"
@@ -90,6 +98,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+
                             android:orientation="horizontal">
 
                             <TextView
@@ -109,6 +118,11 @@
                                 android:src="@drawable/ic_edit"
                                 tools:ignore="SpeakableTextPresentCheck" />
                         </LinearLayout>
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="Username"
+                        android:textColor="@color/introTextColour"
+                        android:textSize="14sp" />
 
 
                         <TextView
@@ -130,7 +144,6 @@
                 android:id="@+id/cvNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
                 android:clickable="true"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="5dp"
@@ -178,6 +191,11 @@
                                 android:src="@drawable/ic_edit" />
                         </LinearLayout>
 
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:textColor="@color/introTextColour"
+                        android:text="About"
+                        android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/tvNumber"
@@ -198,7 +216,6 @@
                 android:id="@+id/cvAbout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
                 android:clickable="true"
                 android:padding="10dp"
                 app:cardCornerRadius="5dp"
@@ -228,6 +245,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+
                             android:orientation="horizontal">
 
                             <TextView
@@ -247,6 +265,12 @@
                                 android:src="@drawable/ic_edit"
                                 tools:ignore="SpeakableTextPresentCheck" />
                         </LinearLayout>
+
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="Number"
+                        android:textColor="@color/introTextColour"
+                        android:textSize="14sp" />
 
 
                         <TextView

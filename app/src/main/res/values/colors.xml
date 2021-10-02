@@ -25,6 +25,9 @@
     <color name = "introTextColour">#747474</color>
     <color name= "toolbarColour">#93d3fb</color>
     <color name = "btnColor">#305ADA</color>
+    <color name = "cardViewLight">#f6f6f6</color>
+    <color name = "cardViewDark">#444444</color>
+    <color name = "rectangleDark">#121212</color>
 
 
 </resources>
