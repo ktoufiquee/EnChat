@@ -76,12 +76,7 @@ public class MainActivity extends AppCompatActivity {
                         loadFindUserActivity();
                         break;
                     case R.id.btnProfile:
-                       // loadProfileActivity();
-                        final AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-                        View view = getLayoutInflater().inflate(R.layout.dialog_edit_about,null);
-                        alert.setView(view);
-                        alert.create();
-                        alert.show();
+                        loadProfileActivity();
                         break;
                     default:
                         break;

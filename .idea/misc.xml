@@ -29,6 +29,7 @@
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/cardview_corner.xml" value="0.19114583333333332" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/ccp_bg_gradient.xml" value="0.14010416666666667" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/circle_drawable.xml" value="0.20989583333333334" />
+        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/cursor_colour.xml" value="0.19427083333333334" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/custom_cardview_username.xml" value="0.18645833333333334" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/custom_edit_dialog.xml" value="0.22552083333333334" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/custom_profile_shape.xml" value="0.18645833333333334" />
@@ -52,7 +53,7 @@
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_get_started.xml" value="0.18229166666666666" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_login.xml" value="0.1787037037037037" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_otp.xml" value="0.18" />
-        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_profile.xml" value="0.18" />
+        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_profile.xml" value="0.22" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_profile_friend.xml" value="0.19" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_profile_info.xml" value="0.18" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/custom_alert_dialog.xml" value="0.22" />

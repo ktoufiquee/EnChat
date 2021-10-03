@@ -45,7 +45,7 @@
             android:padding="10dp">
 
             <EditText
-                android:id="@+id/editTextTextPersonName"
+                android:id="@+id/etEditedAbout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -53,7 +53,8 @@
                 android:inputType="textPersonName"
                 android:gravity="start"
                 android:hint="About"
-                android:textColorLink="@color/line_default" />
+                android:backgroundTint="@color/line_default"
+                android:textCursorDrawable="@drawable/cursor_colour"/>
 
             <ImageView
                 android:id="@+id/imageView6"
@@ -73,7 +74,7 @@
                 android:id="@+id/btnOk"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#ADD8E6"
+                android:backgroundTint="#86C5D8"
                 android:gravity="center"
                 android:padding="8dp"
                 android:text="Ok"
