@@ -2,9 +2,9 @@ package com.tsproject.enchat.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,8 +13,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,11 +43,17 @@ public class MainActivity extends AppCompatActivity {
     RecentAdapter adapter;
     String uID;
 
+    public static String Name = "";
+    public static String dpUrl = "";
+    public static String phoneNumber = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Fresco.initialize(this);
+
+
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawerLayout);
         navView = findViewById(R.id.navView);
@@ -53,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
         //TextView uID = findViewById(R.id.uID);
         //uID.setText(FirebaseAuth.getInstance().getCurrentUser().getUid());
         uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        setSupportActionBar(toolbar);
 
+        setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
@@ -85,15 +93,50 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        Button startChat = findViewById(R.id.startChat);
-//        startChat.setOnClickListener(v -> startChatOnClick());
         initRecyclerView();
 
+        FirebaseDatabase.getInstance().getReference().child("user").child(uID).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (dpUrl.equals("")) {
+                    Name = snapshot.child("userName").getValue().toString();
+                    dpUrl = snapshot.child("imageURL").getValue().toString();
+                    phoneNumber = snapshot.child("phnNum").getValue().toString();
+                }
+
+                ImageView profilePicture = findViewById(R.id.ivUserImage);
+                TextView tvUsername = findViewById(R.id.tvUsername);
+                TextView tvUserNumber = findViewById(R.id.tvUserNumber);
+
+                Glide.with(MainActivity.this)
+                        .load(dpUrl)
+                        .into(profilePicture);
+                tvUsername.setText(Name);
+                tvUserNumber.setText(phoneNumber);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (this.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            this.drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void loadProfileActivity() {
         Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
         startActivity(intent);
+
     }
 
     private void loadFindUserActivity() {

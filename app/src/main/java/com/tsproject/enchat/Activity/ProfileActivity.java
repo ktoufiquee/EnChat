@@ -49,10 +49,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         tvAbout = findViewById(R.id.tvAbout);
         tvNumber = findViewById(R.id.tvNumber);
 
-       auth = FirebaseAuth.getInstance();
-       currentUser = auth.getCurrentUser();
-       db = FirebaseDatabase.getInstance();
-       dRef = db.getReference("user").child("profile");
+        auth = FirebaseAuth.getInstance();
+        currentUser = auth.getCurrentUser();
+        db = FirebaseDatabase.getInstance();
+        dRef = db.getReference("user").child("profile");
 
     /*    etShowName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,34 +86,34 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        switch(view.getId())
-        {
-           case R.id.cvUserName:
-                 showDialogEditName();
-                 break;
+        switch (view.getId()) {
+            case R.id.cvUserName:
+                showDialogEditName();
+                break;
             case R.id.ibEditName:
                 showDialogEditName();
                 break;
             case R.id.cvAbout:
-               showDialogEditAbout();
+                showDialogEditAbout();
                 break;
             case R.id.ibEditAbout:
-               showDialogEditAbout();
+                showDialogEditAbout();
                 break;
             default:
                 break;
         }
     }
+
     private void showDialogEditName() {
 
-       final AlertDialog.Builder alert = new AlertDialog.Builder(ProfileActivity.this);
-        View view = getLayoutInflater().inflate(R.layout.dialog_edit_name,null);
+        final AlertDialog.Builder alert = new AlertDialog.Builder(ProfileActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.dialog_edit_name, null);
         Button btnOk = (Button) view.findViewById(R.id.btnOk);
-        Button btnCancel = (Button)view.findViewById(R.id.btnCancel);
-        final EditText etEditedName = (EditText)view.findViewById(R.id.etEditedName);
-        //  String currentName = tvUserName.getText().toString().trim();
-       // etEditedName.setText(currentName);
-      //  etEditedName.setSelection(etEditedName.getText().length());
+        Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
+        EditText etEditedName = (EditText) view.findViewById(R.id.etEditedName);
+        String currentName = tvUserName.getText().toString().trim();
+        etEditedName.setText(currentName);
+        etEditedName.setSelection(etEditedName.getText().length());
    /*     if (view.getParent() == null) {
             alert.setView(view);
         } else {
@@ -124,19 +124,18 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
       //*/
         alert.setView(view);
         alert.setCancelable(true);
-       final AlertDialog alertDialog = alert.create();
-        btnOk.setOnClickListener(new View.OnClickListener(){
+        final AlertDialog alertDialog = alert.create();
+        btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String editedName = etEditedName.getText().toString().trim();
-                if(!editedName.equals(""))
-                {
+                if (!editedName.equals("")) {
                     tvUserName.setText(editedName);
                     alertDialog.dismiss();
-                    Toast.makeText(ProfileActivity.this, "Username updated", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+                    if (!editedName.equals(currentName)) {
+                        Toast.makeText(ProfileActivity.this, "Username updated", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
                     Toast.makeText(ProfileActivity.this, "Username can't be empty", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -153,25 +152,22 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     private void showDialogEditAbout() {
         AlertDialog.Builder alert = new AlertDialog.Builder(ProfileActivity.this);
-        View view = getLayoutInflater().inflate(R.layout.dialog_edit_about,null, false);
-        Button btnOk = (Button)view.findViewById(R.id.btnOk);
-        Button btnCancel = (Button)view.findViewById(R.id.btnCancel);
+        View view = getLayoutInflater().inflate(R.layout.dialog_edit_about, null, false);
+        Button btnOk = (Button) view.findViewById(R.id.btnOk);
+        Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         EditText etEditedAbout = (EditText) view.findViewById(R.id.etEditedAbout);
         alert.setView(view);
         AlertDialog alertDialog = alert.create();
         alert.setCancelable(true);
-        btnOk.setOnClickListener(new View.OnClickListener(){
+        btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String editedAbout = etEditedAbout.getText().toString().trim();
-                if(!editedAbout.equals(""))
-                {
+                if (!editedAbout.equals("")) {
                     tvAbout.setText(editedAbout);
                     alertDialog.dismiss();
                     Toast.makeText(ProfileActivity.this, "About updated", Toast.LENGTH_SHORT).show();
-                }
-                else
-                {
+                } else {
                     Toast.makeText(ProfileActivity.this, "About can't be empty", Toast.LENGTH_SHORT).show();
                 }
             }

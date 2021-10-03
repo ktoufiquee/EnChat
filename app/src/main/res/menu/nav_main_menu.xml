@@ -3,7 +3,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/btnHome"
-            android:title="Home"/>
+            android:title="Home" />
         <item
             android:id="@+id/btnContacts"
             android:title="Contacts"/>
