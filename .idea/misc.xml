@@ -26,6 +26,7 @@
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable-xxhdpi/ic_add_photo.xml" value="0.13055555555555556" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable-xxhdpi/otp_pin_view.xml" value="0.14444444444444443" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/bg_gradient.xml" value="0.1984375" />
+        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/bg_title.xml" value="0.1984375" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/cardview_corner.xml" value="0.19114583333333332" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/ccp_bg_gradient.xml" value="0.14010416666666667" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/circle_drawable.xml" value="0.20989583333333334" />
@@ -50,16 +51,18 @@
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/ic_otp_check.xml" value="0.1398148148148148" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/otp_pin_view.xml" value="0.1398148148148148" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/drawable/receive_drawable.xml" value="0.1398148148148148" />
+        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_find_user.xml" value="0.11684782608695653" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_get_started.xml" value="0.18229166666666666" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_login.xml" value="0.1787037037037037" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_otp.xml" value="0.18" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_profile.xml" value="0.22" />
-        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_profile_friend.xml" value="0.19" />
+        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_profile_friend.xml" value="0.23107569721115537" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/activity_profile_info.xml" value="0.18" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/custom_alert_dialog.xml" value="0.22" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/custom_cardview_username.xml" value="0.1408514492753623" />
-        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/dialog_edit_about.xml" value="0.18" />
+        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/dialog_edit_about.xml" value="0.22" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/dialog_edit_name.xml" value="0.2046875" />
+        <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/item_contact.xml" value="0.11684782608695653" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/layout/toolbar.xml" value="0.10597826086956522" />
         <entry key="..\:/Users/SrishtiPC/Documents/GitHub/EnChat/app/src/main/res/mipmap-anydpi-v26/ic_contact.xml" value="0.15572916666666667" />
         <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/drawable/circle_drawable.xml" value="0.4036458333333333" />
@@ -72,7 +75,6 @@
         <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/drawable/ic_login_2_background.xml" value="0.36302083333333335" />
         <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/drawable/ic_react_angry_background.xml" value="0.4036458333333333" />
         <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/drawable/ic_react_wow_background.xml" value="0.36302083333333335" />
-        <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/drawable/profile_picture_round.xml" value="0.4036458333333333" />
         <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/drawable/receive_drawable.xml" value="0.4036458333333333" />
         <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/drawable/sent_drawable.xml" value="0.4036458333333333" />
         <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/layout/activity_chat.xml" value="0.3875" />
@@ -90,7 +92,6 @@
         <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/layout/item_send.xml" value="0.3875" />
         <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/layout/nav_header.xml" value="0.3875" />
         <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/layout/toolbar.xml" value="0.3875" />
-        <entry key="..\:/Users/ktouf/AndroidStudioProjects/EnChat/app/src/main/res/menu/nav_main_menu.xml" value="0.3875" />
       </map>
     </option>
   </component>

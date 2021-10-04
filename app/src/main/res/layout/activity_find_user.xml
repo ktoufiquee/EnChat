@@ -14,10 +14,10 @@
         android:id="@+id/etSearchFilter"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_below="@+id/etSearchFilter"
         android:id="@+id/rvContact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/etSearchFilter"
         android:padding="10dp"
         tools:listitem="@layout/item_contact" />
 </RelativeLayout>

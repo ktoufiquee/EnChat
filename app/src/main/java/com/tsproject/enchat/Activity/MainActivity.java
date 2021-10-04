@@ -28,6 +28,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.tsproject.enchat.Adapter.RecentAdapter;
 import com.tsproject.enchat.R;
 import com.tsproject.enchat.Model.User;
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.google.GoogleEmojiProvider;
+import com.vanniktech.emoji.ios.IosEmojiProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Fresco.initialize(this);
-
+        EmojiManager.install(new GoogleEmojiProvider());
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawerLayout);
@@ -85,6 +88,8 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.btnProfile:
                         loadProfileActivity();
+                       // Intent intent = new Intent(MainActivity.this, ProfileFriendActivity.class);
+                        //startActivity(intent);
                         break;
                     default:
                         break;
@@ -94,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         initRecyclerView();
-
+        ///////
         FirebaseDatabase.getInstance().getReference().child("user").child(uID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -121,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+       //////
 
     }
 
@@ -233,4 +239,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+   @Override
+   protected void onStart() {
+       super.onStart();
+
+
+   }
+
+
 }

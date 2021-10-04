@@ -6,6 +6,7 @@ import androidx.cardview.widget.CardView;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,11 +25,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.tsproject.enchat.R;
+import com.vanniktech.emoji.EmojiEditText;
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.EmojiTextView;
+import com.vanniktech.emoji.google.GoogleEmojiProvider;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
-    TextView tvUserName, tvAbout, tvNumber;
+    TextView  tvNumber;
     CardView cvUserName, cvAbout, cvNumber;
     ImageButton ibEditName, ibEditAbout;
+    EmojiTextView  tvAbout, tvUserName;
     FirebaseDatabase db;
     DatabaseReference dRef;
     FirebaseUser currentUser;
@@ -53,6 +61,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         currentUser = auth.getCurrentUser();
         db = FirebaseDatabase.getInstance();
         dRef = db.getReference("user").child("profile");
+
+
 
     /*    etShowName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,26 +115,30 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void showDialogEditName() {
-
-        final AlertDialog.Builder alert = new AlertDialog.Builder(ProfileActivity.this);
+        AlertDialog.Builder alert = new AlertDialog.Builder(ProfileActivity.this);
         View view = getLayoutInflater().inflate(R.layout.dialog_edit_name, null);
         Button btnOk = (Button) view.findViewById(R.id.btnOk);
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
-        EditText etEditedName = (EditText) view.findViewById(R.id.etEditedName);
+        ImageView ivNameEmoji = (ImageView) view.findViewById(R.id.ivNameEmoji);
+        EmojiEditText  etEditedName = (EmojiEditText) view.findViewById(R.id.etEditedName);
         String currentName = tvUserName.getText().toString().trim();
         etEditedName.setText(currentName);
         etEditedName.setSelection(etEditedName.getText().length());
-   /*     if (view.getParent() == null) {
-            alert.setView(view);
-        } else {
-            view = null; //set it to null
-            // now initialized yourView and its component again
-            alert.setView(view);
-        }
-      //*/
         alert.setView(view);
         alert.setCancelable(true);
-        final AlertDialog alertDialog = alert.create();
+        AlertDialog alertDialog = alert.create();
+        EmojiPopup popup = EmojiPopup.Builder.fromRootView(findViewById(R.id.mainLayout)).build(etEditedName);
+        ivNameEmoji.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popup.toggle();
+                if(popup.isShowing())
+                {
+                    
+                }
+            }
+        });
+
         btnOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -136,6 +150,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         Toast.makeText(ProfileActivity.this, "Username updated", Toast.LENGTH_SHORT).show();
                     }
                 } else {
+
                     Toast.makeText(ProfileActivity.this, "Username can't be empty", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -144,9 +159,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 alertDialog.dismiss();
+
             }
         });
-
         alertDialog.show();
     }
 
@@ -156,6 +171,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         Button btnOk = (Button) view.findViewById(R.id.btnOk);
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         EditText etEditedAbout = (EditText) view.findViewById(R.id.etEditedAbout);
+        String currentAbout = tvAbout.getText().toString().trim();
+        etEditedAbout.setText(currentAbout);
+        etEditedAbout.setSelection(etEditedAbout.getText().length());
         alert.setView(view);
         AlertDialog alertDialog = alert.create();
         alert.setCancelable(true);
@@ -166,7 +184,9 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 if (!editedAbout.equals("")) {
                     tvAbout.setText(editedAbout);
                     alertDialog.dismiss();
-                    Toast.makeText(ProfileActivity.this, "About updated", Toast.LENGTH_SHORT).show();
+                    if (!editedAbout.equals(currentAbout)) {
+                        Toast.makeText(ProfileActivity.this, "About updated", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(ProfileActivity.this, "About can't be empty", Toast.LENGTH_SHORT).show();
                 }

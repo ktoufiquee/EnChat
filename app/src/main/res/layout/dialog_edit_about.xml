@@ -44,7 +44,7 @@
             android:orientation="horizontal"
             android:padding="10dp">
 
-            <EditText
+            <com.vanniktech.emoji.EmojiEditText
                 android:id="@+id/etEditedAbout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -57,10 +57,13 @@
                 android:textCursorDrawable="@drawable/cursor_colour"/>
 
             <ImageView
-                android:id="@+id/imageView6"
+                android:id="@+id/ivAboutEmoji"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
+                android:padding="5dp"
                 android:layout_gravity="center"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:scaleType="centerCrop"
                 app:srcCompat="@drawable/ic_emoji" />
 
