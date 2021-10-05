@@ -24,8 +24,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -34,6 +36,7 @@ import com.google.firebase.storage.UploadTask;
 import com.tsproject.enchat.Adapter.ChatAdapter;
 import com.tsproject.enchat.Adapter.ExtraAdapter;
 import com.tsproject.enchat.Model.Message;
+import com.tsproject.enchat.Model.User;
 import com.tsproject.enchat.databinding.ActivityChatBinding;
 
 
@@ -49,9 +52,15 @@ import java.io.StringWriter;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 public class ChatActivity extends AppCompatActivity {
     ActivityChatBinding binding;
@@ -354,7 +363,41 @@ public class ChatActivity extends AppCompatActivity {
     }
     private void checkOnlineStatus(String status)
     {
-        
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("user").child(currentUser.getUid());
+        Map<String, Object> curr_status = new HashMap<>();
+        curr_status.put("activeStatus", status);
+        dbRef.updateChildren(curr_status);
     }
 
+    @Override
+    protected void onResume() {
+        checkOnlineStatus("online");
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //set offline and last seen
+        //gettime Stamp
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        checkOnlineStatus(timeStamp);
+
+    }
+
+    @Override
+    protected void onStart() {
+        //set online
+        checkOnlineStatus("online");
+        super.onStart();
+
+    }
+    public void convertTime(String timeStamp)
+    {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat currentData = new SimpleDateFormat("MMM dd, yyyy");
+        
+    }
 }
