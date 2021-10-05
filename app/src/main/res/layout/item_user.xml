@@ -2,11 +2,11 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mcvItemUser"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
     android:checkable="true"
-    app:cardCornerRadius="2dp"
+    app:cardCornerRadius="5dp"
     app:cardElevation="5dp"
     app:cardMaxElevation="5dp">
 
@@ -25,7 +25,8 @@
                 android:id="@+id/ivImageFriend"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                tools:srcCompat="@tools:sample/avatars" />
+                android:scaleType="centerCrop"
+                tools:srcCompat="@drawable/ic_baseline_account_circle_24" />
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
@@ -38,9 +39,9 @@
                 android:id="@+id/tvNameFriend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginBottom="2dp"
                 android:text="TextView" />
 
@@ -48,9 +49,9 @@
                 android:id="@+id/tvNumberFriend"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="15dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="15dp"
                 android:layout_marginBottom="2dp"
                 android:text="TextView" />
         </LinearLayout>

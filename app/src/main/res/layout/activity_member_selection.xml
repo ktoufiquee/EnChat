@@ -18,7 +18,7 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:checkable="true">
 
             <LinearLayout
@@ -29,22 +29,25 @@
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     app:cardCornerRadius="40dp">
 
                     <ImageView
                         android:id="@+id/ivGroupImage"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        tools:srcCompat="@tools:sample/avatars" />
+                        tools:srcCompat="@drawable/ic_baseline_account_circle_24" />
 
                 </com.google.android.material.card.MaterialCardView>
 
                 <EditText
+                    android:id="@+id/etGroupName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_margin="5dp"
                     android:fontFamily="@font/lato_bold"
+                    android:minHeight="48dp"
                     android:text="Enter group name" />
 
             </LinearLayout>
@@ -54,12 +57,12 @@
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp">
+            android:layout_margin="10dp">
 
             <androidx.recyclerview.widget.RecyclerView
+                android:id="@id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@id/recyclerView"/>
+                android:layout_height="wrap_content" />
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
@@ -67,17 +70,18 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="10dp"
         android:background="#0288D1"
         android:backgroundTint="#0288D1"
         app:cardCornerRadius="5dp"
-        app:layout_constraintBottom_toBottomOf="@+id/materialCardView"
+        app:layout_constraintBottom_toBottomOf="@+id/mcvCreateGroup"
         app:layout_constraintEnd_toStartOf="@+id/linearLayout"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/materialCardView">
+        app:layout_constraintTop_toTopOf="@+id/mcvCreateGroup">
 
         <TextView
+            android:id="@+id/tvSelectionCount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -89,10 +93,10 @@
     </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/materialCardView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:id="@+id/mcvCreateGroup"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="10dp"
         android:background="#0288D1"
         app:cardBackgroundColor="#0288D1"
         app:cardCornerRadius="24dp"
@@ -100,9 +104,10 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            tools:srcCompat="@drawable/ic_baseline_arrow_forward_24"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/ic_baseline_arrow_forward_24"
             app:tint="#FFFFFF" />
     </com.google.android.material.card.MaterialCardView>
 

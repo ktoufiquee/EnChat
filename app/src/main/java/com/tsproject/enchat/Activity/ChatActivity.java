@@ -70,6 +70,7 @@ public class ChatActivity extends AppCompatActivity {
     ExtraAdapter extraAdapter;
     FirebaseDatabase database;
     String uID, chatID;
+    int chatType;
     FirebaseStorage storage;
     ProgressDialog dialog;
 
@@ -91,13 +92,14 @@ public class ChatActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
 
+        chatType = getIntent().getExtras().getInt("type");
         chatID = getIntent().getExtras().getString("chatID");
         String friendName = getIntent().getExtras().getString("friendName");
         binding.tvFriendName.setText(friendName);
 
         //Initializes the messageList ArrayList, Sets the adapter to show messages
         messageList = new ArrayList<>();
-        adapter = new ChatAdapter(this, messageList, chatID);
+        adapter = new ChatAdapter(this, messageList, chatID, chatType);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
 

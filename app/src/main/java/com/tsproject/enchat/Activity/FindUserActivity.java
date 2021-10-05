@@ -355,4 +355,10 @@ public class FindUserActivity extends AppCompatActivity {
             dRef.child("contactPermission").setValue("false");
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(this, MainActivity.class));
+    }
 }

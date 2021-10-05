@@ -189,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
                                 long type = (long) snap.child("type").getValue();
                                 List<String> members = (List<String>) snap.child("members").getValue();
                                 if (type == 0) {
+                                    user.setType(0);
                                     String targetUID = members.get(0).equals(uID) ? members.get(1) : members.get(0);
                                     FirebaseDatabase.getInstance()
                                             .getReference()
@@ -211,6 +212,12 @@ public class MainActivity extends AppCompatActivity {
 
                                                 }
                                             });
+                                }
+                                if (type == 1) {
+                                    user.setType(1);
+                                    user.setUserName(snap.child("GroupName").getValue().toString());
+                                    recentList.add(user);
+                                    adapter.notifyDataSetChanged();
                                 }
                             }
                         }
