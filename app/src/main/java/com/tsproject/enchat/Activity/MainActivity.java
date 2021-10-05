@@ -192,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
                                 if (type == 0) {
                                     user.setType(0);
                                     String targetUID = members.get(0).equals(uID) ? members.get(1) : members.get(0);
+                                    user.setuID(targetUID);
                                     FirebaseDatabase.getInstance()
                                             .getReference()
                                             .child("user")

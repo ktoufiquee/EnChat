@@ -92,7 +92,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         userRef = db.getReference().child("user").child(currentUser.getUid());
-        userRef.addValueEventListener(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
@@ -106,7 +106,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                         {
                             Log.d("ProfileCheck", "onDataChange: Not empty");
                             Glide.with(ProfileActivity.this)
-                                        .load(childSnapshot.child("imageUrl"))
+                                        .load(childSnapshot.child("imageUrl").getValue().toString())
                                         .into(civProfile);
 
                         }

@@ -53,6 +53,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
             public void onClick(View v) {
                 Intent intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("userID", FirebaseAuth.getInstance().getUid());
+                intent.putExtra("friendID", recentList.get(holder.getBindingAdapterPosition()).getuID());
                 intent.putExtra("chatID", recentList.get(holder.getBindingAdapterPosition()).getChatID());
                 String contactName;
                 if(recentList.get(holder.getBindingAdapterPosition()).getContactName() != null) {

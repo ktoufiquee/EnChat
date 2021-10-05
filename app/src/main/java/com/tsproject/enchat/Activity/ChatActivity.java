@@ -69,7 +69,7 @@ public class ChatActivity extends AppCompatActivity {
     ChatAdapter adapter;
     ExtraAdapter extraAdapter;
     FirebaseDatabase database;
-    String uID, chatID;
+    String uID, chatID, fID;
     int chatType;
     FirebaseStorage storage;
     ProgressDialog dialog;
@@ -92,6 +92,7 @@ public class ChatActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
 
+        fID = getIntent().getExtras().getString("friendID");
         chatType = getIntent().getExtras().getInt("type");
         chatID = getIntent().getExtras().getString("chatID");
         String friendName = getIntent().getExtras().getString("friendName");
