@@ -128,7 +128,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:gravity="start"
-                            android:text="Srishti"
+                            android:text="Name"
                             android:inputType="text"
                             android:textSize="20sp"/>
 
@@ -200,7 +200,7 @@
                             android:layout_marginTop="5dp"
                             android:gravity="start"
                             android:maxLength="100"
-                            android:text="I am available on Enchat"
+                            android:text="Default About"
                             android:textSize="20sp" />
 
 
@@ -259,7 +259,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:gravity="start"
-                            android:text="01746536663"
+                            android:text="1234567"
                             android:textSize="20sp" />
 
 
