@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -34,6 +35,7 @@ import com.vanniktech.emoji.ios.IosEmojiProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
@@ -54,16 +56,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         Fresco.initialize(this);
 
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawerLayout);
         navView = findViewById(R.id.navView);
-
-        //TextView uID = findViewById(R.id.uID);
-        //uID.setText(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         setSupportActionBar(toolbar);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -88,8 +89,6 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.btnProfile:
                         loadProfileActivity();
-                       // Intent intent = new Intent(MainActivity.this, ProfileFriendActivity.class);
-                        //startActivity(intent);
                         break;
                     default:
                         break;
@@ -99,7 +98,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         initRecyclerView();
-        ///////
+        findViewById(R.id.cvAddGroup).setOnClickListener(view -> CreateGroupOnClick());
+
         FirebaseDatabase.getInstance().getReference().child("user").child(uID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -109,15 +109,15 @@ public class MainActivity extends AppCompatActivity {
                     phoneNumber = snapshot.child("phnNum").getValue().toString();
                 }
 
-                ImageView profilePicture = findViewById(R.id.ivUserImage);
                 TextView tvUsername = findViewById(R.id.tvUsername);
                 TextView tvUserNumber = findViewById(R.id.tvUserNumber);
+                ImageView profilePicture = findViewById(R.id.ivUserImage);
 
+                tvUsername.setText(Name);
+                tvUserNumber.setText(phoneNumber);
                 Glide.with(MainActivity.this)
                         .load(dpUrl)
                         .into(profilePicture);
-                tvUsername.setText(Name);
-                tvUserNumber.setText(phoneNumber);
 
             }
 
@@ -126,7 +126,17 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-       //////
+
+        findViewById(R.id.cvAddGroup).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, MemberSelectionActivity.class));
+            }
+        });
+
+    }
+
+    private void CreateGroupOnClick() {
 
     }
 
@@ -155,19 +165,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-//    private void startChatOnClick() {
-//        EditText chatID = findViewById(R.id.chatID);
-//        EditText userID = findViewById(R.id.nickname);
-//        String userName = FirebaseAuth.getInstance().getCurrentUser().getUid();
-//        if (userID.getText().toString() != null) {
-//            userName = userID.getText().toString();
-//        }
-//        Intent intent = new Intent(this, ChatActivity.class);
-//        intent.putExtra("userID", userName);
-//        intent.putExtra("chatID", chatID.getText().toString());
-//        startActivity(intent);
-//    }
-
     private void initRecyclerView() {
         rvRecent = findViewById(R.id.rvRecent);
         recentList = new ArrayList<>();
@@ -176,6 +173,65 @@ public class MainActivity extends AppCompatActivity {
         adapter.setRecentList(recentList);
         rvRecent.setLayoutManager((new LinearLayoutManager(this)));
         rvRecent.setAdapter(adapter);
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child("chat")
+                .orderByChild(uID)
+                .equalTo(0)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for (DataSnapshot snap : snapshot.getChildren()) {
+                                User user = new User();
+                                user.setChatID(snap.getKey());
+
+                                long type = (long) snap.child("type").getValue();
+                                List<String> members = (List<String>) snap.child("members").getValue();
+                                if (type == 0) {
+                                    String targetUID = members.get(0).equals(uID) ? members.get(1) : members.get(0);
+                                    FirebaseDatabase.getInstance()
+                                            .getReference()
+                                            .child("user")
+                                            .child(targetUID)
+                                            .addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    if (snapshot.exists()) {
+                                                        user.setUserName(snapshot.child("userName").getValue().toString());
+                                                        recentList.add(user);
+                                                        adapter.notifyDataSetChanged();
+                                                    } else {
+                                                        user.setUserName("Deleted User");
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                }
+                                            });
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+    }
+
+    /*private void adapterLoader() {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("user").child(uID).child("connectedUser");
         DatabaseReference dbUser = FirebaseDatabase.getInstance().getReference().child("user");
         db.addValueEventListener(new ValueEventListener() {
@@ -238,13 +294,5 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
-   @Override
-   protected void onStart() {
-       super.onStart();
-
-
-   }
-
-
+    }*/
 }

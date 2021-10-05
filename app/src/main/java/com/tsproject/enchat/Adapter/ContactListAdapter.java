@@ -2,6 +2,7 @@ package com.tsproject.enchat.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.tsproject.enchat.Model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.ViewHolder> {
@@ -50,16 +52,52 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         ViewHolder holder = new ViewHolder(view);
         return holder;
     }
+
     //ArrayList<Menu> m;
     @Override
     public void onBindViewHolder(@NonNull ContactListAdapter.ViewHolder holder, int position) {
-        holder.tvContactName.setText(contactList.get(position).getContactName());
-        holder.tvContactNumber.setText(contactList.get(position).getPhnNum());
+        String uID = FirebaseAuth.getInstance().getUid();
+        int pos = holder.getBindingAdapterPosition();
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("room_det");
+        holder.tvContactName.setText(contactList.get(pos).getContactName());
+        holder.tvContactNumber.setText(contactList.get(pos).getPhnNum());
         holder.clContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String fID = contactList.get(pos).getuID();
 
-                DatabaseReference dbUser = FirebaseDatabase.getInstance().getReference()
+                FirebaseDatabase.getInstance()
+                        .getReference()
+                        .child("room_det")
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                String key = "";
+                                if (!snapshot.child(uID).child(fID).exists()) {
+                                    if (!snapshot.child(fID).child(uID).exists()) {
+                                        key = initChat(uID, fID);
+                                        ref.child(fID).child(uID).setValue(key);
+                                    } else {
+                                        key = snapshot.child(fID).child(uID).getValue().toString();
+                                    }
+                                    ref.child(uID).child(fID).setValue(key);
+                                } else {
+                                    key = snapshot.child(uID).child(fID).getValue().toString();
+                                }
+                                Log.d("TEST_RID", key);
+                                Intent intent = new Intent(context, ChatActivity.class);
+                                intent.putExtra("chatID", key);
+                                intent.putExtra("friendName", contactList.get(pos).getContactName());
+                                context.startActivity(intent);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                /*DatabaseReference dbUser = FirebaseDatabase.getInstance().getReference()
                         .child("user")
                         .child(FirebaseAuth.getInstance().getUid())
                         .child("connectedUser")
@@ -89,9 +127,26 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                     public void onCancelled(@NonNull DatabaseError error) {
 
                     }
-                });
+                });*/
             }
         });
+    }
+
+    private String initChat(String uID, String fID) {
+        HashMap<String, Integer> mapper = new HashMap<>();
+        mapper.put(uID, 0);
+        mapper.put(fID, 0);
+        mapper.put("type", 0);
+
+        List<String> members = new ArrayList<>();
+        members.add(uID);
+        members.add(fID);
+
+        String key = FirebaseDatabase.getInstance().getReference().child("chat").push().getKey();
+        FirebaseDatabase.getInstance().getReference().child("chat").child(key).setValue(mapper);
+        FirebaseDatabase.getInstance().getReference().child("chat").child(key).child("members").setValue(members);
+
+        return key;
     }
 
     @Override

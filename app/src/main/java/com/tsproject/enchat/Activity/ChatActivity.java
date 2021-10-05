@@ -134,8 +134,10 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 messageList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Message message = dataSnapshot.getValue(Message.class);
-                    messageList.add(message);
+                    if(dataSnapshot.child("senderId").exists()) {
+                        Message message = dataSnapshot.getValue(Message.class);
+                        messageList.add(message);
+                    }
                 }
                 adapter.notifyDataSetChanged();
                 int size = binding.recyclerView.getAdapter().getItemCount();
