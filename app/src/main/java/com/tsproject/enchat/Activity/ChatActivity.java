@@ -350,5 +350,9 @@ public class ChatActivity extends AppCompatActivity {
         }
         return new JSONObject("");
     }
+    private void checkOnlineStatus(String status)
+    {
+        
+    }
 
 }

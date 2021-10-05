@@ -1,8 +1,10 @@
 package com.tsproject.enchat.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -10,9 +12,11 @@ import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -20,16 +24,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.tsproject.enchat.R;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.EmojiPopup;
 import com.vanniktech.emoji.EmojiTextView;
+import com.vanniktech.emoji.EmojiUtils;
 import com.vanniktech.emoji.google.GoogleEmojiProvider;
+
+import java.net.URL;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
+import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
     TextView  tvNumber;
@@ -37,10 +55,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     ImageButton ibEditName, ibEditAbout;
     EmojiTextView  tvAbout, tvUserName;
     FirebaseDatabase db;
-    DatabaseReference dRef;
+    FirebaseStorage storage;
+    StorageReference sRef;
+    DatabaseReference userRef;
     FirebaseUser currentUser;
-    FirebaseAuth auth;
-
+    CircleImageView civProfile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +69,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         cvAbout = findViewById(R.id.cvAbout);
         cvNumber = findViewById(R.id.cvNumber);
 
+        civProfile = findViewById(R.id.civProfile);
+
         ibEditName = findViewById(R.id.ibEditName);
         ibEditAbout = findViewById(R.id.ibEditAbout);
 
@@ -57,50 +78,73 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         tvAbout = findViewById(R.id.tvAbout);
         tvNumber = findViewById(R.id.tvNumber);
 
-        auth = FirebaseAuth.getInstance();
-        currentUser = auth.getCurrentUser();
-        db = FirebaseDatabase.getInstance();
-        dRef = db.getReference("user").child("profile");
-
-
-
-    /*    etShowName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etShowName.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                    }
-                });
-            }
-        });*/
-
         cvUserName.setOnClickListener(this);
         ibEditName.setOnClickListener(this);
 
         cvAbout.setOnClickListener(this);
         ibEditAbout.setOnClickListener(this);
 
+        civProfile.setOnClickListener(this);
+
+        storage = FirebaseStorage.getInstance();
+
+        db = FirebaseDatabase.getInstance();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        userRef = db.getReference().child("user").child(currentUser.getUid());
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists())
+                {
+                    String name = "";
+                    String number = "";
+                    String about = "";
+                    for(DataSnapshot childSnapshot: snapshot.getChildren())
+                    {
+                        if(childSnapshot.child("imageUrl").getValue() != null)
+                        {
+                            Log.d("ProfileCheck", "onDataChange: Not empty");
+                            Glide.with(ProfileActivity.this)
+                                        .load(childSnapshot.child("imageUrl"))
+                                        .into(civProfile);
+
+                        }
+                        if(childSnapshot.child("userName").getValue() != null)
+                        {
+                            name = childSnapshot.child("userName").getValue().toString();
+                            tvUserName.setText(name);
+                        }
+                        if(childSnapshot.child("about").getValue() != null)
+                        {
+                            about = childSnapshot.child("about").getValue().toString();
+                            tvAbout.setText(about);
+                        }
+                        if(childSnapshot.child("phnNum").getValue() != null)
+                        {
+                            number = childSnapshot.child("phnNum").getValue().toString();
+                            tvNumber.setText(number);
+                        }
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.cvUserName:
-                showDialogEditName();
-                break;
+              showDialogEditName();
+               break;
             case R.id.ibEditName:
+                TypedValue outValue = new TypedValue();
                 showDialogEditName();
                 break;
             case R.id.cvAbout:
@@ -127,15 +171,11 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         alert.setView(view);
         alert.setCancelable(true);
         AlertDialog alertDialog = alert.create();
-        EmojiPopup popup = EmojiPopup.Builder.fromRootView(findViewById(R.id.mainLayout)).build(etEditedName);
+        EmojiPopup popup = EmojiPopup.Builder.fromRootView(view.findViewById(R.id.mainLayout)).build(etEditedName);
         ivNameEmoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popup.toggle();
-                if(popup.isShowing())
-                {
-                    
-                }
             }
         });
 
