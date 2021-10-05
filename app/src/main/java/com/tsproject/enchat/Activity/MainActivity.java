@@ -181,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        recentList.clear();
                         if (snapshot.exists()) {
                             for (DataSnapshot snap : snapshot.getChildren()) {
                                 User user = new User();
