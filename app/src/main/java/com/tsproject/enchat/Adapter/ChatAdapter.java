@@ -27,14 +27,16 @@ public class ChatAdapter extends RecyclerView.Adapter {
     Context context;
     ArrayList<Message> messageList;
     String chatID;
+    int chatType;
 
     final int ITEM_SEND = 1;
     final int ITEM_RECEIVE = 2;
 
-    public ChatAdapter(Context context, ArrayList<Message> messageList, String chatID) {
+    public ChatAdapter(Context context, ArrayList<Message> messageList, String chatID, int chatType) {
         this.context = context;
         this.messageList = messageList;
         this.chatID = chatID;
+        this.chatType = chatType;
     }
 
     @NonNull
@@ -82,10 +84,8 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 message.setReact(pos);
             }
             FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).child(message.getMessageID()).setValue(message);
-
             return true; // true is closing popup, false is requesting a new selection
         });
-
 
         if (holder.getClass() == SendViewHolder.class) {
             SendViewHolder sendViewHolder = (SendViewHolder) holder;
@@ -114,14 +114,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     sendViewHolder.binding.tvMessageSend.setVisibility(View.GONE);
                 }
             }
-
-//            sendViewHolder.binding.tvMessageSend.setOnTouchListener(new View.OnTouchListener() {
-//                @Override
-//                public boolean onTouch(View v, MotionEvent event) {
-//                    popup.onTouch(v, event);
-//                    return false;
-//                }
-//            });
         } else {
             ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) holder;
             receiveViewHolder.binding.tvMessageRecieve.setText(message.getMessage());
@@ -149,14 +141,15 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     receiveViewHolder.binding.tvMessageRecieve.setVisibility(View.GONE);
                 }
             }
-
-            receiveViewHolder.binding.tvMessageRecieve.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    popup.onTouch(v, event);
-                    return false;
-                }
-            });
+            if(chatType != 1) {
+                receiveViewHolder.binding.tvMessageRecieve.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        popup.onTouch(v, event);
+                        return false;
+                    }
+                });
+            }
 
         }
     }

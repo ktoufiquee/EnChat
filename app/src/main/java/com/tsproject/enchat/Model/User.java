@@ -8,19 +8,16 @@ public class User {
     String uID;
     String chatID;
     String imageURL;
+    int type;
 
-    public String getImageURL() {
-        return imageURL;
-    }
-
-    public void setImageURL(String imageURL) {
-        this.imageURL = imageURL;
-    }
-
-    public User()
-    {
+    public User() {
 
     }
+
+    public User(String uID) {
+        this.uID = uID;
+    }
+
     public User(String userName, String phnNum) {
         this.userName = userName;
         this.phnNum = phnNum;
@@ -31,6 +28,22 @@ public class User {
         this.phnNum = phnNum;
         this.contactPermission = contactPermission;
         this.uID = uID;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public String getChatID() {

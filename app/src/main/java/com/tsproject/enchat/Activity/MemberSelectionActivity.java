@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -18,14 +20,18 @@ import com.tsproject.enchat.R;
 import com.tsproject.enchat.databinding.ActivityMemberSelectionBinding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MemberSelectionActivity extends AppCompatActivity {
 
-    ActivityMemberSelectionBinding binding;
-    MemberSelectionAdapter adapter;
-    DataSnapshot userList;
-    ArrayList<User> friendList;
-    String uID;
+    private ActivityMemberSelectionBinding binding;
+    private MemberSelectionAdapter adapter;
+    private ArrayList<User> friendList;
+    private String uID;
+
+    public static List<String> selectedList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,20 +39,13 @@ public class MemberSelectionActivity extends AppCompatActivity {
         binding = ActivityMemberSelectionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        selectedList = new ArrayList<>();
         friendList = new ArrayList<>();
         uID = FirebaseAuth.getInstance().getUid();
 
-
-        adapter = new MemberSelectionAdapter(this, friendList);
+        adapter = new MemberSelectionAdapter(this, friendList, binding.tvSelectionCount);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
-
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
 
         FirebaseDatabase.getInstance()
                 .getReference()
@@ -72,6 +71,37 @@ public class MemberSelectionActivity extends AppCompatActivity {
 
                     }
                 });
-        Log.d("CHECK_MID2", "" + friendList.size());
+
+        binding.mcvCreateGroup.setOnClickListener(view -> createGroupOnClick());
+
     }
+
+    private void createGroupOnClick() {
+        if (binding.etGroupName.getText().toString().replaceAll(" ", "").length() == 0) {
+            Toast.makeText(this, "Group name cannot be empty", Toast.LENGTH_SHORT).show();
+        } else if (selectedList.size() == 0) {
+            Toast.makeText(this, "Select at least 1 member", Toast.LENGTH_SHORT).show();
+        } else {
+            String groupName = binding.etGroupName.getText().toString();
+            String key = FirebaseDatabase.getInstance().getReference().child("chat").push().getKey();
+
+            HashMap<String, Integer> mapper = new HashMap<>();
+            selectedList.add(uID);
+            for (String it : selectedList) {
+                mapper.put(it, 0);
+            }
+            mapper.put(uID, 0);
+            mapper.put("type", 1);
+
+            FirebaseDatabase.getInstance().getReference().child("chat").child(key).setValue(mapper);
+            FirebaseDatabase.getInstance().getReference().child("chat").child(key).child("GroupName").setValue(groupName);
+            FirebaseDatabase.getInstance().getReference().child("chat").child(key).child("members").setValue(selectedList);
+
+            Toast.makeText(this, "Group created", Toast.LENGTH_SHORT).show();
+            finish();
+            startActivity(new Intent(this, MainActivity.class));
+        }
+    }
+
+
 }
