@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     android:background="@drawable/bg_gradient"
-    android:id="@+id/mainLayout"
     tools:context=".Activity.ProfileActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -43,6 +43,7 @@
         android:layout_height="0dp"
         android:background="@drawable/custom_profile_shape"
         android:padding="10dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent=".70"
         app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +122,6 @@
                                 android:clickable="true"
                                 tools:ignore="SpeakableTextPresentCheck" />
                         </LinearLayout>
-
                         <com.vanniktech.emoji.EmojiTextView
                             android:id="@+id/tvUserName"
                             android:layout_width="match_parent"
@@ -129,7 +129,9 @@
                             android:layout_marginTop="5dp"
                             android:gravity="start"
                             android:text="Srishti"
-                            android:textSize="20sp" />
+                            android:inputType="text"
+                            android:textSize="20sp"/>
+
 
                     </LinearLayout>
 

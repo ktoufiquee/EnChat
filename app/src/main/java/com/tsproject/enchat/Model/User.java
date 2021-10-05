@@ -9,6 +9,16 @@ public class User {
     String chatID;
     String imageURL;
     int type;
+    String about;
+    String activeStatus;
+
+    public String getActiveStatus() {
+        return activeStatus;
+    }
+
+    public void setActiveStatus(String activeStatus) {
+        this.activeStatus = activeStatus;
+    }
 
     public User() {
 
@@ -23,11 +33,21 @@ public class User {
         this.phnNum = phnNum;
     }
 
-    public User(String userName, String phnNum, String contactPermission, String uID) {
+    public String getAbout() {
+        return about;
+    }
+
+    public void setAbout(String about) {
+        this.about = about;
+    }
+
+    public User(String userName, String phnNum, String contactPermission, String uID, String about, String activeStatus) {
         this.userName = userName;
         this.phnNum = phnNum;
         this.contactPermission = contactPermission;
         this.uID = uID;
+        this.about = about;
+        this.activeStatus = activeStatus;
     }
 
     public int getType() {

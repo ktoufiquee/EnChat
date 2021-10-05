@@ -45,6 +45,9 @@ public class ProfileInfoActivity extends AppCompatActivity {
     String imageURL;
     ProgressBar pbProfileInfo;
 
+    public static final String default_about = "I am available on Enchat";
+    public static final String default_status = "Online";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +60,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
         db = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
         auth = FirebaseAuth.getInstance();
-        currentUser = auth.getCurrentUser();
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         dRef = db.getReference().child("user").child(currentUser.getUid());
 
         fabBtnAddPhoto.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +103,8 @@ public class ProfileInfoActivity extends AppCompatActivity {
                     String uID = auth.getUid();
                     String rec_number = getIntent().getStringExtra("number");
                     User user = new User();
+                    user.setAbout(default_about);
+                    user.setActiveStatus(default_status);
                     user.setUserName(rec_name);
                     user.setPhnNum(rec_number);
                     user.setuID(uID);

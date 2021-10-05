@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         uID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         Fresco.initialize(this);
-        EmojiManager.install(new GoogleEmojiProvider());
+
 
         toolbar = findViewById(R.id.toolbar);
         drawerLayout = findViewById(R.id.drawerLayout);
