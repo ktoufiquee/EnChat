@@ -110,6 +110,19 @@ public class ChatAdapter extends RecyclerView.Adapter {
             SendViewHolder sendViewHolder = (SendViewHolder) holder;
             sendViewHolder.binding.tvMessageSend.setText(message.getMessage());
 
+            //If the view is clicked, show additional buttons
+            sendViewHolder.binding.clSend.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    toggle = !toggle;
+                    if (toggle) {
+                        sendViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
+                    } else {
+                        sendViewHolder.binding.llExtra.setVisibility(View.GONE);
+                    }
+                }
+            });
+
             //If react is not -1 then load the reaction
             if (message.getReact() >= 0) {
                 sendViewHolder.binding.ivReactSend.setImageResource(reacts[(int) message.getReact()]);
@@ -138,18 +151,8 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 }
             }
 
-            //If the view is clicked, show additional buttons
-            sendViewHolder.binding.clSend.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    toggle = !toggle;
-                    if (toggle) {
-                        sendViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
-                    } else {
-                        sendViewHolder.binding.llExtra.setVisibility(View.GONE);
-                    }
-                }
-            });
+
+
 
             sendViewHolder.binding.ivDeleteText.setOnClickListener(view -> deleteTextOnClick(messageList.get(bpos).getMessageID()));
             sendViewHolder.binding.ivSaveText.setOnClickListener(view -> saveTextOnClick(messageList.get(bpos).getMessageID()));
@@ -158,6 +161,19 @@ public class ChatAdapter extends RecyclerView.Adapter {
         else {
             ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) holder;
             receiveViewHolder.binding.tvMessageRecieve.setText(message.getMessage());
+
+            //If the view is clicked, show additional buttons
+            receiveViewHolder.binding.clReceive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    toggle = !toggle;
+                    if (toggle) {
+                        receiveViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
+                    } else {
+                        receiveViewHolder.binding.llExtra.setVisibility(View.GONE);
+                    }
+                }
+            });
 
             //If the chat is group chat, then show the username on top of the message
             if (chatType == 1) {
@@ -214,18 +230,8 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 }
             });
 
-            //If the view is clicked, show additional buttons
-            receiveViewHolder.binding.clReceive.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    toggle = !toggle;
-                    if (toggle) {
-                        receiveViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
-                    } else {
-                        receiveViewHolder.binding.llExtra.setVisibility(View.GONE);
-                    }
-                }
-            });
+
+
 
             receiveViewHolder.binding.ivSaveText.setOnClickListener(view -> saveTextOnClick(messageList.get(bpos).getMessageID()));
 
