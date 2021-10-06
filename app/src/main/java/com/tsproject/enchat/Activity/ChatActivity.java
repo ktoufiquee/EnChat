@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -127,10 +128,8 @@ public class ChatActivity extends AppCompatActivity {
 
         //Initializes the messageList ArrayList, Sets the adapter to show messages
         messageList = new ArrayList<>();
-        adapter = new ChatAdapter(this, messageList, chatID, chatType);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.setAdapter(adapter);
-        adapter.setChatActivity(ChatActivity.this);
+
 
         //Initializes the GIF URL arrayList, Sets the adapter for GIF keyboard
         urlList = new ArrayList<>();
@@ -174,7 +173,7 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String text = binding.etMessage.getText().toString();
-                if(text.replaceAll(" ", "").length() < 1) {
+                if (text.replaceAll(" ", "").length() < 1) {
                     return;
                 }
                 Date date = new Date();
@@ -202,9 +201,11 @@ public class ChatActivity extends AppCompatActivity {
         });
 
         //Reads all the message from database to ChatAdapter, Scrolls to the bottom of the RecyclerView (139,140)
+
         database.getReference().child("chat").child(chatID).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int prevCount = messageList.size();
                 messageList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     if (dataSnapshot.child("senderId").exists()) {
@@ -212,9 +213,8 @@ public class ChatActivity extends AppCompatActivity {
                         messageList.add(message);
                     }
                 }
-                adapter.notifyDataSetChanged();
-                int size = binding.recyclerView.getAdapter().getItemCount();
-                binding.recyclerView.smoothScrollToPosition(size);
+                binding.recyclerView.setAdapter(new ChatAdapter(getApplicationContext(), messageList, chatID, chatType));
+                binding.recyclerView.smoothScrollToPosition(messageList.size());
             }
 
             @Override
@@ -246,7 +246,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        binding.etMessage.addTextChangedListener(new TextWatcher() {
+        /*binding.etMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -265,7 +265,7 @@ public class ChatActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
 
             }
-        });
+        });*/
 
         //initialize record button
         binding.btnRecord.setRecordView(binding.recordView);
@@ -273,75 +273,62 @@ public class ChatActivity extends AppCompatActivity {
         binding.btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-<<<<<<< Updated upstream
-                if(!checkPermissionForAudio()) {
+
+                if (!checkPermissionForAudio()) {
                     binding.btnRecord.setListenForRecord(true);
-                }
-                else
-                {
+                } else {
                     requestPermissionForAudio();
                 }
-=======
-
->>>>>>> Stashed changes
             }
         });
         binding.recordView.setOnRecordListener(new OnRecordListener() {
-           @Override
-           public void onStart() {
-               //Start recording if has permission,otherwise request permission
-                    binding.etMessage.setVisibility(View.INVISIBLE);
-                    binding.btnMedia.setVisibility(View.INVISIBLE);
-                    binding.btnSend.setVisibility(View.INVISIBLE);
-                    binding.btnExtra.setVisibility(View.INVISIBLE);
-                    startRecording();
-                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                    if(vibrator != null)
-                    {
-                        vibrator.vibrate(1000);
-                    }
-
-           }
+            @Override
+            public void onStart() {
+                //Start recording if has permission,otherwise request permission
+                binding.etMessage.setVisibility(View.INVISIBLE);
+                binding.btnMedia.setVisibility(View.INVISIBLE);
+                binding.btnSend.setVisibility(View.INVISIBLE);
+                binding.btnExtra.setVisibility(View.INVISIBLE);
+                startRecording();
+                Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                if (vibrator != null) {
+                    vibrator.vibrate(1000);
+                }
+            }
 
             @Override
             public void onCancel() {
-               //Cancel recording
+                //Cancel recording
                 try {
                     mediaRecorder.reset();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
 
-           @Override
-           public void onFinish(long recordTime, boolean limitReached) {
-               //Stop Recording
-               binding.etMessage.setVisibility(View.VISIBLE);
-               binding.btnMedia.setVisibility(View.VISIBLE);
-               binding.btnSend.setVisibility(View.VISIBLE);
-               binding.btnExtra.setVisibility(View.VISIBLE);
-               try {
-                   String time = getHumanTimeText(recordTime);
-                   stopRecord();
-               }
-               catch(Exception e)
-               {
-                   e.printStackTrace();
-               }
+            @Override
+            public void onFinish(long recordTime, boolean limitReached) {
+                //Stop Recording
+                binding.etMessage.setVisibility(View.VISIBLE);
+                binding.btnMedia.setVisibility(View.VISIBLE);
+                binding.btnSend.setVisibility(View.VISIBLE);
+                binding.btnExtra.setVisibility(View.VISIBLE);
+                try {
+                    String time = getHumanTimeText(recordTime);
+                    stopRecord();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
-           }
-
-           @Override
-           public void onLessThanSecond() {
-               binding.etMessage.setVisibility(View.VISIBLE);
-               binding.btnMedia.setVisibility(View.VISIBLE);
-               binding.btnSend.setVisibility(View.VISIBLE);
-               binding.btnExtra.setVisibility(View.VISIBLE);
-
-
-           }
-       });
+            @Override
+            public void onLessThanSecond() {
+                binding.etMessage.setVisibility(View.VISIBLE);
+                binding.btnMedia.setVisibility(View.VISIBLE);
+                binding.btnSend.setVisibility(View.VISIBLE);
+                binding.btnExtra.setVisibility(View.VISIBLE);
+            }
+        });
     }
 
 
@@ -574,13 +561,8 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-<<<<<<< Updated upstream
-    public String getTime()
-    {
-=======
-
     public String getTime() {
->>>>>>> Stashed changes
+
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         return sdf.format(new Date());
     }
@@ -638,18 +620,13 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     //check permission for recording,if either of the permission is denied,recording will not take place
-<<<<<<< Updated upstream
-    private boolean checkPermissionForAudio()
-    {
-       int write_external_storage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-       int record_audio = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
-       return write_external_storage == PackageManager.PERMISSION_DENIED | record_audio == PackageManager.PERMISSION_DENIED;
+
+    private boolean checkPermissionForAudio() {
+        int write_external_storage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int record_audio = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
+        return write_external_storage == PackageManager.PERMISSION_DENIED | record_audio == PackageManager.PERMISSION_DENIED;
     }
 
-    //else request permission
-    private void requestPermissionForAudio()
-    {
-=======
     private boolean checkPermissionFromDevice() {
         int write_external_storage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int record_audio = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
@@ -657,8 +634,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     //else request permission
-    private void requestPermission() {
->>>>>>> Stashed changes
+    private void requestPermissionForAudio() {
+
         ActivityCompat.requestPermissions(this, new String[]{
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.RECORD_AUDIO
@@ -666,59 +643,54 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private String getHumanTimeText(long recordTime) {
-        String cal =  String.format("%02d",
+        String cal = String.format("%02d",
                 TimeUnit.MILLISECONDS.toSeconds(recordTime) -
                         TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(recordTime)));
-        Log.d("Cal", "getHumanTimeText: "+cal);
+        Log.d("Cal", "getHumanTimeText: " + cal);
         return cal;
     }
 
     private void startRecording() {
         setUpRecording();
-        try{
+        try {
             mediaRecorder.prepare();
             mediaRecorder.start();
-        }catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(this, "Recording Error Occured", Toast.LENGTH_SHORT).show();
         }
 
     }
+
     private void stopRecord() {
-        try{
-        if(mediaRecorder != null)
-        {
+        try {
+            if (mediaRecorder != null) {
                 mediaRecorder.stop();
                 mediaRecorder.reset();
                 mediaRecorder.release();
                 mediaRecorder = null;
                 //Send the recording
                 uriAudio = Uri.fromFile(new File(audio_path));
-                StorageReference sRef = FirebaseStorage.getInstance().getReference().child("enhat/"+fID+"/Recording" + System.currentTimeMillis());
+                StorageReference sRef = FirebaseStorage.getInstance().getReference().child("enhat/" + fID + "/Recording" + System.currentTimeMillis());
                 sRef.putFile(uriAudio).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
                     public void onSuccess(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
                         Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
-                        Log.d("Media", "onSuccess: ?"+ urlTask);
+                        Log.d("Media", "onSuccess: ?" + urlTask);
                     }
                 });
 
+            } else {
+                Toast.makeText(this, "Please try again!", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "There were issues with the recording", Toast.LENGTH_SHORT).show();
         }
-        else
-        {
-            Toast.makeText(this, "Please try again!", Toast.LENGTH_SHORT).show();
-        }}
-       catch (Exception e)
-       {
-           Toast.makeText(this, "There were issues with the recording", Toast.LENGTH_SHORT).show();
-       }
 
     }
 
-    private void setUpRecording()
-    {
-       String file_path =  Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + UUID.randomUUID().toString() + "audio_record.m4a";
+    private void setUpRecording() {
+        String file_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + UUID.randomUUID().toString() + "audio_record.m4a";
         audio_path = file_path;
         mediaRecorder = new MediaRecorder();
         try {
@@ -726,9 +698,7 @@ public class ChatActivity extends AppCompatActivity {
             mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             mediaRecorder.setOutputFile(file_path);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
