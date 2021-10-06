@@ -1,5 +1,6 @@
 package com.tsproject.enchat.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,8 +19,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.tsproject.enchat.Activity.ChatActivity;
 import com.tsproject.enchat.Model.Message;
 import com.tsproject.enchat.R;
+import com.tsproject.enchat.databinding.ActivityChatBinding;
 import com.tsproject.enchat.databinding.ItemReceiveBinding;
 import com.tsproject.enchat.databinding.ItemSendBinding;
 
@@ -32,6 +35,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
     String chatID;
     int chatType;
     boolean toggle = false;
+    Activity chatActivity;
 
     final int ITEM_SEND = 1;
     final int ITEM_RECEIVE = 2;
@@ -41,6 +45,10 @@ public class ChatAdapter extends RecyclerView.Adapter {
         this.messageList = messageList;
         this.chatID = chatID;
         this.chatType = chatType;
+    }
+
+    public void setChatActivity(Activity chatActivity) {
+        this.chatActivity = chatActivity;
     }
 
     @NonNull
@@ -98,7 +106,9 @@ public class ChatAdapter extends RecyclerView.Adapter {
             sendViewHolder.binding.clSend.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    
+                    View v = chatActivity.getCurrentFocus();
+                    v.clearFocus();
+                    view.requestFocus();
                     toggle = !toggle;
                     if (toggle) {
                         sendViewHolder.binding.llExtra.setVisibility(View.VISIBLE);

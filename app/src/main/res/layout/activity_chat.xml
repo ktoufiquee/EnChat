@@ -68,7 +68,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
@@ -99,18 +99,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_weight="1"
-                android:ems="10"
-                android:textCursorDrawable="@drawable/cursor_colour"
                 android:backgroundTint="@color/line_default"
+                android:ems="10"
                 android:hint="Write a message..."
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:textCursorDrawable="@drawable/cursor_colour" />
 
             <ImageView
                 android:id="@+id/btnMedia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:maxWidth="32dp"
                 android:minWidth="32dp"
                 app:srcCompat="@drawable/ic_attachment"
@@ -128,7 +128,6 @@
                 app:tint="#0288D1" />
 
         </LinearLayout>
-
 
 
     </androidx.cardview.widget.CardView>
@@ -201,15 +200,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
         android:layout_toLeftOf="@id/record_button"
         app:counter_time_color="#ff0000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:slide_to_cancel_arrow="@drawable/recv_ic_arrow"
         app:slide_to_cancel_arrow_color="#000000"
         app:slide_to_cancel_bounds="8dp"
         app:slide_to_cancel_margin_right="10dp"
-        app:slide_to_cancel_text="Slide To Cancel"
-        tools:layout_editor_absoluteX="5dp"
-        tools:layout_editor_absoluteY="678dp" />
+        app:slide_to_cancel_text="Slide To Cancel" />
 
     <com.devlomi.record_view.RecordButton
         android:id="@+id/record_button"
@@ -217,11 +217,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="5dp"
         android:background="@drawable/recv_bg_mic"
         android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:mic_icon="@drawable/recv_ic_mic_white"
-        tools:layout_editor_absoluteY="678dp" />
+        tools:ignore="SpeakableTextPresentCheck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

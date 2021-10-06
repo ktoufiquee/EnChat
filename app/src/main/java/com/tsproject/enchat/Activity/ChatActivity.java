@@ -110,6 +110,7 @@ public class ChatActivity extends AppCompatActivity {
         adapter = new ChatAdapter(this, messageList, chatID, chatType);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(adapter);
+        adapter.setChatActivity(ChatActivity.this);
 
         //Initializes the GIF URL arrayList, Sets the adapter for GIF keyboard
         urlList = new ArrayList<>();
