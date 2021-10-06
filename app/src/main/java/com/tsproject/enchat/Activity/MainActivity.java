@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
                 tvUserNumber.setText(phoneNumber);
                 Glide.with(getApplicationContext())
                         .load(dpUrl)
+                        .placeholder(R.mipmap.ic_image_avatar_foreground)
                         .into(profilePicture);
 
             }
