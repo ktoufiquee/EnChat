@@ -68,7 +68,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
@@ -100,6 +100,8 @@
                 android:layout_height="48dp"
                 android:layout_weight="1"
                 android:ems="10"
+                android:textCursorDrawable="@drawable/cursor_colour"
+                android:backgroundTint="@color/line_default"
                 android:hint="Write a message..."
                 android:inputType="textPersonName" />
 
@@ -107,8 +109,8 @@
                 android:id="@+id/btnMedia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:maxWidth="32dp"
                 android:minWidth="32dp"
                 app:srcCompat="@drawable/ic_attachment"
@@ -126,6 +128,9 @@
                 app:tint="#0288D1" />
 
         </LinearLayout>
+
+
+
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
