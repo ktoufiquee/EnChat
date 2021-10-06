@@ -110,6 +110,21 @@ public class ChatActivity extends AppCompatActivity {
         binding.rvExtra.setLayoutManager(new GridLayoutManager(this, 2));
         binding.rvExtra.setAdapter(extraAdapter);
 
+        //see user's active status
+        if(chatType == 0) {
+            FirebaseDatabase.getInstance().getReference().child("user").child(fID).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    binding.tvStatus.setText(snapshot.child("activeStatus").getValue().toString());
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
         //Sends the message written in etMessage
         binding.btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
