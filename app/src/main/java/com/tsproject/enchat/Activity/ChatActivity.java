@@ -12,12 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
+import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Environment;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -56,6 +60,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -73,6 +78,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -89,8 +96,9 @@ public class ChatActivity extends AppCompatActivity {
     ProgressDialog dialog;
     FirebaseUser currentUser;
     RecordView recordView;
-    RecordButton recordButton;
-
+    MediaRecorder mediaRecorder;
+    String audio_path;
+    Uri uriAudio;
 
 
     private static final String TENOR_KEY = "RONF4J9X08K8";
@@ -267,10 +275,71 @@ public class ChatActivity extends AppCompatActivity {
         binding.btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+                if(!checkPermissionForAudio()) {
+                    binding.btnRecord.setListenForRecord(true);
+                }
+                else
+                {
+                    requestPermissionForAudio();
+                }
             }
         });
+        binding.recordView.setOnRecordListener(new OnRecordListener() {
+           @Override
+           public void onStart() {
+               //Start recording if has permission,otherwise request permission
+                    binding.etMessage.setVisibility(View.INVISIBLE);
+                    binding.btnMedia.setVisibility(View.INVISIBLE);
+                    binding.btnSend.setVisibility(View.INVISIBLE);
+                    binding.btnExtra.setVisibility(View.INVISIBLE);
+                    startRecording();
+                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    if(vibrator != null)
+                    {
+                        vibrator.vibrate(1000);
+                    }
 
+           }
+
+            @Override
+            public void onCancel() {
+               //Cancel recording
+                try {
+                    mediaRecorder.reset();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+           @Override
+           public void onFinish(long recordTime, boolean limitReached) {
+               //Stop Recording
+               binding.etMessage.setVisibility(View.VISIBLE);
+               binding.btnMedia.setVisibility(View.VISIBLE);
+               binding.btnSend.setVisibility(View.VISIBLE);
+               binding.btnExtra.setVisibility(View.VISIBLE);
+               try {
+                   String time = getHumanTimeText(recordTime);
+                   stopRecord();
+               }
+               catch(Exception e)
+               {
+                   e.printStackTrace();
+               }
+
+           }
+
+           @Override
+           public void onLessThanSecond() {
+               binding.etMessage.setVisibility(View.VISIBLE);
+               binding.btnMedia.setVisibility(View.VISIBLE);
+               binding.btnSend.setVisibility(View.VISIBLE);
+               binding.btnExtra.setVisibility(View.VISIBLE);
+
+
+           }
+       });
     }
 
 
@@ -483,6 +552,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onResume();
 
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -494,6 +564,7 @@ public class ChatActivity extends AppCompatActivity {
         updateTypingStatus("No");
 
     }
+
     @Override
     protected void onStart() {
         //set online
@@ -502,13 +573,12 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-
-
     public String getTime()
     {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         return sdf.format(new Date());
     }
+
     //convert timestamp
     public static String convertTime(String timeStamp)
     {
@@ -574,15 +644,17 @@ public class ChatActivity extends AppCompatActivity {
         super.onBackPressed();
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
+
     //check permission for recording,if either of the permission is denied,recording will not take place
-    private boolean checkPermissionFromDevice()
+    private boolean checkPermissionForAudio()
     {
        int write_external_storage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
        int record_audio = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
        return write_external_storage == PackageManager.PERMISSION_DENIED | record_audio == PackageManager.PERMISSION_DENIED;
     }
+
     //else request permission
-    private void requestPermission()
+    private void requestPermissionForAudio()
     {
         ActivityCompat.requestPermissions(this, new String[]{
                                                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -590,5 +662,73 @@ public class ChatActivity extends AppCompatActivity {
                 }, REQUEST_RECORD_CODE);
     }
 
+    private String getHumanTimeText(long recordTime) {
+        String cal =  String.format("%02d",
+                TimeUnit.MILLISECONDS.toSeconds(recordTime) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(recordTime)));
+        Log.d("Cal", "getHumanTimeText: "+cal);
+        return cal;
+    }
+
+    private void startRecording() {
+        setUpRecording();
+        try{
+            mediaRecorder.prepare();
+            mediaRecorder.start();
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+            Toast.makeText(this, "Recording Error Occured", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    private void stopRecord() {
+        try{
+        if(mediaRecorder != null)
+        {
+                mediaRecorder.stop();
+                mediaRecorder.reset();
+                mediaRecorder.release();
+                mediaRecorder = null;
+                //Send the recording
+                uriAudio = Uri.fromFile(new File(audio_path));
+                StorageReference sRef = FirebaseStorage.getInstance().getReference().child("enhat/"+fID+"/Recording" + System.currentTimeMillis());
+                sRef.putFile(uriAudio).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                        Task<Uri> urlTask = taskSnapshot.getStorage().getDownloadUrl();
+                        Log.d("Media", "onSuccess: ?"+ urlTask);
+                    }
+                });
+
+        }
+        else
+        {
+            Toast.makeText(this, "Please try again!", Toast.LENGTH_SHORT).show();
+        }}
+       catch (Exception e)
+       {
+           Toast.makeText(this, "There were issues with the recording", Toast.LENGTH_SHORT).show();
+       }
+
+    }
+
+    private void setUpRecording()
+    {
+       String file_path =  Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + UUID.randomUUID().toString() + "audio_record.m4a";
+        audio_path = file_path;
+        mediaRecorder = new MediaRecorder();
+        try {
+            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
+            mediaRecorder.setOutputFile(file_path);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
 
 }
