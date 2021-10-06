@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,24 +20,19 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tsproject.enchat.Adapter.RecentAdapter;
 import com.tsproject.enchat.R;
 import com.tsproject.enchat.Model.User;
-import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.google.GoogleEmojiProvider;
-import com.vanniktech.emoji.ios.IosEmojiProvider;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -51,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     public static String Name = "";
     public static String dpUrl = "";
     public static String phoneNumber = "";
+
+    public static boolean showArchive = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.btnHome:
-                        loadHomeActivity();
+                    case R.id.btnNewGroup:
+                        CreateGroupOnClick();
                         break;
                     case R.id.btnContacts:
                         loadFindUserActivity();
@@ -98,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         initRecyclerView();
-        findViewById(R.id.cvAddGroup).setOnClickListener(view -> CreateGroupOnClick());
 
         FirebaseDatabase.getInstance().getReference().child("user").child(uID).addValueEventListener(new ValueEventListener() {
             @Override
@@ -126,17 +123,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.cvAddGroup).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, MemberSelectionActivity.class));
-            }
-        });
+        CardView cvGetArchive = findViewById(R.id.cvGetArchive);
+        cvGetArchive.setOnClickListener(view -> SeeArchivedOnClick());
 
     }
 
-    private void CreateGroupOnClick() {
+    private void SeeArchivedOnClick() {
+        recentList.clear();
+        TextView tvArchiveText = findViewById(R.id.tvArchiveText);
+        if (showArchive == false) {
+            tvArchiveText.setText("Hide Archived Chats");
+            adapterLoader(1);
+        } else {
+            tvArchiveText.setText("Show Archived Chats");
+            adapterLoader(0);
+        }
+        showArchive = !showArchive;
+    }
 
+    private void CreateGroupOnClick() {
+        startActivity(new Intent(MainActivity.this, MemberSelectionActivity.class));
     }
 
     @Override
@@ -172,11 +178,16 @@ public class MainActivity extends AppCompatActivity {
         adapter.setRecentList(recentList);
         rvRecent.setLayoutManager((new LinearLayoutManager(this)));
         rvRecent.setAdapter(adapter);
+        adapterLoader(0);
+
+    }
+
+    private void adapterLoader(int setting) {
         FirebaseDatabase.getInstance()
                 .getReference()
                 .child("chat")
                 .orderByChild(uID)
-                .equalTo(0)
+                .equalTo(setting)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -201,11 +212,13 @@ public class MainActivity extends AppCompatActivity {
                                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                     if (snapshot.exists()) {
                                                         user.setUserName(snapshot.child("userName").getValue().toString());
-                                                        recentList.add(user);
-                                                        adapter.notifyDataSetChanged();
+                                                        if (!recentList.contains(user)) {
+                                                            recentList.add(user);
+                                                        }
                                                     } else {
                                                         user.setUserName("Deleted User");
                                                     }
+                                                    adapter.notifyDataSetChanged();
                                                 }
 
                                                 @Override
@@ -217,10 +230,14 @@ public class MainActivity extends AppCompatActivity {
                                 if (type == 1) {
                                     user.setType(1);
                                     user.setUserName(snap.child("GroupName").getValue().toString());
-                                    recentList.add(user);
+                                    if (!recentList.contains(user)) {
+                                        recentList.add(user);
+                                    }
                                     adapter.notifyDataSetChanged();
                                 }
                             }
+                        } else {
+                            adapter.notifyDataSetChanged();
                         }
                     }
 
@@ -229,73 +246,8 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-
     }
 
-    /*private void adapterLoader() {
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("user").child(uID).child("connectedUser");
-        DatabaseReference dbUser = FirebaseDatabase.getInstance().getReference().child("user");
-        db.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    recentList.clear();
-                    for (DataSnapshot snap : snapshot.getChildren()) {
-                        User user = new User();
-                        boolean add = true;
-                        if (snap.child("chatID").exists()) {
-                            user.setChatID(snap.child("chatID").getValue().toString());
-                        } else {
-                            dbUser.child(snap.getKey()).child("connectedUser").child(uID).addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    if (snapshot.exists()) {
-                                        if (snapshot.child("chatID").exists()) {
-                                            user.setChatID(snapshot.child("chatID").getValue().toString());
-                                            Log.d("CHECK_CHAT", "Inside" + " " + user.getChatID());
-                                            Map<String, String> mChatID = new HashMap<>();
-                                            mChatID.put("chatID", user.getChatID());
-                                            mChatID.put("contactName", snap.child("contactName").getValue().toString());
-                                            mChatID.put("search", snap.child("search").getValue().toString());
-                                            mChatID.put("phnNum", snap.child("phnNum").getValue().toString());
-                                            db.child(snap.getKey()).setValue(mChatID);
-                                            if (snap.child("contactName").getValue().toString() != null) {
-                                                user.setUserName(snap.child("contactName").getValue().toString());
-                                            }
-                                            recentList.add(user);
-                                        } else {
-                                            user.setChatID("");
-                                        }
-                                        adapter.notifyDataSetChanged();
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-                        }
-                        if (user.getChatID() == null) {
-                            add = false;
-                        }
-                        if (snap.child("contactName").getValue().toString() != null) {
-                            user.setUserName(snap.child("contactName").getValue().toString());
-                        }
-                        if (add) {
-                            recentList.add(user);
-                        }
-                    }
-                    adapter.notifyDataSetChanged();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }*/
     @Override
     protected void onResume() {
         ChatActivity.checkOnlineStatus("online");

@@ -100,7 +100,6 @@ public class ChatActivity extends AppCompatActivity {
     String audio_path;
     Uri uriAudio;
 
-
     private static final String TENOR_KEY = "RONF4J9X08K8";
 
     @Override
@@ -140,14 +139,24 @@ public class ChatActivity extends AppCompatActivity {
         binding.rvExtra.setAdapter(extraAdapter);
 
         //see user's active status
-        if(chatType == 0) {
+        if (chatType == 0) {
+            /*FirebaseDatabase.getInstance().getReference().child("user").child(fID).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.child("typing").equals(currentUser.getUid())) {
+                        binding.tvStatus.setText("typing...");
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });*/
             FirebaseDatabase.getInstance().getReference().child("user").child(fID).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                      if(snapshot.child("typing").equals(currentUser.getUid()))
-                      {
-                          binding.tvStatus.setText("typing...");
-                      }
+                    binding.tvStatus.setText(snapshot.child("activeStatus").getValue().toString());
                 }
 
                 @Override
@@ -155,19 +164,9 @@ public class ChatActivity extends AppCompatActivity {
 
                 }
             });
-            if(binding.tvStatus.getText().length() == 0) {
-                FirebaseDatabase.getInstance().getReference().child("user").child(fID).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        binding.tvStatus.setText(snapshot.child("activeStatus").getValue().toString());
-                    }
+            /*if (binding.tvStatus.getText().length() == 2) {
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-            }
+            }*/
         }
 
         //Sends the message written in etMessage
@@ -175,11 +174,13 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String text = binding.etMessage.getText().toString();
-
+                if(text.replaceAll(" ", "").length() < 1) {
+                    return;
+                }
                 Date date = new Date();
                 String messageID = database.getReference().child("chat").child(chatID).push().getKey();
                 Message message = new Message(uID, text, messageID, date.getTime());
-
+                database.getReference().child("chat").child(chatID).child("lastMsg").setValue(text);
                 database.getReference().child("chat").child(chatID).child(messageID).setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -206,7 +207,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 messageList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if(dataSnapshot.child("senderId").exists()) {
+                    if (dataSnapshot.child("senderId").exists()) {
                         Message message = dataSnapshot.getValue(Message.class);
                         messageList.add(message);
                     }
@@ -253,14 +254,11 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if(charSequence.toString().trim().length() == 0)
-                    {
-                        updateTypingStatus("No");
-                    }
-                    else
-                    {
-                        updateTypingStatus(fID);//the one who is receiving the text will see typing
-                    }
+                if (charSequence.toString().trim().length() == 0) {
+                    updateTypingStatus("No");
+                } else {
+                    updateTypingStatus(fID);//the one who is receiving the text will see typing
+                }
             }
 
             @Override
@@ -275,6 +273,7 @@ public class ChatActivity extends AppCompatActivity {
         binding.btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+<<<<<<< Updated upstream
                 if(!checkPermissionForAudio()) {
                     binding.btnRecord.setListenForRecord(true);
                 }
@@ -282,6 +281,9 @@ public class ChatActivity extends AppCompatActivity {
                 {
                     requestPermissionForAudio();
                 }
+=======
+
+>>>>>>> Stashed changes
             }
         });
         binding.recordView.setOnRecordListener(new OnRecordListener() {
@@ -389,6 +391,7 @@ public class ChatActivity extends AppCompatActivity {
                                                 binding.etMessage.setText("");
                                             }
                                         });
+                                        database.getReference().child("chat").child(chatID).child("lastMsg").setValue(MainActivity.Name + " sent an attachment.");
                                     }
                                 });
                             }
@@ -431,7 +434,7 @@ public class ChatActivity extends AppCompatActivity {
                 ChatActivity.this.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Collections.shuffle(urlList);
+                        //Collections.shuffle(urlList);
                         extraAdapter.notifyDataSetChanged();
                     }
                 });
@@ -521,25 +524,23 @@ public class ChatActivity extends AppCompatActivity {
         }
         return new JSONObject("");
     }
+
     //check if user is online,else show last seen
-    public static void checkOnlineStatus(String status)
-    {
+    public static void checkOnlineStatus(String status) {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("user").child(currentUser.getUid());
         Map<String, Object> curr_status = new HashMap<>();
-        if(status.equals("online")) {
+        if (status.equals("online")) {
             curr_status.put("activeStatus", status);
-        }
-        else
-        {
-             curr_status.put("activeStatus", convertTime(status));
+        } else {
+            curr_status.put("activeStatus", convertTime(status));
         }
         dbRef.updateChildren(curr_status);
     }
+
     //check if user is typing
-    private void updateTypingStatus(String type_status)
-    {
-       // FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private void updateTypingStatus(String type_status) {
+        // FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("user").child(currentUser.getUid());
         Map<String, Object> type = new HashMap<>();
         type.put("typing", type_status);
@@ -573,15 +574,19 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+<<<<<<< Updated upstream
     public String getTime()
     {
+=======
+
+    public String getTime() {
+>>>>>>> Stashed changes
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         return sdf.format(new Date());
     }
 
     //convert timestamp
-    public static String convertTime(String timeStamp)
-    {
+    public static String convertTime(String timeStamp) {
         String show;
         double mSecPerMinute = 60 * 1000;//milli
         double mSecPerHour = mSecPerMinute * 60;
@@ -597,40 +602,27 @@ public class ChatActivity extends AppCompatActivity {
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEE");
         String dayString = dayFormat.format(new Date(Long.parseLong(timeStamp)));
         double diff = currentDate.getTime() - stampDate.getTime();
-        if(diff < mSecPerMonth)//day
+        if (diff < mSecPerMonth)//day
         {
-            if((diff / mSecPerDay) < 1.00)
-            {
-                Log.d("Date", "convertTime: " + diff/mSecPerHour);
-                show = "Last seen today at "+timeString;
-            }
-            else if((diff / mSecPerDay) < 2.00)
-            {
-                show = "Last seen yesterday at "+timeString ;
-            }
-            else if((diff/ mSecPerDay) <8.00)
-            {
+            if ((diff / mSecPerDay) < 1.00) {
+                Log.d("Date", "convertTime: " + diff / mSecPerHour);
+                show = "Last seen today at " + timeString;
+            } else if ((diff / mSecPerDay) < 2.00) {
+                show = "Last seen yesterday at " + timeString;
+            } else if ((diff / mSecPerDay) < 8.00) {
                 show = "Last seen " + dayString + " at " + timeString;
-            }
-            else
-            {
+            } else {
                 show = "Last seen at " + dateString;
             }
-        }
-        else if(diff < mSecPerYear)//month
+        } else if (diff < mSecPerYear)//month
         {
-            if((diff / mSecPerMonth) < 1.00)
-            {
-                show = "Last seen" + (long)Math.floor(diff / mSecPerMonth) + " month ago";
-            }
-            else
-            {
-                show = "Last seen" + (long)Math.floor(diff / mSecPerMonth) + " months ago";
+            if ((diff / mSecPerMonth) < 1.00) {
+                show = "Last seen" + (long) Math.floor(diff / mSecPerMonth) + " month ago";
+            } else {
+                show = "Last seen" + (long) Math.floor(diff / mSecPerMonth) + " months ago";
             }
 
-        }
-        else
-        { //year
+        } else { //year
 
             show = "Last seen a long time ago";
 
@@ -646,6 +638,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     //check permission for recording,if either of the permission is denied,recording will not take place
+<<<<<<< Updated upstream
     private boolean checkPermissionForAudio()
     {
        int write_external_storage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -656,10 +649,20 @@ public class ChatActivity extends AppCompatActivity {
     //else request permission
     private void requestPermissionForAudio()
     {
+=======
+    private boolean checkPermissionFromDevice() {
+        int write_external_storage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int record_audio = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
+        return write_external_storage == PackageManager.PERMISSION_DENIED | record_audio == PackageManager.PERMISSION_DENIED;
+    }
+
+    //else request permission
+    private void requestPermission() {
+>>>>>>> Stashed changes
         ActivityCompat.requestPermissions(this, new String[]{
-                                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                                Manifest.permission.RECORD_AUDIO
-                }, REQUEST_RECORD_CODE);
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.RECORD_AUDIO
+        }, REQUEST_RECORD_CODE);
     }
 
     private String getHumanTimeText(long recordTime) {
