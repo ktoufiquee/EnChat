@@ -418,4 +418,10 @@ public class ChatActivity extends AppCompatActivity {
         SimpleDateFormat currentData = new SimpleDateFormat("MMM dd, yyyy");
         
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        startActivity(new Intent(this, MainActivity.class));
+    }
 }
