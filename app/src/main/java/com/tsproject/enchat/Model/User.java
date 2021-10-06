@@ -1,6 +1,6 @@
 package com.tsproject.enchat.Model;
 
-public class User {
+public class User implements Comparable<User> {
     String userName;
     String phnNum;
     String contactPermission;
@@ -12,6 +12,8 @@ public class User {
     String about;
     String activeStatus;
     String typing;
+    Long lastTime;
+
     public String getActiveStatus() {
         return activeStatus;
     }
@@ -57,6 +59,14 @@ public class User {
         this.about = about;
         this.activeStatus = activeStatus;
         this.typing = typing;
+    }
+
+    public void setLastTime(long lastTime) {
+        this.lastTime = lastTime;
+    }
+
+    public Long getLastTime() {
+        return lastTime;
     }
 
     public int getType() {
@@ -121,5 +131,11 @@ public class User {
 
     public void setuID(String uID) {
         this.uID = uID;
+    }
+
+
+    @Override
+    public int compareTo(User user) {
+        return user.getLastTime().compareTo(this.getLastTime());
     }
 }

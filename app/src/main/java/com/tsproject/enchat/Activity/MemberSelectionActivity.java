@@ -53,10 +53,13 @@ public class MemberSelectionActivity extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        friendList.clear();
                         User user = new User();
                         for (DataSnapshot snap : snapshot.child(uID).child("connectedUser").getChildren()) {
                             user.setuID(snap.getKey());
-                            friendList.add(user);
+                            if(!friendList.contains(user)) {
+                                friendList.add(user);
+                            }
                         }
                         for (User u : friendList) {
                             u.setUserName(snapshot.child(u.getuID()).child("userName").getValue().toString());

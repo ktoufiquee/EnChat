@@ -2,6 +2,7 @@ package com.tsproject.enchat.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -135,14 +136,15 @@ public class ChatAdapter extends RecyclerView.Adapter {
             if (message.getMediaUrl() != null) {
                 sendViewHolder.binding.ivMediaSend.setVisibility(View.VISIBLE);
                 if (message.getMessageType() != null) {
-                    if (message.getMessageType().equals("GIF")) {
+                    if (message.getMessageType().equals("PIC")) {
+                        Glide.with(context)
+                                .load(message.getMediaUrl())
+                                .placeholder(R.mipmap.ic_image_placeholder_foreground)
+                                .into(sendViewHolder.binding.ivMediaSend);
+                    } else {
                         Glide.with(context)
                                 .asGif()
                                 .load(message.getMediaUrl())
-                                .into(sendViewHolder.binding.ivMediaSend);
-                    } else {
-                        Glide.with(context).load(message.getMediaUrl())
-                                .placeholder(R.mipmap.ic_image_placeholder_foreground)
                                 .into(sendViewHolder.binding.ivMediaSend);
                     }
                 }
@@ -163,6 +165,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
             receiveViewHolder.binding.clReceive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Log.v("CHAT_ADAPT", "CLICKED");
                     toggle = !toggle;
                     if (toggle) {
                         receiveViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
@@ -192,14 +195,14 @@ public class ChatAdapter extends RecyclerView.Adapter {
             if (message.getMediaUrl() != null) {
                 receiveViewHolder.binding.ivMediaReceive.setVisibility(View.VISIBLE);
                 if (message.getMessageType() != null) {
-                    if (message.getMessageType().equals("GIF")) {
+                    if (message.getMessageType().equals("PIC")) {
+                        Glide.with(context).load(message.getMediaUrl())
+                                .placeholder(R.mipmap.ic_image_placeholder_foreground)
+                                .into(receiveViewHolder.binding.ivMediaReceive);
+                    } else {
                         Glide.with(context)
                                 .asGif()
                                 .load(message.getMediaUrl())
-                                .into(receiveViewHolder.binding.ivMediaReceive);
-                    } else {
-                        Glide.with(context).load(message.getMediaUrl())
-                                .placeholder(R.mipmap.ic_image_placeholder_foreground)
                                 .into(receiveViewHolder.binding.ivMediaReceive);
                     }
                 }

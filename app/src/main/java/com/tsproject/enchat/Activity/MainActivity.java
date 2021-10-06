@@ -28,10 +28,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.tsproject.enchat.Adapter.RecentAdapter;
+import com.tsproject.enchat.Extra.Utility;
 import com.tsproject.enchat.R;
 import com.tsproject.enchat.Model.User;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -197,8 +199,9 @@ public class MainActivity extends AppCompatActivity {
                             for (DataSnapshot snap : snapshot.getChildren()) {
                                 User user = new User();
                                 user.setChatID(snap.getKey());
-
                                 long type = (long) snap.child("type").getValue();
+                                long lastTime = (long) snap.child("lastTime").getValue();
+                                user.setLastTime(lastTime);
                                 List<String> members = (List<String>) snap.child("members").getValue();
                                 if (type == 0) {
                                     user.setType(0);
@@ -219,6 +222,7 @@ public class MainActivity extends AppCompatActivity {
                                                     } else {
                                                         user.setUserName("Deleted User");
                                                     }
+                                                    Collections.sort(recentList);
                                                     adapter.notifyDataSetChanged();
                                                 }
 
@@ -234,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
                                     if (!recentList.contains(user)) {
                                         recentList.add(user);
                                     }
+                                    Collections.sort(recentList);
                                     adapter.notifyDataSetChanged();
                                 }
                             }

@@ -372,6 +372,7 @@ public class ChatActivity extends AppCompatActivity {
                                         Date date = new Date();
                                         String messageID = database.getReference().child("chat").child(chatID).push().getKey();
                                         Message message = new Message(uID, text, messageID, date.getTime());
+                                        message.setMessageType("PIC");
                                         message.setMediaUrl(filepath);
                                         database.getReference().child("chat").child(chatID).child(messageID).setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
