@@ -29,6 +29,7 @@
     <color name = "cardViewDark">#444444</color>
     <color name = "rectangleDark">#121212</color>
     <color name = "colorDarkSemiTransparent">#C6000000</color>
+    <color name = "micBackground">#0288D1</color>
 
 
 </resources>

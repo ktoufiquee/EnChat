@@ -3,12 +3,17 @@ package com.tsproject.enchat.Activity;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,6 +26,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.devlomi.record_view.OnBasketAnimationEnd;
+import com.devlomi.record_view.OnRecordListener;
+import com.devlomi.record_view.RecordButton;
+import com.devlomi.record_view.RecordView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -39,7 +48,6 @@ import com.tsproject.enchat.Adapter.ChatAdapter;
 import com.tsproject.enchat.Adapter.ExtraAdapter;
 import com.tsproject.enchat.Model.Message;
 import com.tsproject.enchat.Model.User;
-import com.tsproject.enchat.R;
 import com.tsproject.enchat.databinding.ActivityChatBinding;
 
 
@@ -67,6 +75,8 @@ import java.util.Map;
 import java.util.TimeZone;
 
 public class ChatActivity extends AppCompatActivity {
+
+    private static final int REQUEST_RECORD_CODE = 101;
     ActivityChatBinding binding;
     ArrayList<Message> messageList;
     ArrayList<String> urlList;
@@ -78,6 +88,9 @@ public class ChatActivity extends AppCompatActivity {
     FirebaseStorage storage;
     ProgressDialog dialog;
     FirebaseUser currentUser;
+    RecordView recordView;
+    RecordButton recordButton;
+
 
 
     private static final String TENOR_KEY = "RONF4J9X08K8";
@@ -119,13 +132,14 @@ public class ChatActivity extends AppCompatActivity {
         binding.rvExtra.setAdapter(extraAdapter);
 
         //see user's active status
-        if (chatType == 0) {
+        if(chatType == 0) {
             FirebaseDatabase.getInstance().getReference().child("user").child(fID).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    if (snapshot.child("typing").equals(currentUser.getUid())) {
-                        binding.tvStatus.setText("typing...");
-                    }
+                      if(snapshot.child("typing").equals(currentUser.getUid()))
+                      {
+                          binding.tvStatus.setText("typing...");
+                      }
                 }
 
                 @Override
@@ -133,7 +147,7 @@ public class ChatActivity extends AppCompatActivity {
 
                 }
             });
-            if (binding.tvStatus.getText().length() == 0) {
+            if(binding.tvStatus.getText().length() == 0) {
                 FirebaseDatabase.getInstance().getReference().child("user").child(fID).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -184,7 +198,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 messageList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot.child("senderId").exists()) {
+                    if(dataSnapshot.child("senderId").exists()) {
                         Message message = dataSnapshot.getValue(Message.class);
                         messageList.add(message);
                     }
@@ -231,11 +245,14 @@ public class ChatActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.toString().trim().length() == 0) {
-                    updateTypingStatus("No");
-                } else {
-                    updateTypingStatus(fID);//the one who is receiving the text will see typing
-                }
+                    if(charSequence.toString().trim().length() == 0)
+                    {
+                        updateTypingStatus("No");
+                    }
+                    else
+                    {
+                        updateTypingStatus(fID);//the one who is receiving the text will see typing
+                    }
             }
 
             @Override
@@ -244,9 +261,17 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        //initialize record button
+        binding.btnRecord.setRecordView(binding.recordView);
+        binding.btnRecord.setListenForRecord(false);
+        binding.btnRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
 
     }
-
 
 
     private void btnCloseExtraClicked() {
@@ -427,23 +452,25 @@ public class ChatActivity extends AppCompatActivity {
         }
         return new JSONObject("");
     }
-
     //check if user is online,else show last seen
-    public static void checkOnlineStatus(String status) {
+    public static void checkOnlineStatus(String status)
+    {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("user").child(currentUser.getUid());
         Map<String, Object> curr_status = new HashMap<>();
-        if (status.equals("online")) {
+        if(status.equals("online")) {
             curr_status.put("activeStatus", status);
-        } else {
-            curr_status.put("activeStatus", convertTime(status));
+        }
+        else
+        {
+             curr_status.put("activeStatus", convertTime(status));
         }
         dbRef.updateChildren(curr_status);
     }
-
     //check if user is typing
-    private void updateTypingStatus(String type_status) {
-        // FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+    private void updateTypingStatus(String type_status)
+    {
+       // FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("user").child(currentUser.getUid());
         Map<String, Object> type = new HashMap<>();
         type.put("typing", type_status);
@@ -455,9 +482,7 @@ public class ChatActivity extends AppCompatActivity {
         checkOnlineStatus("online");
         super.onResume();
 
-
     }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -469,7 +494,6 @@ public class ChatActivity extends AppCompatActivity {
         updateTypingStatus("No");
 
     }
-
     @Override
     protected void onStart() {
         //set online
@@ -477,16 +501,17 @@ public class ChatActivity extends AppCompatActivity {
         super.onStart();
 
     }
-    //check edit text change listener
 
 
-    public String getTime() {
+
+    public String getTime()
+    {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         return sdf.format(new Date());
     }
-
     //convert timestamp
-    public static String convertTime(String timeStamp) {
+    public static String convertTime(String timeStamp)
+    {
         String show;
         double mSecPerMinute = 60 * 1000;//milli
         double mSecPerHour = mSecPerMinute * 60;
@@ -502,27 +527,40 @@ public class ChatActivity extends AppCompatActivity {
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEE");
         String dayString = dayFormat.format(new Date(Long.parseLong(timeStamp)));
         double diff = currentDate.getTime() - stampDate.getTime();
-        if (diff < mSecPerMonth)//day
+        if(diff < mSecPerMonth)//day
         {
-            if ((diff / mSecPerDay) < 1.00) {
-                Log.d("Date", "convertTime: " + diff / mSecPerHour);
-                show = "Last seen today at " + timeString;
-            } else if ((diff / mSecPerDay) < 2.00) {
-                show = "Last seen yesterday at " + timeString;
-            } else if ((diff / mSecPerDay) < 8.00) {
+            if((diff / mSecPerDay) < 1.00)
+            {
+                Log.d("Date", "convertTime: " + diff/mSecPerHour);
+                show = "Last seen today at "+timeString;
+            }
+            else if((diff / mSecPerDay) < 2.00)
+            {
+                show = "Last seen yesterday at "+timeString ;
+            }
+            else if((diff/ mSecPerDay) <8.00)
+            {
                 show = "Last seen " + dayString + " at " + timeString;
-            } else {
+            }
+            else
+            {
                 show = "Last seen at " + dateString;
             }
-        } else if (diff < mSecPerYear)//month
+        }
+        else if(diff < mSecPerYear)//month
         {
-            if ((diff / mSecPerMonth) < 1.00) {
-                show = "Last seen" + (long) Math.floor(diff / mSecPerMonth) + " month ago";
-            } else {
-                show = "Last seen" + (long) Math.floor(diff / mSecPerMonth) + " months ago";
+            if((diff / mSecPerMonth) < 1.00)
+            {
+                show = "Last seen" + (long)Math.floor(diff / mSecPerMonth) + " month ago";
+            }
+            else
+            {
+                show = "Last seen" + (long)Math.floor(diff / mSecPerMonth) + " months ago";
             }
 
-        } else { //year
+        }
+        else
+        { //year
 
             show = "Last seen a long time ago";
 
@@ -536,4 +574,21 @@ public class ChatActivity extends AppCompatActivity {
         super.onBackPressed();
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
     }
+    //check permission for recording,if either of the permission is denied,recording will not take place
+    private boolean checkPermissionFromDevice()
+    {
+       int write_external_storage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+       int record_audio = ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO);
+       return write_external_storage == PackageManager.PERMISSION_DENIED | record_audio == PackageManager.PERMISSION_DENIED;
+    }
+    //else request permission
+    private void requestPermission()
+    {
+        ActivityCompat.requestPermissions(this, new String[]{
+                                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                                Manifest.permission.RECORD_AUDIO
+                }, REQUEST_RECORD_CODE);
+    }
+
+
 }
