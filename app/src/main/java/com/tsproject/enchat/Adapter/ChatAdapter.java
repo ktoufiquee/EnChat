@@ -27,6 +27,7 @@ import com.tsproject.enchat.databinding.ItemReceiveBinding;
 import com.tsproject.enchat.databinding.ItemSendBinding;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ChatAdapter extends RecyclerView.Adapter {
 
@@ -103,32 +104,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
         if (holder.getClass() == SendViewHolder.class) {
             SendViewHolder sendViewHolder = (SendViewHolder) holder;
             sendViewHolder.binding.tvMessageSend.setText(message.getMessage());
-            sendViewHolder.binding.clSend.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    View v = chatActivity.getCurrentFocus();
-                    v.clearFocus();
-                    view.requestFocus();
-                    toggle = !toggle;
-                    if (toggle) {
-                        sendViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
-                    } else {
-                        sendViewHolder.binding.llExtra.setVisibility(View.GONE);
-                    }
-                    return false;
-                }
-            });
-            sendViewHolder.binding.clSend.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View view, boolean b) {
-                    toggle = !toggle;
-                    if (toggle) {
-                        sendViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
-                    } else {
-                        sendViewHolder.binding.llExtra.setVisibility(View.GONE);
-                    }
-                }
-            });
+
             if (message.getReact() >= 0) {
                 sendViewHolder.binding.ivReactSend.setImageResource(reacts[(int) message.getReact()]);
                 sendViewHolder.binding.ivReactSend.setVisibility(View.VISIBLE);
@@ -152,7 +128,21 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     sendViewHolder.binding.tvMessageSend.setVisibility(View.GONE);
                 }
             }
+
+            sendViewHolder.binding.clSend.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    toggle = !toggle;
+                    if (toggle) {
+                        sendViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
+                    } else {
+                        sendViewHolder.binding.llExtra.setVisibility(View.GONE);
+                    }
+                    return false;
+                }
+            });
             sendViewHolder.binding.ivDeleteText.setOnClickListener(view -> deleteTextOnClick(messageList.get(bpos).getMessageID()));
+            sendViewHolder.binding.ivSaveText.setOnClickListener(view -> saveTextOnClick(messageList.get(bpos).getMessageID()));
         } else {
 
             ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) holder;
@@ -217,6 +207,30 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 //.setOnClickListener(view -> deleteTextOnClick(messageList.get(bpos).getMessageID()));
             }
         }
+    }
+
+    private void saveTextOnClick(String messageID) {
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child("chat")
+                .child(chatID)
+                .child(messageID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        FirebaseDatabase.getInstance()
+                                .getReference()
+                                .child("chat")
+                                .child(FirebaseAuth.getInstance().getUid())
+                                .child(messageID)
+                                .setValue(snapshot.getValue());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
     }
 
     private void deleteTextOnClick(String messageID) {
