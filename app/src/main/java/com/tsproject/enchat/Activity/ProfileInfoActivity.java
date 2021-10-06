@@ -47,6 +47,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
 
     public static final String default_about = "I am available on Enchat";
     public static final String default_status = "Online";
+    public static final String default_typing = "No";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +106,7 @@ public class ProfileInfoActivity extends AppCompatActivity {
                     User user = new User();
                     user.setAbout(default_about);
                     user.setActiveStatus(default_status);
+                    user.setTyping(default_typing);
                     user.setUserName(rec_name);
                     user.setPhnNum(rec_number);
                     user.setuID(uID);

@@ -17,6 +17,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -75,6 +76,8 @@ public class ChatActivity extends AppCompatActivity {
     int chatType;
     FirebaseStorage storage;
     ProgressDialog dialog;
+    FirebaseUser currentUser;
+
 
 
     private static final String TENOR_KEY = "RONF4J9X08K8";
@@ -93,6 +96,8 @@ public class ChatActivity extends AppCompatActivity {
         uID = FirebaseAuth.getInstance().getUid();
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
+
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         fID = getIntent().getExtras().getString("friendID");
         chatType = getIntent().getExtras().getInt("type");
@@ -117,7 +122,10 @@ public class ChatActivity extends AppCompatActivity {
             FirebaseDatabase.getInstance().getReference().child("user").child(fID).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    binding.tvStatus.setText(snapshot.child("activeStatus").getValue().toString());
+                      if(snapshot.child("typing").equals(currentUser.getUid()))
+                      {
+                          binding.tvStatus.setText("typing...");
+                      }
                 }
 
                 @Override
@@ -125,6 +133,19 @@ public class ChatActivity extends AppCompatActivity {
 
                 }
             });
+            if(binding.tvStatus.getText().length() == 0) {
+                FirebaseDatabase.getInstance().getReference().child("user").child(fID).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        binding.tvStatus.setText(snapshot.child("activeStatus").getValue().toString());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
         }
 
         //Sends the message written in etMessage
@@ -193,6 +214,31 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 updateGIFUrl(charSequence.toString());
+                updateTypingStatus(fID);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        binding.etMessage.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if(charSequence.toString().trim().length() == 0)
+                    {
+                        updateTypingStatus("No");
+                    }
+                    else
+                    {
+                        updateTypingStatus(fID);//the one who is receiving the text will see typing
+                    }
             }
 
             @Override
@@ -381,6 +427,7 @@ public class ChatActivity extends AppCompatActivity {
         }
         return new JSONObject("");
     }
+    //check if user is online,else show last seen
     public static void checkOnlineStatus(String status)
     {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -392,9 +439,17 @@ public class ChatActivity extends AppCompatActivity {
         else
         {
              curr_status.put("activeStatus", convertTime(status));
-            Log.d("Date", "onPause: "+convertTime(status));
         }
         dbRef.updateChildren(curr_status);
+    }
+    //check if user is typing
+    private void updateTypingStatus(String type_status)
+    {
+       // FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("user").child(currentUser.getUid());
+        Map<String, Object> type = new HashMap<>();
+        type.put("typing", type_status);
+        dbRef.updateChildren(type);
     }
 
     @Override
@@ -412,7 +467,7 @@ public class ChatActivity extends AppCompatActivity {
         String timeStamp = String.valueOf(System.currentTimeMillis());
         //convertTime(timeStamp);
         checkOnlineStatus(timeStamp);
-        Log.d("Date", "onPause: "+convertTime(timeStamp));
+        updateTypingStatus("No");
 
     }
 
@@ -420,15 +475,19 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStart() {
         //set online
         checkOnlineStatus("online");
-
         super.onStart();
 
     }
+    //check edit text change listener
+
+
+
     public String getTime()
     {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         return sdf.format(new Date());
     }
+    //convert timestamp
     public static String convertTime(String timeStamp)
     {
         String show;
@@ -440,16 +499,11 @@ public class ChatActivity extends AppCompatActivity {
         Date currentDate = new Date();
         Date stampDate = new Date(Long.parseLong(timeStamp));
         SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
-        SimpleDateFormat dayFormat = new SimpleDateFormat("EEE");
-        String dateString = dateFormat.format(new Date(Long.parseLong(timeStamp)));
         String timeString = timeFormat.format(new Date(Long.parseLong(timeStamp)));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String dateString = dateFormat.format(new Date(Long.parseLong(timeStamp)));
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEE");
         String dayString = dayFormat.format(new Date(Long.parseLong(timeStamp)));
-        Log.d("Date", "convertTime: " + timeString);
-        Log.d("Date", "convertTime: "+dateString);
-        Log.d("Date", "convertTime: " +dayString);
-        Log.d("Date", "convertTime: " + currentDate);
-        Log.d("Date", "convertTime: "+ stampDate);
         double diff = currentDate.getTime() - stampDate.getTime();
         if(diff < mSecPerMonth)//day
         {
@@ -485,14 +539,7 @@ public class ChatActivity extends AppCompatActivity {
         }
         else
         { //year
-           /* if((diff / mSecPerYear) <= 1)
-            {
-                show = "Last seen" + ((diff / mSecPerYear)) + " year ago";
-            }
-            else
-            {
-                show = "Last seen" + ((diff / mSecPerYear)) + " years ago";
-            }*/
+
             show = "Last seen a long time ago";
 
         }
@@ -505,4 +552,5 @@ public class ChatActivity extends AppCompatActivity {
         super.onBackPressed();
         startActivity(new Intent(this, MainActivity.class));
     }
+
 }

@@ -11,7 +11,7 @@ public class User {
     int type;
     String about;
     String activeStatus;
-
+    String typing;
     public String getActiveStatus() {
         return activeStatus;
     }
@@ -41,13 +41,22 @@ public class User {
         this.about = about;
     }
 
-    public User(String userName, String phnNum, String contactPermission, String uID, String about, String activeStatus) {
+    public String getTyping() {
+        return typing;
+    }
+
+    public void setTyping(String typing) {
+        this.typing = typing;
+    }
+
+    public User(String userName, String phnNum, String contactPermission, String uID, String about, String activeStatus, String typing) {
         this.userName = userName;
         this.phnNum = phnNum;
         this.contactPermission = contactPermission;
         this.uID = uID;
         this.about = about;
         this.activeStatus = activeStatus;
+        this.typing = typing;
     }
 
     public int getType() {
