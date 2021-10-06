@@ -151,9 +151,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 }
             }
 
-
-
-
             sendViewHolder.binding.ivDeleteText.setOnClickListener(view -> deleteTextOnClick(messageList.get(bpos).getMessageID()));
             sendViewHolder.binding.ivSaveText.setOnClickListener(view -> saveTextOnClick(messageList.get(bpos).getMessageID()));
         }
@@ -194,15 +191,17 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
             if (message.getMediaUrl() != null) {
                 receiveViewHolder.binding.ivMediaReceive.setVisibility(View.VISIBLE);
-                if (message.getMessageType().equals("GIF")) {
-                    Glide.with(context)
-                            .asGif()
-                            .load(message.getMediaUrl())
-                            .into(receiveViewHolder.binding.ivMediaReceive);
-                } else {
-                    Glide.with(context).load(message.getMediaUrl())
-                            .placeholder(R.mipmap.ic_image_placeholder_foreground)
-                            .into(receiveViewHolder.binding.ivMediaReceive);
+                if (message.getMessageType() != null) {
+                    if (message.getMessageType().equals("GIF")) {
+                        Glide.with(context)
+                                .asGif()
+                                .load(message.getMediaUrl())
+                                .into(receiveViewHolder.binding.ivMediaReceive);
+                    } else {
+                        Glide.with(context).load(message.getMediaUrl())
+                                .placeholder(R.mipmap.ic_image_placeholder_foreground)
+                                .into(receiveViewHolder.binding.ivMediaReceive);
+                    }
                 }
                 if (message.getMessage().isEmpty()) {
                     receiveViewHolder.binding.tvMessageRecieve.setVisibility(View.GONE);
@@ -229,8 +228,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     return false;
                 }
             });
-
-
 
 
             receiveViewHolder.binding.ivSaveText.setOnClickListener(view -> saveTextOnClick(messageList.get(bpos).getMessageID()));
