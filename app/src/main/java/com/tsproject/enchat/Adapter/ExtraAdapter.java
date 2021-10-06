@@ -13,6 +13,7 @@ import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.tsproject.enchat.Activity.MainActivity;
 import com.tsproject.enchat.Model.Message;
 import com.tsproject.enchat.R;
 import com.tsproject.enchat.databinding.ItemGifBinding;
@@ -60,12 +61,9 @@ public class ExtraAdapter extends RecyclerView.Adapter {
                 message.setTimestamp(date.getTime());
                 message.setMessageID(messageID);
                 message.setSenderId(FirebaseAuth.getInstance().getUid());
-                FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).child(messageID).setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-
-                    }
-                });
+                FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).child(messageID).setValue(message);
+                FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).child("lastMsg").setValue(MainActivity.Name + " sent a GIF.");
+                FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).child("lastTime").setValue(date.getTime());
             }
         });
     }

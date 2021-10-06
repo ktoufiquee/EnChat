@@ -121,8 +121,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
                             if (snapshot.exists()) {
                                 String imageURL = snapshot.getValue().toString();
                                 if (imageURL == "No Image") {
-                                    BitmapDrawable dp = getProfilePhoto(recentList.get(bpos).getUserName().charAt(0) + "");
-                                    holder.binding.ivImageFriend.setImageDrawable(dp);
+                                    holder.binding.ivImageFriend.setImageResource(R.mipmap.ic_image_avatar_foreground);
                                 } else {
                                     Glide.with(context.getApplicationContext())
                                             .load(imageURL)
@@ -144,11 +143,11 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
                             if (snapshot.exists()) {
                                 String imageURL = snapshot.getValue().toString();
                                 if (imageURL == "No Image") {
-                                    BitmapDrawable dp = getProfilePhoto(recentList.get(bpos).getUserName().charAt(0) + "");
-                                    holder.binding.ivImageFriend.setImageDrawable(dp);
+                                    holder.binding.ivImageFriend.setImageResource(R.mipmap.ic_image_avatar_foreground);
                                 } else {
                                     Glide.with(context.getApplicationContext())
                                             .load(imageURL)
+                                            .placeholder(R.mipmap.ic_image_avatar_foreground)
                                             .into(holder.binding.ivImageFriend);
                                 }
                             }

@@ -121,15 +121,17 @@ public class ChatAdapter extends RecyclerView.Adapter {
             //If mediaURL is not empty, then the message contains a media that needs to be shown.
             if (message.getMediaUrl() != null) {
                 sendViewHolder.binding.ivMediaSend.setVisibility(View.VISIBLE);
-                if (message.getMessageType().equals("GIF")) {
-                    Glide.with(context)
-                            .asGif()
-                            .load(message.getMediaUrl())
-                            .into(sendViewHolder.binding.ivMediaSend);
-                } else {
-                    Glide.with(context).load(message.getMediaUrl())
-                            .placeholder(R.mipmap.ic_image_placeholder_foreground)
-                            .into(sendViewHolder.binding.ivMediaSend);
+                if (message.getMessageType() != null) {
+                    if (message.getMessageType().equals("GIF")) {
+                        Glide.with(context)
+                                .asGif()
+                                .load(message.getMediaUrl())
+                                .into(sendViewHolder.binding.ivMediaSend);
+                    } else {
+                        Glide.with(context).load(message.getMediaUrl())
+                                .placeholder(R.mipmap.ic_image_placeholder_foreground)
+                                .into(sendViewHolder.binding.ivMediaSend);
+                    }
                 }
                 if (message.getMessage().isEmpty()) {
                     sendViewHolder.binding.tvMessageSend.setVisibility(View.GONE);
@@ -137,16 +139,15 @@ public class ChatAdapter extends RecyclerView.Adapter {
             }
 
             //If the view is clicked, show additional buttons
-            sendViewHolder.binding.clSend.setOnTouchListener(new View.OnTouchListener() {
+            sendViewHolder.binding.clSend.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
+                public void onClick(View view) {
                     toggle = !toggle;
                     if (toggle) {
                         sendViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
                     } else {
                         sendViewHolder.binding.llExtra.setVisibility(View.GONE);
                     }
-                    return false;
                 }
             });
 
@@ -225,6 +226,9 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
+
+            receiveViewHolder.binding.ivSaveText.setOnClickListener(view -> saveTextOnClick(messageList.get(bpos).getMessageID()));
+
 
         }
     }
