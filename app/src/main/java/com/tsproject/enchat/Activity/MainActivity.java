@@ -109,9 +109,9 @@ public class MainActivity extends AppCompatActivity {
                     phoneNumber = snapshot.child("phnNum").getValue().toString();
                 }
 
-                TextView tvUsername = findViewById(R.id.tvUsername);
-                TextView tvUserNumber = findViewById(R.id.tvUserNumber);
-                ImageView profilePicture = findViewById(R.id.ivUserImage);
+                @NonNull TextView tvUsername = findViewById(R.id.tvUsername);
+                @NonNull TextView tvUserNumber = findViewById(R.id.tvUserNumber);
+                @NonNull ImageView profilePicture = findViewById(R.id.ivUserImage);
                 tvUsername.setText(Name);
                 tvUserNumber.setText(phoneNumber);
                 Glide.with(getApplicationContext())

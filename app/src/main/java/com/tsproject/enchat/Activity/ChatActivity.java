@@ -67,7 +67,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 public class ChatActivity extends AppCompatActivity {
-    static ActivityChatBinding binding;
+    ActivityChatBinding binding;
     ArrayList<Message> messageList;
     ArrayList<String> urlList;
     ChatAdapter adapter;
@@ -247,12 +247,6 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
-    public static void clearFocus() {
-        for (int i = 0; i < binding.recyclerView.getChildCount(); ++i) {
-            binding.recyclerView.findViewHolderForAdapterPosition(i).itemView.clearFocus();
-            binding.recyclerView.findViewHolderForAdapterPosition(i).itemView.clearFocus();
-        }
-    }
 
 
     private void btnCloseExtraClicked() {
