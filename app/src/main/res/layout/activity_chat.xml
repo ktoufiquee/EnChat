@@ -75,10 +75,10 @@
         android:layout_marginBottom="5dp"
         app:cardCornerRadius="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/record_button"
+        app:layout_constraintEnd_toStartOf="@+id/btnRecord"
         app:layout_constraintStart_toStartOf="parent">
 
-        [6:01 PM]
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -196,33 +196,31 @@
     </LinearLayout>
 
     <com.devlomi.record_view.RecordView
-        android:id="@+id/record_view"
+        android:id="@+id/recordView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_marginBottom="60dp"
-        android:layout_toLeftOf="@id/record_button"
         app:counter_time_color="#ff0000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:slide_to_cancel_arrow="@drawable/recv_ic_arrow"
+        app:slide_to_cancel_arrow="@drawable/ic_back_arrow"
         app:slide_to_cancel_arrow_color="#000000"
         app:slide_to_cancel_bounds="8dp"
         app:slide_to_cancel_margin_right="10dp"
+        android:visibility="visible"
         app:slide_to_cancel_text="Slide To Cancel" />
 
     <com.devlomi.record_view.RecordButton
-        android:id="@+id/record_button"
+        android:id="@+id/btnRecord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
         android:layout_marginBottom="5dp"
-        android:background="@drawable/recv_bg_mic"
+        android:background="@drawable/circle_drawable"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:mic_icon="@drawable/recv_ic_mic_white"
+        app:mic_icon="@drawable/ic_recording"
+        app:tint="@color/white"
         tools:ignore="SpeakableTextPresentCheck" />
 
 
