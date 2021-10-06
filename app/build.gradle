@@ -67,7 +67,11 @@ dependencies {
     implementation "com.vanniktech:emoji-ios:0.8.0"//
     implementation 'androidx.palette:palette:1.0.0'    //
     implementation 'com.github.hani-momanii:SuperNova-Emoji:1.1'//
+<<<<<<< Updated upstream
     implementation 'com.devlomi.record-view:record-view:2.0.1' //add record view
 
+=======
+    implementation 'com.devlomi.record-view:record-view:2.0.1'
+>>>>>>> Stashed changes
 
 }
