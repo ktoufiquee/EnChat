@@ -14,7 +14,10 @@ import com.github.pgreze.reactions.ReactionPopup;
 import com.github.pgreze.reactions.ReactionsConfig;
 import com.github.pgreze.reactions.ReactionsConfigBuilder;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.tsproject.enchat.Model.Message;
 import com.tsproject.enchat.R;
 import com.tsproject.enchat.databinding.ItemReceiveBinding;
@@ -28,6 +31,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
     ArrayList<Message> messageList;
     String chatID;
     int chatType;
+    boolean toggle = false;
 
     final int ITEM_SEND = 1;
     final int ITEM_RECEIVE = 2;
@@ -75,7 +79,9 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 sendViewHolder.binding.ivReactSend.setVisibility(View.VISIBLE);
             } else {
                 ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) holder;
-                receiveViewHolder.binding.ivReactRecieve.setImageResource(reacts[pos]);
+                if(pos >= 0) {
+                    receiveViewHolder.binding.ivReactRecieve.setImageResource(reacts[pos]);
+                }
             }
             //Log.d("TEST", pos + " " + chatID + " " + message.getMessageID());
             if (message.getReact() == pos) {
@@ -115,9 +121,24 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 }
             }
         } else {
+
             ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) holder;
             receiveViewHolder.binding.tvMessageRecieve.setText(message.getMessage());
+            if (chatType == 1) {
+                receiveViewHolder.binding.tvRecievedName.setVisibility(View.VISIBLE);
+                String fID = messageList.get(receiveViewHolder.getBindingAdapterPosition()).getSenderId();
+                FirebaseDatabase.getInstance().getReference().child("user").child(fID).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        receiveViewHolder.binding.tvRecievedName.setText(snapshot.child("userName").getValue().toString());
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
             if (message.getReact() >= 0) {
                 receiveViewHolder.binding.ivReactRecieve.setImageResource(reacts[(int) message.getReact()]);
                 receiveViewHolder.binding.ivReactRecieve.setVisibility(View.VISIBLE);
@@ -150,7 +171,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     }
                 });
             }
-
         }
     }
 

@@ -50,16 +50,18 @@ import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
-    TextView  tvNumber;
+    TextView tvNumber;
     CardView cvUserName, cvAbout, cvNumber;
     ImageButton ibEditName, ibEditAbout;
-    EmojiTextView  tvAbout, tvUserName;
+    EmojiTextView tvAbout, tvUserName;
     FirebaseDatabase db;
     FirebaseStorage storage;
     StorageReference sRef;
     DatabaseReference userRef;
     FirebaseUser currentUser;
     CircleImageView civProfile;
+    String uID;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,61 +90,54 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
         storage = FirebaseStorage.getInstance();
 
+        uID = FirebaseAuth.getInstance().getUid();
         db = FirebaseDatabase.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        userRef = db.getReference().child("user").child(currentUser.getUid());
-        FirebaseDatabase.getInstance().getReference().child("user").child(FirebaseAuth.getInstance().getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.exists())
-                {
-                    String name = "";
-                    String number = "";
-                    String about = "";
-                    for(DataSnapshot childSnapshot: snapshot.getChildren())
-                    {
-                        if(childSnapshot.child("imageUrl").getValue() != null)
-                        {
-                            Log.d("ProfileCheck", "onDataChange: Not empty");
-                            Glide.with(ProfileActivity.this)
-                                        .load(childSnapshot.child("imageUrl").getValue().toString())
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child("user")
+                .child(uID)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            String name = "";
+                            String number = "";
+                            String about = "";
+                            if (snapshot.child("imageURL").getValue() != null) {
+                                Glide.with(ProfileActivity.this)
+                                        .load(snapshot.child("imageURL").getValue().toString())
                                         .into(civProfile);
+                            }
+                            if (snapshot.child("userName").getValue() != null) {
+                                name = snapshot.child("userName").getValue().toString();
+                                tvUserName.setText(name);
+                            }
+                            if (snapshot.child("about").getValue() != null) {
+                                about = snapshot.child("about").getValue().toString();
+                                tvAbout.setText(about);
+                            }
+                            if (snapshot.child("phnNum").getValue() != null) {
+                                number = snapshot.child("phnNum").getValue().toString();
+                                tvNumber.setText(number);
+                            }
+                        }
+                    }
 
-                        }
-                        if(childSnapshot.child("userName").getValue() != null)
-                        {
-                            name = childSnapshot.child("userName").getValue().toString();
-                            tvUserName.setText(name);
-                        }
-                        if(childSnapshot.child("about").getValue() != null)
-                        {
-                            about = childSnapshot.child("about").getValue().toString();
-                            tvAbout.setText(about);
-                        }
-                        if(childSnapshot.child("phnNum").getValue() != null)
-                        {
-                            number = childSnapshot.child("phnNum").getValue().toString();
-                            tvNumber.setText(number);
-                        }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
                     }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+                });
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.cvUserName:
-              showDialogEditName();
-               break;
+                showDialogEditName();
+                break;
             case R.id.ibEditName:
                 TypedValue outValue = new TypedValue();
                 showDialogEditName();
@@ -164,7 +159,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         Button btnOk = (Button) view.findViewById(R.id.btnOk);
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
         ImageView ivNameEmoji = (ImageView) view.findViewById(R.id.ivNameEmoji);
-        EmojiEditText  etEditedName = (EmojiEditText) view.findViewById(R.id.etEditedName);
+        EmojiEditText etEditedName = (EmojiEditText) view.findViewById(R.id.etEditedName);
         String currentName = tvUserName.getText().toString().trim();
         etEditedName.setText(currentName);
         etEditedName.setSelection(etEditedName.getText().length());
@@ -187,10 +182,10 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     tvUserName.setText(editedName);
                     alertDialog.dismiss();
                     if (!editedName.equals(currentName)) {
+                        FirebaseDatabase.getInstance().getReference().child("user").child(uID).child("userName").setValue(editedName);
                         Toast.makeText(ProfileActivity.this, "Username updated", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-
                     Toast.makeText(ProfileActivity.this, "Username can't be empty", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -225,6 +220,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     tvAbout.setText(editedAbout);
                     alertDialog.dismiss();
                     if (!editedAbout.equals(currentAbout)) {
+
+                        FirebaseDatabase.getInstance().getReference().child("user").child(uID).child("about").setValue(currentAbout);
                         Toast.makeText(ProfileActivity.this, "About updated", Toast.LENGTH_SHORT).show();
                     }
                 } else {
