@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.api.LogDescriptor;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -61,6 +62,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class ChatActivity extends AppCompatActivity {
     ActivityChatBinding binding;
@@ -379,12 +381,19 @@ public class ChatActivity extends AppCompatActivity {
         }
         return new JSONObject("");
     }
-    private void checkOnlineStatus(String status)
+    public static void checkOnlineStatus(String status)
     {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("user").child(currentUser.getUid());
         Map<String, Object> curr_status = new HashMap<>();
-        curr_status.put("activeStatus", status);
+        if(status.equals("online")) {
+            curr_status.put("activeStatus", status);
+        }
+        else
+        {
+             curr_status.put("activeStatus", convertTime(status));
+            Log.d("Date", "onPause: "+convertTime(status));
+        }
         dbRef.updateChildren(curr_status);
     }
 
@@ -401,7 +410,9 @@ public class ChatActivity extends AppCompatActivity {
         //set offline and last seen
         //gettime Stamp
         String timeStamp = String.valueOf(System.currentTimeMillis());
+        //convertTime(timeStamp);
         checkOnlineStatus(timeStamp);
+        Log.d("Date", "onPause: "+convertTime(timeStamp));
 
     }
 
@@ -409,14 +420,84 @@ public class ChatActivity extends AppCompatActivity {
     protected void onStart() {
         //set online
         checkOnlineStatus("online");
+
         super.onStart();
 
     }
-    public void convertTime(String timeStamp)
+    public String getTime()
     {
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat currentData = new SimpleDateFormat("MMM dd, yyyy");
-        
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        return sdf.format(new Date());
+    }
+    public static String convertTime(String timeStamp)
+    {
+        String show;
+        double mSecPerMinute = 60 * 1000;//milli
+        double mSecPerHour = mSecPerMinute * 60;
+        double mSecPerDay = mSecPerHour * 24;
+        double mSecPerMonth = mSecPerDay * 30;
+        double mSecPerYear = mSecPerDay * 365;
+        Date currentDate = new Date();
+        Date stampDate = new Date(Long.parseLong(timeStamp));
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat dayFormat = new SimpleDateFormat("EEE");
+        String dateString = dateFormat.format(new Date(Long.parseLong(timeStamp)));
+        String timeString = timeFormat.format(new Date(Long.parseLong(timeStamp)));
+        String dayString = dayFormat.format(new Date(Long.parseLong(timeStamp)));
+        Log.d("Date", "convertTime: " + timeString);
+        Log.d("Date", "convertTime: "+dateString);
+        Log.d("Date", "convertTime: " +dayString);
+        Log.d("Date", "convertTime: " + currentDate);
+        Log.d("Date", "convertTime: "+ stampDate);
+        double diff = currentDate.getTime() - stampDate.getTime();
+        if(diff < mSecPerMonth)//day
+        {
+            if((diff / mSecPerDay) < 1.00)
+            {
+                Log.d("Date", "convertTime: " + diff/mSecPerHour);
+                show = "Last seen today at "+timeString;
+            }
+            else if((diff / mSecPerDay) < 2.00)
+            {
+                show = "Last seen yesterday at "+timeString ;
+            }
+            else if((diff/ mSecPerDay) <8.00)
+            {
+                show = "Last seen " + dayString + " at " + timeString;
+            }
+            else
+            {
+                show = "Last seen at " + dateString;
+            }
+        }
+        else if(diff < mSecPerYear)//month
+        {
+            if((diff / mSecPerMonth) < 1.00)
+            {
+                show = "Last seen" + (long)Math.floor(diff / mSecPerMonth) + " month ago";
+            }
+            else
+            {
+                show = "Last seen" + (long)Math.floor(diff / mSecPerMonth) + " months ago";
+            }
+
+        }
+        else
+        { //year
+           /* if((diff / mSecPerYear) <= 1)
+            {
+                show = "Last seen" + ((diff / mSecPerYear)) + " year ago";
+            }
+            else
+            {
+                show = "Last seen" + ((diff / mSecPerYear)) + " years ago";
+            }*/
+            show = "Last seen a long time ago";
+
+        }
+        return show;
+
     }
 
     @Override

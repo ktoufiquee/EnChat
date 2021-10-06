@@ -36,7 +36,9 @@ import com.tsproject.enchat.Extra.CountryToPhonePrefix;
 import com.tsproject.enchat.R;
 import com.tsproject.enchat.Model.User;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -360,5 +362,29 @@ public class FindUserActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         startActivity(new Intent(this, MainActivity.class));
+    }
+    @Override
+    protected void onResume() {
+        ChatActivity.checkOnlineStatus("online");
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //set offline and last seen
+        //gettime Stamp
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        ChatActivity.checkOnlineStatus(timeStamp);
+
+    }
+
+    @Override
+    protected void onStart() {
+        //set online
+        ChatActivity.checkOnlineStatus("online");
+        super.onStart();
+
     }
 }

@@ -102,6 +102,30 @@ public class MemberSelectionActivity extends AppCompatActivity {
             startActivity(new Intent(this, MainActivity.class));
         }
     }
+    @Override
+    protected void onResume() {
+        ChatActivity.checkOnlineStatus("online");
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //set offline and last seen
+        //gettime Stamp
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        ChatActivity.checkOnlineStatus(timeStamp);
+
+    }
+
+    @Override
+    protected void onStart() {
+        //set online
+        ChatActivity.checkOnlineStatus("online");
+        super.onStart();
+
+    }
 
 
 }

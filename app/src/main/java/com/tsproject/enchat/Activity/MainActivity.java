@@ -112,10 +112,9 @@ public class MainActivity extends AppCompatActivity {
                 TextView tvUsername = findViewById(R.id.tvUsername);
                 TextView tvUserNumber = findViewById(R.id.tvUserNumber);
                 ImageView profilePicture = findViewById(R.id.ivUserImage);
-
                 tvUsername.setText(Name);
                 tvUserNumber.setText(phoneNumber);
-                Glide.with(MainActivity.this)
+                Glide.with(getApplicationContext())
                         .load(dpUrl)
                         .into(profilePicture);
 
@@ -233,13 +232,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-
-    }
-
     /*private void adapterLoader() {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("user").child(uID).child("connectedUser");
         DatabaseReference dbUser = FirebaseDatabase.getInstance().getReference().child("user");
@@ -304,4 +296,28 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }*/
+    @Override
+    protected void onResume() {
+        ChatActivity.checkOnlineStatus("online");
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //set offline and last seen
+        //gettime Stamp
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        ChatActivity.checkOnlineStatus(timeStamp);
+
+    }
+
+    @Override
+    protected void onStart() {
+        //set online
+        ChatActivity.checkOnlineStatus("online");
+        super.onStart();
+
+    }
 }

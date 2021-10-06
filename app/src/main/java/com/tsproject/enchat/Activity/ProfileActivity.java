@@ -89,7 +89,6 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         civProfile.setOnClickListener(this);
 
         storage = FirebaseStorage.getInstance();
-
         uID = FirebaseAuth.getInstance().getUid();
         db = FirebaseDatabase.getInstance();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -106,7 +105,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                             String number = "";
                             String about = "";
                             if (snapshot.child("imageURL").getValue() != null) {
-                                Glide.with(ProfileActivity.this)
+                                Glide.with(getApplicationContext())
                                         .load(snapshot.child("imageURL").getValue().toString())
                                         .into(civProfile);
                             }
@@ -236,6 +235,30 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
         alertDialog.show();
+    }
+    @Override
+    protected void onResume() {
+        ChatActivity.checkOnlineStatus("online");
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //set offline and last seen
+        //gettime Stamp
+        String timeStamp = String.valueOf(System.currentTimeMillis());
+        ChatActivity.checkOnlineStatus(timeStamp);
+
+    }
+
+    @Override
+    protected void onStart() {
+        //set online
+        ChatActivity.checkOnlineStatus("online");
+        super.onStart();
+
     }
 
 
