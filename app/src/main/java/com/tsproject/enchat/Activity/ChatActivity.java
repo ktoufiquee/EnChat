@@ -126,9 +126,17 @@ public class ChatActivity extends AppCompatActivity {
         String friendName = getIntent().getExtras().getString("friendName");
         binding.tvFriendName.setText(friendName);
 
+
+        if (chatType == 1 || chatType == 2) {
+            binding.tvStatus.setVisibility(View.GONE);
+        } else {
+            binding.tvStatus.setVisibility(View.VISIBLE);
+        }
         //Initializes the messageList ArrayList, Sets the adapter to show messages
         messageList = new ArrayList<>();
+        adapter = new ChatAdapter(getApplicationContext(), messageList, chatID, chatType);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.recyclerView.setAdapter(adapter);
 
 
         //Initializes the GIF URL arrayList, Sets the adapter for GIF keyboard
@@ -214,8 +222,8 @@ public class ChatActivity extends AppCompatActivity {
                         messageList.add(message);
                     }
                 }
-                binding.recyclerView.setAdapter(new ChatAdapter(getApplicationContext(), messageList, chatID, chatType));
-                binding.recyclerView.smoothScrollToPosition(messageList.size());
+                adapter.notifyDataSetChanged();
+                binding.recyclerView.smoothScrollToPosition(binding.recyclerView.getAdapter().getItemCount());
             }
 
             @Override

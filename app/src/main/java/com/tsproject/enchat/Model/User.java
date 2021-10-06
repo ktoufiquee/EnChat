@@ -61,6 +61,21 @@ public class User implements Comparable<User> {
         this.typing = typing;
     }
 
+    public User(String userName, String phnNum, String contactPermission, String contactName, String uID, String chatID, String imageURL, int type, String about, String activeStatus, String typing, Long lastTime) {
+        this.userName = userName;
+        this.phnNum = phnNum;
+        this.contactPermission = contactPermission;
+        this.contactName = contactName;
+        this.uID = uID;
+        this.chatID = chatID;
+        this.imageURL = imageURL;
+        this.type = type;
+        this.about = about;
+        this.activeStatus = activeStatus;
+        this.typing = typing;
+        this.lastTime = lastTime;
+    }
+
     public void setLastTime(long lastTime) {
         this.lastTime = lastTime;
     }

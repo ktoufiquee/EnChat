@@ -37,7 +37,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
     String chatID;
     int chatType;
     boolean toggle = false;
-    Activity chatActivity;
+
 
     final int ITEM_SEND = 1;
     final int ITEM_RECEIVE = 2;
@@ -47,10 +47,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
         this.messageList = messageList;
         this.chatID = chatID;
         this.chatType = chatType;
-    }
-
-    public void setChatActivity(Activity chatActivity) {
-        this.chatActivity = chatActivity;
     }
 
     @NonNull
@@ -155,6 +151,12 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
             sendViewHolder.binding.ivDeleteText.setOnClickListener(view -> deleteTextOnClick(messageList.get(bpos).getMessageID()));
             sendViewHolder.binding.ivSaveText.setOnClickListener(view -> saveTextOnClick(messageList.get(bpos).getMessageID()));
+
+            if(chatType == 2) {
+                sendViewHolder.binding.ivSaveText.setVisibility(View.GONE);
+            } else {
+                sendViewHolder.binding.ivSaveText.setVisibility(View.VISIBLE);
+            }
         }
         //If the message is sent from another user
         else {
@@ -165,7 +167,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
             receiveViewHolder.binding.clReceive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.v("CHAT_ADAPT", "CLICKED");
                     toggle = !toggle;
                     if (toggle) {
                         receiveViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
@@ -176,7 +177,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
             });
 
             //If the chat is group chat, then show the username on top of the message
-            if (chatType == 1) {
+            if (chatType == 1 || chatType == 2) {
                 receiveViewHolder.binding.tvRecievedName.setVisibility(View.VISIBLE);
                 String fID = messageList.get(receiveViewHolder.getBindingAdapterPosition()).getSenderId();
                 FirebaseDatabase.getInstance().getReference().child("user").child(fID).addValueEventListener(new ValueEventListener() {
@@ -212,7 +213,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
             }
 
             //Reaction is disabled on group chat
-            if (chatType != -1) {
+            if (chatType != 1) {
                 if (message.getReact() >= 0) {
                     receiveViewHolder.binding.ivReactRecieve.setImageResource(reacts[(int) message.getReact()]);
                     receiveViewHolder.binding.ivReactRecieve.setVisibility(View.VISIBLE);
@@ -234,7 +235,11 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
 
             receiveViewHolder.binding.ivSaveText.setOnClickListener(view -> saveTextOnClick(messageList.get(bpos).getMessageID()));
-
+            if(chatType == 2) {
+                receiveViewHolder.binding.ivSaveText.setVisibility(View.GONE);
+            } else {
+                receiveViewHolder.binding.ivSaveText.setVisibility(View.VISIBLE);
+            }
 
         }
     }

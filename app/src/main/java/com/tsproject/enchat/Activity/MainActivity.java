@@ -90,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.btnProfile:
                         loadProfileActivity();
                         break;
+                    case R.id.btnSaved:
+                        loadMemoActivity();
+                        break;
                     default:
                         break;
                 }
@@ -129,6 +132,15 @@ public class MainActivity extends AppCompatActivity {
         CardView cvGetArchive = findViewById(R.id.cvGetArchive);
         cvGetArchive.setOnClickListener(view -> SeeArchivedOnClick());
 
+    }
+
+    private void loadMemoActivity() {
+        Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+        intent.putExtra("type", 2);
+        intent.putExtra("chatID", uID);
+        intent.putExtra("friendName", "Saved Messages");
+        intent.putExtra("friendID", uID);
+        startActivity(intent);
     }
 
     private void SeeArchivedOnClick() {
@@ -200,7 +212,10 @@ public class MainActivity extends AppCompatActivity {
                                 User user = new User();
                                 user.setChatID(snap.getKey());
                                 long type = (long) snap.child("type").getValue();
-                                long lastTime = (long) snap.child("lastTime").getValue();
+                                long lastTime = 0;
+                                if(snap.child("lastTime").exists()) {
+                                    lastTime = (long) snap.child("lastTime").getValue();
+                                }
                                 user.setLastTime(lastTime);
                                 List<String> members = (List<String>) snap.child("members").getValue();
                                 if (type == 0) {

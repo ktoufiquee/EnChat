@@ -23,6 +23,7 @@ import com.tsproject.enchat.R;
 import com.tsproject.enchat.Model.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -142,11 +143,11 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         List<String> members = new ArrayList<>();
         members.add(uID);
         members.add(fID);
-
+        Date date = new Date();
         String key = FirebaseDatabase.getInstance().getReference().child("chat").push().getKey();
         FirebaseDatabase.getInstance().getReference().child("chat").child(key).setValue(mapper);
         FirebaseDatabase.getInstance().getReference().child("chat").child(key).child("members").setValue(members);
-
+        FirebaseDatabase.getInstance().getReference().child("chat").child(key).child("lastTime").setValue(date.getTime());
         return key;
     }
 
