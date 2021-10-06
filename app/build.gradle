@@ -46,6 +46,7 @@ dependencies {
     implementation 'com.facebook.fresco:fresco:2.5.0'
     implementation 'com.github.stfalcon:frescoimageviewer:0.5.0'
     implementation 'com.google.firebase:firebase-storage:20.0.0'
+    implementation 'com.google.firebase:firebase-dynamic-links:19.0.0'
 
     testImplementation 'junit:junit:4.13.2'
     implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.1.2'

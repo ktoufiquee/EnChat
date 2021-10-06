@@ -180,6 +180,7 @@ public class ChatActivity extends AppCompatActivity {
                 String messageID = database.getReference().child("chat").child(chatID).push().getKey();
                 Message message = new Message(uID, text, messageID, date.getTime());
                 database.getReference().child("chat").child(chatID).child("lastMsg").setValue(text);
+                database.getReference().child("chat").child(chatID).child("lastTime").setValue(date.getTime());
                 database.getReference().child("chat").child(chatID).child(messageID).setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
@@ -379,6 +380,7 @@ public class ChatActivity extends AppCompatActivity {
                                             }
                                         });
                                         database.getReference().child("chat").child(chatID).child("lastMsg").setValue(MainActivity.Name + " sent an attachment.");
+                                        database.getReference().child("chat").child(chatID).child("lastTime").setValue(date.getTime());
                                     }
                                 });
                             }

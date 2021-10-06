@@ -192,6 +192,7 @@ public class FindUserActivity extends AppCompatActivity {
         userRef.addValueEventListener(new ValueEventListener() {
             String contactName = "";
             String number = "";
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
@@ -306,6 +307,15 @@ public class FindUserActivity extends AppCompatActivity {
                     }
 
                 }
+                else
+                {
+                    Map<String, String> s = new HashMap<>();
+                    s.put("contactName", phnContact.getContactName());
+                    s.put("search", phnContact.getContactName().toLowerCase());
+                    s.put("phnNum", phnContact.getPhnNum());
+                    String take = dRef.child("inviteUser").push().getKey();
+                    dRef.child("inviteUser").child(take).setValue(s);
+                }
             }
 
             @Override
@@ -363,6 +373,7 @@ public class FindUserActivity extends AppCompatActivity {
         super.onBackPressed();
         startActivity(new Intent(this, MainActivity.class));
     }
+
     @Override
     protected void onResume() {
         ChatActivity.checkOnlineStatus("online");
