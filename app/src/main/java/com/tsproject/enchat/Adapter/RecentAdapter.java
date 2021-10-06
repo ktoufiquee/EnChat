@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.tsproject.enchat.Activity.ChatActivity;
 import com.tsproject.enchat.R;
 import com.tsproject.enchat.Model.User;
+import com.tsproject.enchat.databinding.ItemChatHeadsBinding;
 
 import java.util.ArrayList;
 
@@ -46,9 +47,8 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        //holder.ivProfilePic.setImageResource(recentList.get(position).);
-        holder.tvName.setText(recentList.get(position).getUserName());
-        holder.parent.setOnClickListener(new View.OnClickListener() {
+        holder.binding.tvNameFriend.setText(recentList.get(position).getUserName());
+        holder.binding.mcvItemUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, ChatActivity.class);
@@ -74,14 +74,10 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private CircleImageView ivProfilePic;
-        private TextView tvName;
-        private ConstraintLayout parent;
+        ItemChatHeadsBinding binding;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
-            tvName = itemView.findViewById(R.id.tvName);
-            parent = itemView.findViewById(R.id.clRecent);
+            binding = ItemChatHeadsBinding.bind(itemView);
         }
     }
 }
