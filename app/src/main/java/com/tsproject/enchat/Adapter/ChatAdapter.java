@@ -68,6 +68,8 @@ public class ChatAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Message message = messageList.get(position);
         int bpos = holder.getBindingAdapterPosition();
+
+        //Storing reaction images in react[] array;
         int reacts[] = new int[]{
                 R.mipmap.ic_react_like_foreground,
                 R.mipmap.ic_react_love_foreground,
@@ -77,10 +79,12 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 R.mipmap.ic_react_angry_foreground
         };
 
+        //Initializing ReactionsConfig with reacts[] array
         ReactionsConfig config = new ReactionsConfigBuilder(context)
                 .withReactions(reacts)
                 .build();
 
+        //Setting ReactionPopup Touch action to update the message with correct reaction
         ReactionPopup popup = new ReactionPopup(context, config, (pos) -> {
             if (holder.getClass() == SendViewHolder.class) {
                 SendViewHolder sendViewHolder = (SendViewHolder) holder;
@@ -101,10 +105,12 @@ public class ChatAdapter extends RecyclerView.Adapter {
             return true; // true is closing popup, false is requesting a new selection
         });
 
+        //If the message is sent from current user
         if (holder.getClass() == SendViewHolder.class) {
             SendViewHolder sendViewHolder = (SendViewHolder) holder;
             sendViewHolder.binding.tvMessageSend.setText(message.getMessage());
 
+            //If react is not -1 then load the reaction
             if (message.getReact() >= 0) {
                 sendViewHolder.binding.ivReactSend.setImageResource(reacts[(int) message.getReact()]);
                 sendViewHolder.binding.ivReactSend.setVisibility(View.VISIBLE);
@@ -112,6 +118,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 sendViewHolder.binding.ivReactSend.setVisibility(View.GONE);
             }
 
+            //If mediaURL is not empty, then the message contains a media that needs to be shown.
             if (message.getMediaUrl() != null) {
                 sendViewHolder.binding.ivMediaSend.setVisibility(View.VISIBLE);
                 if (message.getMessageType().equals("GIF")) {
@@ -129,6 +136,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
                 }
             }
 
+            //If the view is clicked, show additional buttons
             sendViewHolder.binding.clSend.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -141,23 +149,16 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     return false;
                 }
             });
+
             sendViewHolder.binding.ivDeleteText.setOnClickListener(view -> deleteTextOnClick(messageList.get(bpos).getMessageID()));
             sendViewHolder.binding.ivSaveText.setOnClickListener(view -> saveTextOnClick(messageList.get(bpos).getMessageID()));
-        } else {
-
+        }
+        //If the message is sent from another user
+        else {
             ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) holder;
             receiveViewHolder.binding.tvMessageRecieve.setText(message.getMessage());
-            receiveViewHolder.binding.clReceive.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    toggle = !toggle;
-                    if (toggle) {
-                        receiveViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
-                    } else {
-                        receiveViewHolder.binding.llExtra.setVisibility(View.GONE);
-                    }
-                }
-            });
+
+            //If the chat is group chat, then show the username on top of the message
             if (chatType == 1) {
                 receiveViewHolder.binding.tvRecievedName.setVisibility(View.VISIBLE);
                 String fID = messageList.get(receiveViewHolder.getBindingAdapterPosition()).getSenderId();
@@ -172,12 +173,6 @@ public class ChatAdapter extends RecyclerView.Adapter {
 
                     }
                 });
-            }
-            if (message.getReact() >= 0) {
-                receiveViewHolder.binding.ivReactRecieve.setImageResource(reacts[(int) message.getReact()]);
-                receiveViewHolder.binding.ivReactRecieve.setVisibility(View.VISIBLE);
-            } else {
-                receiveViewHolder.binding.ivReactRecieve.setVisibility(View.GONE);
             }
 
             if (message.getMediaUrl() != null) {
@@ -196,16 +191,41 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     receiveViewHolder.binding.tvMessageRecieve.setVisibility(View.GONE);
                 }
             }
-            if (chatType != 1) {
-                receiveViewHolder.binding.tvMessageRecieve.setOnTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        popup.onTouch(v, event);
-                        return false;
-                    }
-                });
-                //.setOnClickListener(view -> deleteTextOnClick(messageList.get(bpos).getMessageID()));
+
+            //Reaction is disabled on group chat
+            if (chatType != -1) {
+                if (message.getReact() >= 0) {
+                    receiveViewHolder.binding.ivReactRecieve.setImageResource(reacts[(int) message.getReact()]);
+                    receiveViewHolder.binding.ivReactRecieve.setVisibility(View.VISIBLE);
+                } else {
+                    receiveViewHolder.binding.ivReactRecieve.setVisibility(View.GONE);
+                }
             }
+
+            //Load the reaction option on touch if the chat is not a group chat
+            receiveViewHolder.binding.tvMessageRecieve.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (chatType != 1) {
+                        popup.onTouch(v, event);
+                    }
+                    return false;
+                }
+            });
+
+            //If the view is clicked, show additional buttons
+            receiveViewHolder.binding.clReceive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    toggle = !toggle;
+                    if (toggle) {
+                        receiveViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
+                    } else {
+                        receiveViewHolder.binding.llExtra.setVisibility(View.GONE);
+                    }
+                }
+            });
+
         }
     }
 
