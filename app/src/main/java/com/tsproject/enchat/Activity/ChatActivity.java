@@ -100,6 +100,8 @@ public class ChatActivity extends AppCompatActivity {
     MediaRecorder mediaRecorder;
     String audio_path;
     Uri uriAudio;
+    long blockStatus = 0;
+    long blockedStatus = 0;
 
     private static final String TENOR_KEY = "RONF4J9X08K8";
 
@@ -169,6 +171,62 @@ public class ChatActivity extends AppCompatActivity {
         if (chatType == 2) {
             binding.civFriendImage.setVisibility(View.INVISIBLE);
         }
+
+        if (chatType == 2) {
+            binding.ivBlockUser.setVisibility(View.GONE);
+        }
+
+        if (chatType == 0) {
+            FirebaseDatabase.getInstance().getReference().child("block_list").child(uID).child(fID).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        blockStatus = (long) snapshot.getValue();
+                        if (blockStatus == 1) {
+                            binding.tvBlockText.setVisibility(View.VISIBLE);
+                            binding.llChatContent.setVisibility(View.GONE);
+                            binding.tvBlockText.setText("You have blocked this person");
+                        } else {
+                            binding.tvBlockText.setVisibility(View.GONE);
+                            binding.llChatContent.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            FirebaseDatabase.getInstance().getReference().child("block_list").child(fID).child(uID).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        blockedStatus = (long) snapshot.getValue();
+                        if (snapshot.exists()) {
+                            blockedStatus = (long) snapshot.getValue();
+                            if (blockedStatus == 1) {
+                                binding.tvBlockText.setVisibility(View.VISIBLE);
+                                binding.llChatContent.setVisibility(View.GONE);
+                                binding.ivBlockUser.setVisibility(View.GONE);
+                                binding.tvBlockText.setText("This person is unavailable");
+                            } else {
+                                binding.tvBlockText.setVisibility(View.GONE);
+                                binding.llChatContent.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
+        binding.ivBlockUser.setOnClickListener(view -> BlockOnClick());
 
         if (chatType == 1 || chatType == 2) {
             binding.tvStatus.setVisibility(View.GONE);
@@ -382,6 +440,23 @@ public class ChatActivity extends AppCompatActivity {
                 binding.btnExtra.setVisibility(View.VISIBLE);
             }
         });
+
+
+    }
+
+    private void BlockOnClick() {
+        if (chatType == 0) {
+            if (blockStatus == 0) {
+                FirebaseDatabase.getInstance().getReference().child("block_list").child(uID).child(fID).setValue(1);
+            } else {
+                FirebaseDatabase.getInstance().getReference().child("block_list").child(uID).child(fID).setValue(0);
+            }
+        }
+        if (chatType == 1) {
+            FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).removeValue();
+            getApplicationContext().startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            finish();
+        }
     }
 
 

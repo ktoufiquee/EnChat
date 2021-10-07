@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black_tg_back"
+    android:foregroundTint="#FFFFFF"
     tools:context=".Activity.ChatActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarChat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
+        android:background="@color/toolbarColour"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,13 +26,15 @@
         android:padding="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+
         <ImageView
+            android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back_arrow"
             android:layout_gravity="center"
-            android:id="@+id/btnBack"
-            android:layout_marginEnd="4dp"/>
+            android:layout_marginEnd="4dp"
+            android:src="@drawable/ic_back_arrow" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="50dp"
@@ -72,6 +75,16 @@
                 android:textColor="#FFFFFF"
                 android:textSize="14sp" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ivBlockUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:foregroundTint="#FF0000"
+            app:srcCompat="@drawable/ic_baseline_block_24" />
+
     </LinearLayout>
 
 
@@ -88,12 +101,23 @@
         app:layout_constraintStart_toStartOf="parent">
 
 
+        <TextView
+            android:id="@+id/tvBlockText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:fontFamily="@font/lato_bold"
+            android:text="This person is currently available"
+            android:textSize="20sp"
+            android:visibility="gone" />
 
         <LinearLayout
+            android:id="@+id/llChatContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="visible">
 
             <ImageView
                 android:id="@+id/btnExtra"
@@ -151,7 +175,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbarChat"
-        app:layout_constraintVertical_bias="1.0" >
+        app:layout_constraintVertical_bias="1.0">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -209,6 +233,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="60dp"
+        android:visibility="gone"
         app:counter_time_color="#ff0000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -216,7 +241,6 @@
         app:slide_to_cancel_arrow_color="#000000"
         app:slide_to_cancel_bounds="8dp"
         app:slide_to_cancel_margin_right="10dp"
-        android:visibility="visible"
         app:slide_to_cancel_text="Slide To Cancel" />
 
     <com.devlomi.record_view.RecordButton
@@ -226,6 +250,7 @@
         android:layout_marginBottom="5dp"
         android:background="@drawable/circle_drawable"
         android:scaleType="centerInside"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:mic_icon="@drawable/ic_recording"
