@@ -44,6 +44,7 @@ import com.vanniktech.emoji.EmojiUtils;
 import com.vanniktech.emoji.google.GoogleEmojiProvider;
 
 import java.net.URL;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
@@ -129,6 +130,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
                     }
                 });
+
     }
 
     @Override
@@ -147,10 +149,21 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             case R.id.ibEditAbout:
                 showDialogEditAbout();
                 break;
+            case R.id.civProfile:
+                profilePicChangeOnClick();
             default:
                 break;
         }
     }
+
+    private void profilePicChangeOnClick() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/");
+        startActivityForResult(intent, 25);
+    }
+
+
 
     private void showDialogEditName() {
         AlertDialog.Builder alert = new AlertDialog.Builder(ProfileActivity.this);
@@ -252,10 +265,15 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
     }
 }

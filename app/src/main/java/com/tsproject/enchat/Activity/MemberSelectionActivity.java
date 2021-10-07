@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -96,6 +97,12 @@ public class MemberSelectionActivity extends AppCompatActivity {
 
         binding.ivGroupImage.setOnClickListener(view -> uploadGroupImage());
 
+        binding.btnBackMStoM.setOnClickListener(view -> btnBackOnClick());
+    }
+
+    private void btnBackOnClick() {
+        finish();
+        getApplicationContext().startActivity(new Intent(MemberSelectionActivity.this, MainActivity.class));
     }
 
     private void uploadGroupImage() {
@@ -123,6 +130,9 @@ public class MemberSelectionActivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(Uri uri) {
                                         filepath = uri.toString();
+                                        Glide.with(getApplicationContext())
+                                                .load(filepath)
+                                                .into(binding.ivGroupImage);
                                     }
                                 });
                             }
@@ -182,6 +192,12 @@ public class MemberSelectionActivity extends AppCompatActivity {
         ChatActivity.checkOnlineStatus("online");
         super.onStart();
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
     }
 
 

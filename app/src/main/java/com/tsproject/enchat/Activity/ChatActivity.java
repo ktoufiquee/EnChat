@@ -451,6 +451,12 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        binding.btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
     }
 

@@ -92,6 +92,7 @@ public class ProfileFriendActivity extends AppCompatActivity {
 
         setSupportActionBar(tbProfile);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         collapseLayout.setContentScrimColor(getResources().getColor(R.color.toolbarColour));
 
 
@@ -120,6 +121,17 @@ public class ProfileFriendActivity extends AppCompatActivity {
         ChatActivity.checkOnlineStatus("online");
         super.onStart();
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
     }
 
 

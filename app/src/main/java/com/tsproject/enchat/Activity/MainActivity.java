@@ -34,7 +34,9 @@ import com.tsproject.enchat.Model.User;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -237,6 +239,9 @@ public class MainActivity extends AppCompatActivity {
                                                     } else {
                                                         user.setUserName("Deleted User");
                                                     }
+                                                    Set<User> set = new HashSet<>(recentList);
+                                                    recentList.clear();
+                                                    recentList.addAll(set);
                                                     Collections.sort(recentList);
                                                     adapter.notifyDataSetChanged();
                                                 }
@@ -253,6 +258,12 @@ public class MainActivity extends AppCompatActivity {
                                     if (!recentList.contains(user)) {
                                         recentList.add(user);
                                     }
+                                    Set<User> set = new HashSet<>(recentList);
+                                    recentList.clear();
+                                    recentList.addAll(set);
+                                    Set<User> st = new HashSet<>(recentList);
+                                    recentList.clear();
+                                    recentList.addAll(st);
                                     Collections.sort(recentList);
                                     adapter.notifyDataSetChanged();
                                 }

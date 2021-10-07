@@ -51,7 +51,8 @@
                 android:id="@+id/civFriendImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/avatar" />
+                android:src="@drawable/avatar"
+                android:scaleType="centerCrop"/>
         </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout

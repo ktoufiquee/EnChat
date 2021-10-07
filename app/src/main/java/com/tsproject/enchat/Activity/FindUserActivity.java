@@ -1,6 +1,7 @@
 package com.tsproject.enchat.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -21,8 +23,13 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +38,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.tsproject.enchat.Adapter.ContactListAdapter;
 import com.tsproject.enchat.Extra.CountryToPhonePrefix;
 import com.tsproject.enchat.R;
@@ -52,10 +62,17 @@ public class FindUserActivity extends AppCompatActivity {
     private ContactListAdapter adapter;
     private EditText etSearchUser;
 
+    ProgressDialog dialog;
+    String filepath = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_user);
+
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Uploading image...");
+        dialog.setCancelable(false);
 
         rvContact = findViewById(R.id.rvContact);
         etSearchUser = findViewById(R.id.etSearchFilter);
@@ -113,6 +130,48 @@ public class FindUserActivity extends AppCompatActivity {
 
             }
         });
+
+        ImageView btnBack = findViewById(R.id.btnBackCtoM);
+        btnBack.setOnClickListener(view -> btnBackOnClick());
+    }
+
+    public void btnBackOnClick() {
+        finish();
+        startActivity(new Intent(FindUserActivity.this, MainActivity.class));
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 25) {
+            if (data != null) {
+                if (data.getData() != null) {
+                    Uri selectedImage = data.getData();
+                    StorageReference ref = FirebaseStorage.getInstance().getReference().child("profilePic").child(FirebaseAuth.getInstance().getUid());
+                    dialog.show();
+                    ref.putFile(selectedImage).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            dialog.dismiss();
+                            if (task.isSuccessful()) {
+                                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        filepath = uri.toString();
+                                        FirebaseDatabase.getInstance()
+                                                .getReference()
+                                                .child("user")
+                                                .child(FirebaseAuth.getInstance().getUid())
+                                                .child("imageURL")
+                                                .setValue(filepath);
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        }
     }
 
     public void showAlert() {

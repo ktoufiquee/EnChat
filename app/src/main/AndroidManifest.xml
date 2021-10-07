@@ -33,6 +33,7 @@
         </activity>
         <activity
             android:name=".Activity.ProfileFriendActivity"
+            android:parentActivityName=".Activity.ChatActivity"
             android:exported="true" />
         <activity
             android:name=".Activity.ProfileActivity"

@@ -11,9 +11,6 @@
             android:id="@+id/btnProfile"
             android:title="Profile"/>
         <item
-            android:id="@+id/btnStories"
-            android:title="Stories"/>
-        <item
             android:id="@+id/btnSaved"
             android:title="Saved Messages"/>
     </group>

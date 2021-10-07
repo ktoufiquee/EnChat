@@ -16,17 +16,30 @@
         tools:layout_editor_absoluteX="10dp"
         tools:layout_editor_absoluteY="10dp">
 
-        <EditText
-            android:id="@+id/etSearchFilter"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="12dp"
-            android:backgroundTint="@color/line_default"
-            android:hint="Search..."
-            android:textCursorDrawable="@drawable/cursor_colour"
-            app:layout_constraintEnd_toEndOf="parent"
-            tools:layout_editor_absoluteY="16dp" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/btnBackCtoM"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_baseline_arrow_back_blue_24" />
+
+            <EditText
+                android:id="@+id/etSearchFilter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/line_default"
+                android:hint="Search..."
+                android:textCursorDrawable="@drawable/cursor_colour"
+                app:layout_constraintEnd_toEndOf="parent"
+                tools:layout_editor_absoluteY="16dp" />
+        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvContact"

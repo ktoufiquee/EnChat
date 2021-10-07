@@ -64,12 +64,14 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="5dp" />
+
             <LinearLayout
                 android:id="@+id/llMedia"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="0dp"
@@ -107,7 +109,8 @@
                 android:padding="15dp"
                 android:text="Mute Notification"
                 android:textColor="@color/black"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:visibility="gone" />
             <View
                 android:layout_width="match_parent"
                 android:layout_height="15dp" />
