@@ -46,9 +46,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_margin="5dp"
-                    android:fontFamily="@font/lato_bold"
+                    android:fontFamily="@font/ubuntu_light"
+                    android:hint="Enter group name"
                     android:minHeight="48dp"
-                    android:text="Enter group name" />
+                    android:textStyle="bold" />
 
             </LinearLayout>
 

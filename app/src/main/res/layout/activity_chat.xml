@@ -33,15 +33,22 @@
             android:id="@+id/btnBack"
             android:layout_marginEnd="4dp"/>
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:id="@+id/civFriendImage"
-            android:src="@drawable/avatar" />
+            app:cardCornerRadius="25dp">
+
+            <ImageView
+                android:id="@+id/civFriendImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/avatar" />
+        </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
             android:orientation="vertical">
@@ -49,20 +56,21 @@
             <TextView
                 android:id="@+id/tvFriendName"
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
+                android:layout_height="wrap_content"
                 android:text="TextView"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
+                android:id="@+id/tvStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Online Status"
-                android:textSize="14sp"
-                android:id="@+id/tvStatus"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#FFFFFF"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 

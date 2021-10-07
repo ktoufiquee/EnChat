@@ -126,6 +126,49 @@ public class ChatActivity extends AppCompatActivity {
         String friendName = getIntent().getExtras().getString("friendName");
         binding.tvFriendName.setText(friendName);
 
+        if (chatType == 0) {
+            FirebaseDatabase.getInstance().getReference().child("user").child(fID).child("imageURL").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        String url = snapshot.getValue().toString();
+                        if (!url.equals("No Image")) {
+                            Glide.with(getApplicationContext())
+                                    .load(url)
+                                    .into(binding.civFriendImage);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        if (chatType == 1) {
+            FirebaseDatabase.getInstance().getReference().child("chat").child(chatID).child("imageURL").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        String url = snapshot.getValue().toString();
+                        if (!url.equals("No Image")) {
+                            Glide.with(getApplicationContext())
+                                    .load(url)
+                                    .into(binding.civFriendImage);
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        if (chatType == 2) {
+            binding.civFriendImage.setVisibility(View.INVISIBLE);
+        }
 
         if (chatType == 1 || chatType == 2) {
             binding.tvStatus.setVisibility(View.GONE);
@@ -291,6 +334,7 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
         binding.recordView.setOnRecordListener(new OnRecordListener() {
+            @SuppressLint("MissingPermission")
             @Override
             public void onStart() {
                 //Start recording if has permission,otherwise request permission

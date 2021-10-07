@@ -1,25 +1,36 @@
 package com.tsproject.enchat.Activity;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.tsproject.enchat.Adapter.MemberSelectionAdapter;
+import com.tsproject.enchat.Model.Message;
 import com.tsproject.enchat.Model.User;
 import com.tsproject.enchat.R;
 import com.tsproject.enchat.databinding.ActivityMemberSelectionBinding;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +41,8 @@ public class MemberSelectionActivity extends AppCompatActivity {
     private MemberSelectionAdapter adapter;
     private ArrayList<User> friendList;
     private String uID;
+    ProgressDialog dialog;
+    String filepath = "";
 
     public static List<String> selectedList;
 
@@ -42,6 +55,10 @@ public class MemberSelectionActivity extends AppCompatActivity {
         selectedList = new ArrayList<>();
         friendList = new ArrayList<>();
         uID = FirebaseAuth.getInstance().getUid();
+
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Uploading image...");
+        dialog.setCancelable(false);
 
         adapter = new MemberSelectionAdapter(this, friendList, binding.tvSelectionCount);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -77,6 +94,43 @@ public class MemberSelectionActivity extends AppCompatActivity {
 
         binding.mcvCreateGroup.setOnClickListener(view -> createGroupOnClick());
 
+        binding.ivGroupImage.setOnClickListener(view -> uploadGroupImage());
+
+    }
+
+    private void uploadGroupImage() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/");
+        startActivityForResult(intent, 25);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 25) {
+            if (data != null) {
+                if (data.getData() != null) {
+                    Uri selectedImage = data.getData();
+                    StorageReference ref = FirebaseStorage.getInstance().getReference().child("GroupChatPic");
+                    dialog.show();
+                    ref.putFile(selectedImage).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            dialog.dismiss();
+                            if (task.isSuccessful()) {
+                                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        filepath = uri.toString();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            }
+        }
     }
 
     private void createGroupOnClick() {
@@ -99,7 +153,7 @@ public class MemberSelectionActivity extends AppCompatActivity {
             FirebaseDatabase.getInstance().getReference().child("chat").child(key).setValue(mapper);
             FirebaseDatabase.getInstance().getReference().child("chat").child(key).child("GroupName").setValue(groupName);
             FirebaseDatabase.getInstance().getReference().child("chat").child(key).child("members").setValue(selectedList);
-
+            FirebaseDatabase.getInstance().getReference().child("chat").child(key).child("imageURL").setValue(filepath);
             Toast.makeText(this, "Group created", Toast.LENGTH_SHORT).show();
             finish();
             startActivity(new Intent(this, MainActivity.class));

@@ -27,7 +27,9 @@ import com.tsproject.enchat.databinding.ActivityChatBinding;
 import com.tsproject.enchat.databinding.ItemReceiveBinding;
 import com.tsproject.enchat.databinding.ItemSendBinding;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class ChatAdapter extends RecyclerView.Adapter {
@@ -65,6 +67,12 @@ public class ChatAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Message message = messageList.get(position);
         int bpos = holder.getBindingAdapterPosition();
+
+        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm aa");
+        String timeString = timeFormat.format(new Date(Long.parseLong(message.getTimestamp() + "")));
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy");
+        String dateString = dateFormat.format(new Date(Long.parseLong(message.getTimestamp() + "")));
 
         //Storing reaction images in react[] array;
         int reacts[] = new int[]{
@@ -106,7 +114,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
         if (holder.getClass() == SendViewHolder.class) {
             SendViewHolder sendViewHolder = (SendViewHolder) holder;
             sendViewHolder.binding.tvMessageSend.setText(message.getMessage());
-
+            sendViewHolder.binding.tvTime.setText(timeString + "," + dateString);
             //If the view is clicked, show additional buttons
             sendViewHolder.binding.clSend.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -114,8 +122,10 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     toggle = !toggle;
                     if (toggle) {
                         sendViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
+                        sendViewHolder.binding.tvTime.setVisibility(View.VISIBLE);
                     } else {
                         sendViewHolder.binding.llExtra.setVisibility(View.GONE);
+                        sendViewHolder.binding.tvTime.setVisibility(View.GONE);
                     }
                 }
             });
@@ -162,7 +172,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
         else {
             ReceiveViewHolder receiveViewHolder = (ReceiveViewHolder) holder;
             receiveViewHolder.binding.tvMessageRecieve.setText(message.getMessage());
-
+            receiveViewHolder.binding.tvTime.setText(timeString + "," + dateString);
             //If the view is clicked, show additional buttons
             receiveViewHolder.binding.clReceive.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -170,8 +180,10 @@ public class ChatAdapter extends RecyclerView.Adapter {
                     toggle = !toggle;
                     if (toggle) {
                         receiveViewHolder.binding.llExtra.setVisibility(View.VISIBLE);
+                        receiveViewHolder.binding.tvTime.setVisibility(View.VISIBLE);
                     } else {
                         receiveViewHolder.binding.llExtra.setVisibility(View.GONE);
+                        receiveViewHolder.binding.tvTime.setVisibility(View.GONE);
                     }
                 }
             });

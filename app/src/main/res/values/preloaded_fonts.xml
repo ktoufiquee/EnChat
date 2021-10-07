@@ -4,5 +4,6 @@
         <item>@font/andada</item>
         <item>@font/lato</item>
         <item>@font/lato_bold</item>
+        <item>@font/ubuntu_light</item>
     </array>
 </resources>
