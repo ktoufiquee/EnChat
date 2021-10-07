@@ -94,6 +94,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewHolder
                         .child(recentList.get(bpos).getChatID())
                         .child(FirebaseAuth.getInstance().getUid())
                         .setValue(var);
+                context.startActivity(new Intent(context.getApplicationContext(), MainActivity.class));
             }
         });
         FirebaseDatabase.getInstance().getReference().child("chat").child(recentList.get(bpos).getChatID()).child("lastMsg")

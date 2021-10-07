@@ -44,7 +44,7 @@
                         android:id="@+id/ivGroupImage"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        tools:srcCompat="@drawable/ic_baseline_account_circle_24" />
+                        android:src="@drawable/ic_add_image_foreground" />
 
                 </com.google.android.material.card.MaterialCardView>
 

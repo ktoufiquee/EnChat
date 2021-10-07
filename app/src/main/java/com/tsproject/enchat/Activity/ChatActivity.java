@@ -377,15 +377,17 @@ public class ChatActivity extends AppCompatActivity {
 
             }
         });*/
-        binding.friendStatusLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ChatActivity.this, ProfileFriendActivity.class);
-                intent.putExtra("friendID",fID);
-                intent.putExtra("friendName", friendName);
-                startActivity(intent);
-            }
-        });
+        if(chatType == 0) {
+            binding.friendStatusLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(ChatActivity.this, ProfileFriendActivity.class);
+                    intent.putExtra("friendID", fID);
+                    intent.putExtra("friendName", friendName);
+                    startActivity(intent);
+                }
+            });
+        }
 
         //initialize record button
         binding.btnRecord.setRecordView(binding.recordView);

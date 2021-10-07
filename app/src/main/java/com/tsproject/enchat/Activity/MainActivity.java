@@ -200,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void adapterLoader(int setting) {
+        recentList.clear();
         FirebaseDatabase.getInstance()
                 .getReference()
                 .child("chat")

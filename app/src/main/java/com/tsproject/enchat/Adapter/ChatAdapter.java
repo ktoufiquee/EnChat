@@ -167,6 +167,7 @@ public class ChatAdapter extends RecyclerView.Adapter {
             } else {
                 sendViewHolder.binding.ivSaveText.setVisibility(View.VISIBLE);
             }
+            sendViewHolder.binding.ivForwardText.setVisibility(View.GONE);
         }
         //If the message is sent from another user
         else {
@@ -249,11 +250,23 @@ public class ChatAdapter extends RecyclerView.Adapter {
             receiveViewHolder.binding.ivSaveText.setOnClickListener(view -> saveTextOnClick(messageList.get(bpos).getMessageID()));
             if(chatType == 2) {
                 receiveViewHolder.binding.ivSaveText.setVisibility(View.GONE);
+                receiveViewHolder.binding.ivDeleteText.setVisibility(View.VISIBLE);
+                receiveViewHolder.binding.ivDeleteText.setOnClickListener(view -> deleteFromSave(messageList.get(bpos).getMessageID()));
             } else {
                 receiveViewHolder.binding.ivSaveText.setVisibility(View.VISIBLE);
+                receiveViewHolder.binding.ivDeleteText.setVisibility(View.GONE);
             }
-
+            receiveViewHolder.binding.ivForwardText.setVisibility(View.GONE);
         }
+    }
+
+    private void deleteFromSave(String messageID) {
+        FirebaseDatabase.getInstance()
+                .getReference()
+                .child("chat")
+                .child(FirebaseAuth.getInstance().getUid())
+                .child(messageID)
+                .removeValue();
     }
 
     private void saveTextOnClick(String messageID) {
