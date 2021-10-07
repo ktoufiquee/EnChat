@@ -19,7 +19,6 @@
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             android:id="@+id/collapseLayout"
-
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <ImageView
@@ -41,12 +40,10 @@
                 android:layout_height="?actionBarSize"
                 app:layout_collapseMode="pin"
                 android:id="@+id/tbProfile"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:subtitle="1234567"
-                app:subtitleTextColor="@color/white"
-                app:title="Username"
+                app:titleTextColor="@color/white"
+                app:popupTheme="@style/Theme.MaterialComponents.Light.NoActionBar"
                 app:titleTextAppearance="@style/TextAppearance.AppCompat.Title"
-                app:titleTextColor="@color/white" />
+                />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -111,25 +108,6 @@
                 android:text="Mute Notification"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="1dp"
-                android:background="@color/white"
-                android:clickable="true"
-                android:id="@+id/tvSaveMedia"
-                android:fontFamily="@font/lato"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:padding="15dp"
-                android:text="Media Visibility"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="15dp" />
@@ -250,67 +228,8 @@
                     android:foreground="?android:attr/selectableItemBackground"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tvInfoNickname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/lato"
-                        android:text="Tadaa"
-                        android:textColor="@color/black"
-                        android:textSize="18sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="2dp"
-                        android:fontFamily="@font/lato"
-                        android:text="Nickname"
-                        android:textSize="14sp" />
-
                 </LinearLayout>
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:background="@color/white"
-                android:clickable="true"
-                android:id="@+id/llBlock"
-                android:foreground="?android:attr/selectableItemBackground"
-                android:orientation="horizontal"
-                android:padding="15dp"
-               >
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/lato"
-                    android:text="Block"
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:id="@+id/ivBlock"
-                    android:layout_width="25dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="5dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ic_block" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="15dp" />
-
-
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
