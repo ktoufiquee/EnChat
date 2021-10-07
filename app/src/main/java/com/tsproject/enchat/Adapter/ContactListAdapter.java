@@ -6,12 +6,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -61,12 +64,14 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         int pos = holder.getBindingAdapterPosition();
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("room_det");
         holder.tvContactName.setText(contactList.get(pos).getContactName());
+        Glide.with(context)
+                .load(contactList.get(position).getImageURL())
+                .into(holder.ivImageContact);
         holder.tvContactNumber.setText(contactList.get(pos).getPhnNum());
         holder.clContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String fID = contactList.get(pos).getuID();
-
                 FirebaseDatabase.getInstance()
                         .getReference()
                         .child("room_det")
@@ -159,13 +164,15 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvContactName, tvContactNumber;
-        private ConstraintLayout clContact;
+        private MaterialCardView clContact;
+        private ImageView ivImageContact;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvContactName = itemView.findViewById(R.id.tvContactName);
             tvContactNumber = itemView.findViewById(R.id.tvContactNumber);
             clContact = itemView.findViewById(R.id.clContact);
+            ivImageContact = itemView.findViewById(R.id.ivImageContact);
         }
     }
 }

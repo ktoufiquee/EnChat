@@ -51,10 +51,9 @@ import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
 public class ProfileActivity extends AppCompatActivity implements View.OnClickListener {
-    TextView tvNumber;
     CardView cvUserName, cvAbout, cvNumber;
     ImageButton ibEditName, ibEditAbout;
-    EmojiTextView tvAbout, tvUserName;
+    TextView tvAbout, tvUserName, tvNumber;
     FirebaseDatabase db;
     FirebaseStorage storage;
     StorageReference sRef;
@@ -158,23 +157,14 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         View view = getLayoutInflater().inflate(R.layout.dialog_edit_name, null);
         Button btnOk = (Button) view.findViewById(R.id.btnOk);
         Button btnCancel = (Button) view.findViewById(R.id.btnCancel);
-        ImageView ivNameEmoji = (ImageView) view.findViewById(R.id.ivNameEmoji);
-        EmojiEditText etEditedName = (EmojiEditText) view.findViewById(R.id.etEditedName);
+        EditText etEditedName = (EditText) view.findViewById(R.id.etEditedName);
         String currentName = tvUserName.getText().toString().trim();
         etEditedName.setText(currentName);
         etEditedName.setSelection(etEditedName.getText().length());
         alert.setView(view);
         alert.setCancelable(true);
         AlertDialog alertDialog = alert.create();
-        EmojiPopup popup = EmojiPopup.Builder.fromRootView(view.findViewById(R.id.mainLayout)).build(etEditedName);
-        ivNameEmoji.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popup.toggle();
-            }
-        });
-
-        btnOk.setOnClickListener(new View.OnClickListener() {
+        btnOk.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 String editedName = etEditedName.getText().toString().trim();
@@ -221,7 +211,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     alertDialog.dismiss();
                     if (!editedAbout.equals(currentAbout)) {
 
-                        FirebaseDatabase.getInstance().getReference().child("user").child(uID).child("about").setValue(currentAbout);
+                        FirebaseDatabase.getInstance().getReference().child("user").child(uID).child("about").setValue(editedAbout);
                         Toast.makeText(ProfileActivity.this, "About updated", Toast.LENGTH_SHORT).show();
                     }
                 } else {
